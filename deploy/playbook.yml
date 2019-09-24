@@ -1,0 +1,17 @@
+- name: Build application
+  hosts: localhost
+  roles:
+    - build-app
+
+- name: Install application
+  hosts: target
+  become: true
+  become_method: sudo
+  become_user: root
+  roles:
+    - install-server
+
+- name: Cleanup local environment
+  hosts: localhost
+  roles:
+    - cleanup

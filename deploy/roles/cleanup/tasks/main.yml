@@ -1,0 +1,4 @@
+- name: Remove build archive
+  file:
+    path: ../app.tgz
+    state: absent
