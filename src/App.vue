@@ -2,7 +2,7 @@
   <div id="app">
     <md-app>
       <md-app-toolbar class="md-primary">
-        <span class="md-title">Porygon</span>
+        <toolbar-title title="Porygon"></toolbar-title>
       </md-app-toolbar>
 
       <md-app-drawer md-permanent="full">
@@ -17,6 +17,17 @@
     </md-app>
   </div>
 </template>
+
+<script>
+import ToolbarTitle from '@/components/toolbar/ToolbarTitle.vue';
+
+export default {
+  name: 'app',
+  components: {
+    ToolbarTitle,
+  },
+};
+</script>
 
 <style lang="scss">
 @import "~vue-material/dist/theme/engine";
