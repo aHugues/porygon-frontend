@@ -1,5 +1,9 @@
 # porygon-frontend
 
+[![Build Status](https://travis-ci.org/aHugues/porygon-frontend.svg?branch=master)](https://travis-ci.org/aHugues/porygon-frontend)
+
+[![codecov](https://codecov.io/gh/aHugues/porygon-frontend/branch/master/graph/badge.svg)](https://codecov.io/gh/aHugues/porygon-frontend)
+
 ## Project setup
 ```
 npm install
