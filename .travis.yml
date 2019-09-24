@@ -1,4 +1,5 @@
 language: node_js
+dist: bionic
 node_js:
   - 10
   - 12
@@ -7,10 +8,13 @@ cache:
     - node_modules
 
 before_install:
+  - sudo apt update
+  - sudo apt install -y ansible
   - openssl aes-256-cbc -K $encrypted_a5b4e8ef6288_key -iv $encrypted_a5b4e8ef6288_iv -in secrets.tar.enc -out deploy/secrets.tar -d
-  - tar xvf deploy/secrets.tar -C deploy/
+  - tar xvf deploy/secrets.tar
   
 install:
+  - npm install
   - npm install -g codecov
 
 script:
@@ -18,3 +22,11 @@ script:
 
 after_success:
   - if [[ $TRAVIS_NODE_VERSION == 10 ]]; then codecov; fi
+
+deploy:
+  - provider: script
+    skip_cleanup: true
+    script: ansible-playbook deploy/playbook.yml --private-key=deploy/ssh_key --inventory deploy/inventory
+    on:
+      node_js: 10
+      branch: master
