@@ -6,7 +6,7 @@ import App from './App.vue';
 import router from './router';
 import './registerServiceWorker';
 import 'vue-material/dist/vue-material.min.css';
-import 'vue-material/dist/theme/default.css';
+// import 'vue-material/dist/theme/default.css';
 
 Vue.config.productionTip = false;
 Vue.use(MdButton);
