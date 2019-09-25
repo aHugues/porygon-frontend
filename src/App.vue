@@ -1,8 +1,10 @@
 <template>
   <div id="app">
     <md-app>
-      <md-app-toolbar class="md-primary">
+      <md-app-toolbar class="md-primary toolbar-wrapper">
         <toolbar-title title="Porygon"></toolbar-title>
+        <div class="separator-2"></div>
+        <toolbar-avatar></toolbar-avatar>
       </md-app-toolbar>
 
       <md-app-drawer md-permanent="full">
@@ -20,11 +22,13 @@
 
 <script>
 import ToolbarTitle from '@/components/toolbar/ToolbarTitle.vue';
+import ToolbarAvatar from '@/components/toolbar/ToolbarAvatar.vue';
 
 export default {
   name: 'app',
   components: {
     ToolbarTitle,
+    ToolbarAvatar,
   },
 };
 </script>
@@ -38,4 +42,12 @@ export default {
 ));
 
 @import "~vue-material/dist/theme/all";
+
+.toolbar-wrapper {
+  display: flex;
+}
+
+.separator-2 {
+  flex: 2;
+}
 </style>
