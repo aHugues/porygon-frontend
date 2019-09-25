@@ -1,6 +1,10 @@
 <template>
   <div class="home">
-    Home page
+    <md-empty-state
+    md-icon="home"
+    md-label="Nothing here"
+    md-description="Work in progress.">
+   </md-empty-state>
   </div>
 </template>
 
