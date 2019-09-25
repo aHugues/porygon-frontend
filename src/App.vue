@@ -13,24 +13,24 @@
         </md-toolbar>
 
         <md-list>
-          <md-list-item>
-            <md-icon>home</md-icon>
-            <span class="md-list-item-text">Home</span>
+          <md-list-item to="/" exact>
+                <md-icon>home</md-icon>
+                <span class="md-list-item-text">Home</span>
           </md-list-item>
 
-          <md-list-item>
-            <md-icon>movie</md-icon>
-            <span class="md-list-item-text">Movies</span>
+          <md-list-item to="/movies">
+              <md-icon>movie</md-icon>
+              <span class="md-list-item-text">Movies</span>
           </md-list-item>
 
-          <md-list-item>
-            <md-icon>tv</md-icon>
-            <span class="md-list-item-text">Series</span>
+          <md-list-item to="/series">
+              <md-icon>tv</md-icon>
+              <span class="md-list-item-text">Series</span>
           </md-list-item>
 
-          <md-list-item>
-            <md-icon>folder</md-icon>
-            <span class="md-list-item-text">Locations</span>
+          <md-list-item to="/locations">
+              <md-icon>folder</md-icon>
+              <span class="md-list-item-text">Locations</span>
           </md-list-item>
         </md-list>
       </md-app-drawer>
