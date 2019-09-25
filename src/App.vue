@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <md-app>
+    <md-app md-waterfall md-mode="fixed">
       <md-app-toolbar class="md-primary toolbar-wrapper">
         <toolbar-title title="Porygon"></toolbar-title>
         <div class="separator-2"></div>
@@ -71,5 +71,9 @@ export default {
 
 .separator-2 {
   flex: 2;
+}
+
+.md-app {
+  height: 100vh;
 }
 </style>
