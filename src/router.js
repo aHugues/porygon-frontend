@@ -4,6 +4,7 @@ import Home from './views/Home.vue';
 import Movies from './views/Movies.vue';
 import Series from './views/Series.vue';
 import Locations from './views/Locations.vue';
+import Categories from './views/Categories.vue';
 
 Vue.use(Router);
 
@@ -30,6 +31,11 @@ export default new Router({
       path: '/locations',
       name: 'locations',
       component: Locations,
+    },
+    {
+      path: '/categories',
+      name: 'categories',
+      component: Categories,
     },
     // {
     //   path: '/about',

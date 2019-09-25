@@ -32,6 +32,11 @@
               <md-icon>folder</md-icon>
               <span class="md-list-item-text">Locations</span>
           </md-list-item>
+
+          <md-list-item to="/categories">
+              <md-icon>category</md-icon>
+              <span class="md-list-item-text">Categories</span>
+          </md-list-item>
         </md-list>
       </md-app-drawer>
 
