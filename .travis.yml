@@ -10,7 +10,7 @@ cache:
 before_install:
   - sudo apt update
   - sudo apt install -y ansible
-  - openssl aes-256-cbc -K $encrypted_a5b4e8ef6288_key -iv $encrypted_a5b4e8ef6288_iv -in secrets.tar.enc -out deploy/secrets.tar -d
+  - openssl aes-256-cbc -K $encrypted_a5b4e8ef6288_key -iv $encrypted_a5b4e8ef6288_iv -in deploy/secrets.tar.enc -out deploy/secrets.tar -d
   - tar xvf deploy/secrets.tar
   
 install:
