@@ -11,6 +11,28 @@
         <md-toolbar class="md-transparent" md-elevation="0">
           Navigation
         </md-toolbar>
+
+        <md-list>
+          <md-list-item>
+            <md-icon>home</md-icon>
+            <span class="md-list-item-text">Home</span>
+          </md-list-item>
+
+          <md-list-item>
+            <md-icon>movie</md-icon>
+            <span class="md-list-item-text">Movies</span>
+          </md-list-item>
+
+          <md-list-item>
+            <md-icon>tv</md-icon>
+            <span class="md-list-item-text">Series</span>
+          </md-list-item>
+
+          <md-list-item>
+            <md-icon>folder</md-icon>
+            <span class="md-list-item-text">Locations</span>
+          </md-list-item>
+        </md-list>
       </md-app-drawer>
 
       <md-app-content>

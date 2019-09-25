@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import {
-  MdButton, MdApp, MdDrawer, MdToolbar, MdContent, MdLayout, MdAvatar,
+  MdButton, MdApp, MdDrawer, MdToolbar, MdContent, MdLayout, MdAvatar, MdList,
+  MdIcon,
 } from 'vue-material/dist/components';
 import App from './App.vue';
 import router from './router';
@@ -16,6 +17,8 @@ Vue.use(MdToolbar);
 Vue.use(MdContent);
 Vue.use(MdLayout);
 Vue.use(MdAvatar);
+Vue.use(MdList);
+Vue.use(MdIcon);
 
 new Vue({
   router,
