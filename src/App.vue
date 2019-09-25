@@ -9,7 +9,7 @@
 
       <md-app-drawer md-permanent="full">
         <md-toolbar class="md-transparent" md-elevation="0">
-          Navigation
+          <h3 class="md-title">Navigation</h3>
         </md-toolbar>
 
         <md-list>
