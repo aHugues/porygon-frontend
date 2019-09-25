@@ -5,6 +5,7 @@ module.exports = {
     'json',
     'vue',
   ],
+  verbose: true,
   transform: {
     '^.+\\.vue$': 'vue-jest',
     '.+\\.(css|styl|less|sass|scss|svg|png|jpg|ttf|woff|woff2)$': 'jest-transform-stub',
@@ -29,7 +30,7 @@ module.exports = {
   ],
   collectCoverage: true,
   collectCoverageFrom: [
-    '**/*.{vue}', '!**/node_modules/**', '!<rootDir>/dist/**',
+    '<rootDir>/src/**/*.{vue}', '!**/node_modules/**', '!<rootDir>/dist/**',
     '!<rootDir>/src/plugins/**', '!<rootDir>/tests/**',
   ],
   coverageReporters: ['lcov', 'text-summary'],
