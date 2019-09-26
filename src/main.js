@@ -37,6 +37,17 @@ keycloak.init({ onLoad: 'login-required' })
       window.location.reload();
     }
 
+    keycloak.loadUserInfo()
+      .success(() => {
+        const { userInfo } = keycloak;
+        localStorage.setItem('vue-user-firstname', userInfo.given_name);
+        localStorage.setItem('vue-user-lastname', userInfo.family_name);
+        localStorage.setItem('vue-user-firstname', userInfo.given_name);
+      })
+      .error(() => {
+        console.error('Impossible to load user profile');
+      });
+
     new Vue({
       router,
       render: h => h(App),
