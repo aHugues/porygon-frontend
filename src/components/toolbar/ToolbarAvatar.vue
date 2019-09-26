@@ -24,7 +24,7 @@
         </md-menu-item> -->
 
         <md-menu-item>
-          <md-button to="/logout" @click="showSnackbar = true" disabled>
+          <md-button @click="logout">
             <div class="logout-button-content">
               <md-icon>logout</md-icon>
               <div>Logout</div>
@@ -34,9 +34,6 @@
       </md-menu-content>
     </md-menu>
 
-    <md-snackbar :md-active.sync="showSnackbar" :md-duration="2000">
-      Logout will soon be implemented.
-    </md-snackbar>
   </div>
 </template>
 
@@ -52,6 +49,11 @@ export default {
     language: 'en',
     showSnackbar: false,
   }),
+  methods: {
+    logout() {
+      this.$keycloak.logout('/');
+    },
+  },
 };
 </script>
 
