@@ -8,6 +8,22 @@
     <md-button class="md-primary md-raised">Create your first category</md-button>
    </md-empty-state>
 
+   <div class="edit-form-wrapper" v-if="showDialog">
+     <md-card>
+       <md-card-header>
+         <div class="md-title">Create category</div>
+       </md-card-header>
+
+       <md-card-content>
+         <category-form></category-form>
+       </md-card-content>
+     </md-card>
+   </div>
+
+  <div v-if="categories.length > 0 && showDialog" class="divider-wrapper">
+    <md-divider></md-divider>
+  </div>
+
    <div class="md-layout" v-if="categories.length > 0">
      <div
       v-for="(category, key) in categories" :key="key"
@@ -20,7 +36,7 @@
    </div>
 
    <div class="add-button-wrapper" v-if="categories.length > 0">
-     <md-button class="md-fab md-primary">
+     <md-button class="md-fab md-primary" @click="showDialog = true">
        <md-icon>add</md-icon>
      </md-button>
    </div>
@@ -31,6 +47,7 @@
 
 import axios from 'axios';
 import Category from '@/components/category/Category.vue';
+import CategoryForm from '@/components/category/CategoryForm.vue';
 import config from '../config';
 
 export default {
@@ -42,6 +59,7 @@ export default {
     return {
       categories: [],
       environment: process.env.NODE_ENV,
+      showDialog: false,
     };
   },
   computed: {
@@ -66,6 +84,7 @@ export default {
   },
   components: {
     Category,
+    CategoryForm,
   },
 };
 </script>
@@ -75,6 +94,13 @@ export default {
   position: fixed;
   bottom: 10px;
   right: 10px;
-  z-index: 99;
+  z-index: 10;
+}
+.md-dialog-alert {
+  background-color: var(--md-theme-default-background, #fff);
+}
+.divider-wrapper {
+  margin-top: 18px;
+  margin-bottom: 10px;
 }
 </style>

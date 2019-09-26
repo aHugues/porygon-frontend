@@ -62,10 +62,11 @@ export default {
 
 <style lang="scss">
 @import "~vue-material/dist/theme/engine";
+@import url("https://unpkg.com/vue-material@beta/dist/theme/default.css");
 
 @include md-register-theme("default", (
   primary: #C6525A,
-  accent: #57AFBA
+  accent: #57AFBA,
 ));
 
 @import "~vue-material/dist/theme/all";
