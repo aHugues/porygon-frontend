@@ -8,7 +8,7 @@
     <md-button class="md-primary md-raised">Create your first category</md-button>
    </md-empty-state>
 
-   <div class="md-layout">
+   <div class="md-layout" v-if="categories.length > 0">
      <div
       v-for="(category, key) in categories" :key="key"
       class="md-layout-item md-large-size-20 md-medium-size-33 md-small-size-50 md-xsmall-size-100">
@@ -17,6 +17,12 @@
       :label="category.label">
       </category>
      </div>
+   </div>
+
+   <div class="add-button-wrapper" v-if="categories.length > 0">
+     <md-button class="md-fab md-primary">
+       <md-icon>add</md-icon>
+     </md-button>
    </div>
   </div>
 </template>
@@ -34,7 +40,7 @@ export default {
   name: 'CategoriesView',
   data() {
     return {
-      categories: {},
+      categories: [],
       environment: process.env.NODE_ENV,
     };
   },
@@ -63,3 +69,12 @@ export default {
   },
 };
 </script>
+
+<style lang="scss" scoped>
+.add-button-wrapper {
+  position: fixed;
+  bottom: 10px;
+  right: 10px;
+  z-index: 99;
+}
+</style>
