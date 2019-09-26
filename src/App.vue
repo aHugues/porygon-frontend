@@ -81,4 +81,8 @@ export default {
 .md-app {
   height: 100vh;
 }
+
+.md-drawer {
+  max-width: 300px !important;
+}
 </style>
