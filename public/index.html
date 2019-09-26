@@ -7,6 +7,12 @@
     <link rel="icon" href="<%= BASE_URL %>favicon.ico">
     <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Roboto:400,500,700,400italic|Material+Icons">
     <title>Porygon</title>
+    <script src="https://keycloak.aurelienhugues.com/auth/js/keycloak.js"></script>
+    <script>
+      var keycloak = Keycloak('keycloak.json');
+      keycloak.init({ onLoad: 'login-required' }).success(function(authenticated) {})
+                                                  .error(function() {});
+  </script>
   </head>
   <body>
     <noscript>
