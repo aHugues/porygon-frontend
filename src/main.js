@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import {
   MdButton, MdApp, MdDrawer, MdToolbar, MdContent, MdLayout, MdAvatar, MdList,
-  MdIcon, MdEmptyState, MdMenu, MdSwitch, MdSnackbar, MdField,
+  MdIcon, MdEmptyState, MdMenu, MdSwitch, MdSnackbar, MdField, MdCard,
 } from 'vue-material/dist/components';
 import App from './App.vue';
 import router from './router';
@@ -24,6 +24,7 @@ Vue.use(MdMenu);
 Vue.use(MdSwitch);
 Vue.use(MdSnackbar);
 Vue.use(MdField);
+Vue.use(MdCard);
 
 new Vue({
   router,

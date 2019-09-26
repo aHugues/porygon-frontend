@@ -1,7 +1,14 @@
 <template>
   <div>
-    id: {{ id }}
-    label: {{ label }}
+    <md-card md-with-hover>
+      <md-card-header>
+        <div class="md-title">{{ label }}</div>
+      </md-card-header>
+
+      <md-card-content>
+        Lorem ipsum
+      </md-card-content>
+    </md-card>
   </div>
 </template>
 
@@ -16,5 +23,8 @@ export default {
 </script>
 
 <style>
-
+.md-card {
+  margin-bottom: 8px;
+  margin-top: 8px;
+}
 </style>
