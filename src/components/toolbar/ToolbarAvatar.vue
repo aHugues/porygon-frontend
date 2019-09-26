@@ -3,7 +3,9 @@
     <md-menu md-align-trigger :md-close-on-select=false md-size="auto">
 
       <md-button md-menu-trigger class="md-icon-button">
-        <md-avatar class="md-avatar-icon md-accent">AH</md-avatar>
+        <md-avatar class="md-avatar-icon md-accent">
+          {{ firstNameInitial }}{{ lastNameInitial }}
+        </md-avatar>
       </md-button>
 
       <md-menu-content>
@@ -41,6 +43,10 @@
 <script>
 export default {
   name: 'ToolbarAvatar',
+  computed: {
+    firstNameInitial() { return localStorage.getItem('vue-user-firstname')[0]; },
+    lastNameInitial() { return localStorage.getItem('vue-user-lastname')[0]; },
+  },
   data: () => ({
     darkTheme: false,
     language: 'en',
