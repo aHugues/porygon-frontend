@@ -23,19 +23,36 @@
 
 import axios from 'axios';
 import Category from '@/components/category/Category.vue';
+import config from '../config';
 
 export default {
   mounted() {
     this.fetchData();
   },
   name: 'CategoriesView',
-  data: () => ({
-    categories: {},
-  }),
+  data() {
+    return {
+      categories: {},
+      environment: process.env.NODE_ENV,
+    };
+  },
+  computed: {
+    apiBaseUrl() { return config[this.environment].porygonApiBaseUrl; },
+    authenticationRequired() { return config[this.environment].porygonApiAuthentication; },
+  },
   methods: {
+    buildHeaders() {
+      const headers = { 'Content-Type': 'application/json' };
+      if (this.authenticationRequired) {
+        headers.Authorization = `Bearer ${localStorage.getItem('vue-token')}`;
+      }
+      return headers;
+    },
     fetchData() {
       axios
-        .get('http://localhost:4000/api/v1/categories')
+        .get(`${this.apiBaseUrl}/categories`, {
+          headers: this.buildHeaders(),
+        })
         .then((response) => { this.categories = response.data; });
     },
   },

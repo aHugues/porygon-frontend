@@ -1,8 +1,0 @@
-{
-  "realm": "home",
-  "auth-server-url": "https://keycloak.aurelienhugues.com/auth",
-  "ssl-required": "all",
-  "resource": "porygon-public",
-  "public-client": true,
-  "confidential-port": 0
-}

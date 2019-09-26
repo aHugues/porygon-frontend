@@ -1,0 +1,8 @@
+{
+  "realm": "home",
+  "url": "https://keycloak.aurelienhugues.com/auth",
+  "public-client": true,
+  "confidential-port": 0,
+  "clientId": "porygon-public",
+  "onLoad": "login-required"
+}
