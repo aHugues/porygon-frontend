@@ -52,6 +52,14 @@ import ToolbarTitle from '@/components/toolbar/ToolbarTitle.vue';
 import ToolbarAvatar from '@/components/toolbar/ToolbarAvatar.vue';
 
 export default {
+  created() {
+    let currentTheme = localStorage.getItem('vue-user-theme');
+    if (currentTheme === null || currentTheme === undefined) {
+      currentTheme = 'porygon-light';
+      localStorage.setItem('vue-user-theme', 'porygon-light');
+    }
+    this.$material.theming.theme = currentTheme;
+  },
   name: 'app',
   components: {
     ToolbarTitle,
@@ -64,9 +72,15 @@ export default {
 @import "~vue-material/dist/theme/engine";
 @import url("https://unpkg.com/vue-material@beta/dist/theme/default.css");
 
-@include md-register-theme("default", (
+@include md-register-theme("porygon-light", (
   primary: #C6525A,
   accent: #57AFBA,
+));
+
+@include md-register-theme("porygon-dark", (
+  primary: #C6525A,
+  accent: #57AFBA,
+  theme: dark,
 ));
 
 @import "~vue-material/dist/theme/all";

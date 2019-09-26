@@ -40,12 +40,26 @@
 <script>
 export default {
   name: 'ToolbarAvatar',
+  created() {
+    const currentTheme = localStorage.getItem('vue-user-theme');
+    this.darkTheme = currentTheme === 'porygon-dark';
+  },
+  updated() {
+    const selectedTheme = (this.darkTheme) ? 'porygon-dark' : 'porygon-light';
+    this.$material.theming.theme = selectedTheme;
+  },
+  watch: {
+    darkTheme(newTheme) {
+      const selectedTheme = (newTheme) ? 'porygon-dark' : 'porygon-light';
+      localStorage.setItem('vue-user-theme', selectedTheme);
+    },
+  },
   computed: {
     firstNameInitial() { return localStorage.getItem('vue-user-firstname')[0]; },
     lastNameInitial() { return localStorage.getItem('vue-user-lastname')[0]; },
   },
   data: () => ({
-    darkTheme: false,
+    darkTheme: undefined,
     language: 'en',
     showSnackbar: false,
   }),
