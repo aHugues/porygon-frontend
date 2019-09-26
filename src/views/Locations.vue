@@ -1,5 +1,5 @@
 <template>
-  <div class="about">
+  <div class="locations">
    <md-empty-state
     md-icon="folder"
     md-label="Create your first location"
@@ -8,3 +8,9 @@
    </md-empty-state>
   </div>
 </template>
+
+<script>
+export default {
+  name: 'locations',
+};
+</script>
