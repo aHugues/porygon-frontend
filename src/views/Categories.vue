@@ -9,7 +9,9 @@
    </md-empty-state>
 
    <div class="md-layout">
-     <div v-for="(category, key) in categories" :key="key"  class="md-layout-item">
+     <div
+      v-for="(category, key) in categories" :key="key"
+      class="md-layout-item md-large-size-20 md-medium-size-33 md-small-size-50 md-xsmall-size-100">
       <category
       :id="category.id"
       :label="category.label">
