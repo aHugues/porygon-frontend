@@ -46,20 +46,19 @@ keycloak.init({ onLoad: 'login-required' })
         localStorage.setItem('vue-user-firstname', userInfo.given_name);
         localStorage.setItem('vue-user-lastname', userInfo.family_name);
         localStorage.setItem('vue-user-firstname', userInfo.given_name);
+        localStorage.setItem('vue-token', keycloak.token);
+        localStorage.setItem('vue-refresh-token', keycloak.refreshToken);
+
+        Vue.prototype.$keycloak = keycloak;
+
+        new Vue({
+          router,
+          render: h => h(App),
+        }).$mount('#app');
       })
       .error(() => {
         console.error('Impossible to load user profile');
       });
-
-    new Vue({
-      router,
-      render: h => h(App),
-    }).$mount('#app');
-
-    localStorage.setItem('vue-token', keycloak.token);
-    localStorage.setItem('vue-refresh-token', keycloak.refreshToken);
-
-    Vue.prototype.$keycloak = keycloak;
 
     setTimeout(() => {
       keycloak.updateToken(70)
