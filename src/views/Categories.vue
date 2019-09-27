@@ -10,7 +10,7 @@
 
    <div class="edit-form-wrapper" v-if="showDialog">
       <category-form
-      :method="'create'"
+      :method="dialogMethod" :id="currentId" :currentLabel="currentLabel"
       @category-added-or-modified="fetchData(); showDialog = false;"
       ></category-form>
    </div>
@@ -22,6 +22,7 @@
    <div class="md-layout" v-if="categories.length > 0">
      <div
       v-for="(category, key) in categories" :key="key"
+      @click="editCategory(category.id, category.label)"
       class="md-layout-item md-large-size-20 md-medium-size-33 md-small-size-50 md-xsmall-size-100">
       <category
       :id="category.id"
@@ -31,7 +32,7 @@
    </div>
 
    <div class="add-button-wrapper" v-if="categories.length > 0">
-     <md-button class="md-fab md-primary" @click="showDialog = true">
+     <md-button class="md-fab md-primary" @click="newCategory()">
        <md-icon>add</md-icon>
      </md-button>
    </div>
@@ -55,6 +56,9 @@ export default {
       categories: [],
       environment: process.env.NODE_ENV,
       showDialog: false,
+      dialogMethod: 'create',
+      currentId: -1,
+      currentLabel: '',
     };
   },
   computed: {
@@ -75,6 +79,16 @@ export default {
           headers: this.buildHeaders(),
         })
         .then((response) => { this.categories = response.data; });
+    },
+    newCategory() {
+      this.dialogMethod = 'create';
+      this.showDialog = true;
+    },
+    editCategory(id, label) {
+      this.dialogMethod = 'modify';
+      this.currentId = id;
+      this.currentLabel = label;
+      this.showDialog = true;
     },
   },
   components: {

@@ -17,6 +17,8 @@
         <span class="md-error" v-if="!$v.label.maxLength">The label is too long</span>
       </md-field>
 
+      {{ currentLabel }}
+
     </md-card-content>
 
     <md-card-actions>
@@ -37,6 +39,16 @@ import config from '../../config';
 export default {
   name: 'CategoryForm',
   mixins: [validationMixin],
+  mounted() {
+    if (this.method === 'modify') {
+      this.label = this.currentLabel;
+    }
+  },
+  watch: {
+    currentLabel(newLabel) {
+      this.label = newLabel;
+    },
+  },
   data() {
     return {
       label: '',
@@ -59,6 +71,8 @@ export default {
       required: true,
       validator: value => ['create', 'modify'].indexOf(value) !== -1,
     },
+    id: Number,
+    currentLabel: String,
   },
   methods: {
     buildHeaders() {
@@ -82,9 +96,10 @@ export default {
     },
     saveCategory() {
       const method = (this.method === 'create') ? 'post' : 'put';
+      const urlId = (this.method === 'modify') ? `/${this.id}` : '';
       axios({
         method,
-        url: `${this.apiBaseUrl}/categories`,
+        url: `${this.apiBaseUrl}/categories${urlId}`,
         headers: this.buildHeaders(),
         data: {
           label: this.label,
