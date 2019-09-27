@@ -9,15 +9,10 @@
    </md-empty-state>
 
    <div class="edit-form-wrapper" v-if="showDialog">
-     <md-card>
-       <md-card-header>
-         <div class="md-title">Create category</div>
-       </md-card-header>
-
-       <md-card-content>
-         <category-form></category-form>
-       </md-card-content>
-     </md-card>
+      <category-form
+      :method="'create'"
+      @category-added-or-modified="fetchData(); showDialog = false;"
+      ></category-form>
    </div>
 
   <div v-if="categories.length > 0 && showDialog" class="divider-wrapper">
