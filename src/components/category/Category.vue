@@ -6,7 +6,7 @@
       </md-card-header>
 
       <md-card-content>
-        Lorem ipsum
+        {{ description }}
       </md-card-content>
     </md-card>
   </div>
@@ -18,6 +18,7 @@ export default {
   props: {
     id: Number,
     label: String,
+    description: String,
     selected: Boolean,
   },
   computed: {

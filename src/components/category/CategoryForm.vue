@@ -17,6 +17,11 @@
         <span class="md-error" v-if="!$v.label.maxLength">The label is too long</span>
       </md-field>
 
+      <md-field :class="getValidationClass('description')">
+        <label for="description">description</label>
+        <md-input name="description" id="description" v-model="description"/>
+      </md-field>
+
     </md-card-content>
 
     <md-card-actions>
@@ -48,16 +53,21 @@ export default {
   mounted() {
     if (this.method === 'modify') {
       this.label = this.currentLabel;
+      this.description = this.currentDescription;
     }
   },
   watch: {
     currentLabel(newLabel) {
       this.label = newLabel;
     },
+    currentDescription(newDescription) {
+      this.description = newDescription;
+    },
   },
   data() {
     return {
       label: '',
+      description: '',
       environment: process.env.NODE_ENV,
     };
   },
@@ -68,8 +78,9 @@ export default {
   validations: {
     label: {
       required,
-      maxLength: maxLength(42),
+      maxLength: maxLength(32),
     },
+    description: {},
   },
   props: {
     method: {
@@ -79,6 +90,7 @@ export default {
     },
     id: Number,
     currentLabel: String,
+    currentDescription: String,
   },
   methods: {
     deleteCategory() {
@@ -118,6 +130,7 @@ export default {
         headers: this.buildHeaders(),
         data: {
           label: this.label,
+          description: this.description,
         },
       })
         .then(() => this.$emit('category-added-or-modified'))

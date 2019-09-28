@@ -12,7 +12,7 @@
 
    <div class="edit-form-wrapper" v-if="showDialog">
       <category-form
-      :method="dialogMethod" :id="currentId" :currentLabel="currentLabel"
+      :method="dialogMethod" :id="currentId" :currentLabel="currentLabel" :currentDescription="currentDescription"
       @category-added-or-modified="fetchData(); showDialog = false;"
       ></category-form>
    </div>
@@ -24,11 +24,12 @@
    <div class="md-layout" v-if="categories.length > 0">
      <div
       v-for="(category, key) in categories" :key="key"
-      @click="editCategory(category.id, category.label)"
+      @click="editCategory(category.id, category.label, category.description)"
       class="md-layout-item md-large-size-20 md-medium-size-33 md-small-size-50 md-xsmall-size-100">
       <category
       :id="category.id"
       :label="category.label"
+      :description="category.description"
       :selected="category.id == currentId">
       </category>
      </div>
@@ -62,6 +63,7 @@ export default {
       dialogMethod: 'create',
       currentId: -1,
       currentLabel: '',
+      currentDescription: '',
     };
   },
   computed: {
@@ -87,10 +89,11 @@ export default {
       this.dialogMethod = 'create';
       this.showDialog = true;
     },
-    editCategory(id, label) {
+    editCategory(id, label, description) {
       this.dialogMethod = 'modify';
       this.currentId = id;
       this.currentLabel = label;
+      this.currentDescription = description;
       this.showDialog = true;
     },
   },
