@@ -20,7 +20,15 @@
     </md-card-content>
 
     <md-card-actions>
-      <md-button type="submit" class="md-primary">Create category</md-button>
+      <md-button v-if="method === 'modify'" @click="deleteCategory" class="md-primary">
+        Delete category
+      </md-button>
+      <md-button v-if="method === 'create'" type="submit" class="md-accent">
+        Create category
+      </md-button>
+      <md-button v-if="method === 'modify'" type="submit" class="md-accent">
+        Edit category
+      </md-button>
     </md-card-actions>
     </form>
   </md-card>
@@ -73,6 +81,15 @@ export default {
     currentLabel: String,
   },
   methods: {
+    deleteCategory() {
+      axios({
+        method: 'delete',
+        url: `${this.apiBaseUrl}/categories/${this.id}`,
+        headers: this.buildHeaders(),
+      })
+        .then(() => this.$emit('category-added-or-modified'))
+        .catch(error => console.error(error));
+    },
     buildHeaders() {
       const headers = { 'Content-Type': 'application/json' };
       if (this.authenticationRequired) {
