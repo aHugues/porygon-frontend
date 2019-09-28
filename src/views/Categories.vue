@@ -1,11 +1,13 @@
 <template>
   <div class="categories">
    <md-empty-state
-    v-if="categories.length == 0"
+    v-if="categories.length == 0 && !showDialog"
     md-icon="category"
     md-label="Create your first category"
     md-description="Creating category, you'll be able to better organize movies and series.">
-    <md-button class="md-primary md-raised">Create your first category</md-button>
+    <md-button @click="newCategory()" class="md-primary md-raised">
+      Create your first category
+    </md-button>
    </md-empty-state>
 
    <div class="edit-form-wrapper" v-if="showDialog">

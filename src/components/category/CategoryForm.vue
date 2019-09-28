@@ -17,8 +17,6 @@
         <span class="md-error" v-if="!$v.label.maxLength">The label is too long</span>
       </md-field>
 
-      {{ currentLabel }}
-
     </md-card-content>
 
     <md-card-actions>
