@@ -12,7 +12,8 @@
 
    <div class="edit-form-wrapper" v-if="showDialog">
       <category-form
-      :method="dialogMethod" :id="currentId" :currentLabel="currentLabel" :currentDescription="currentDescription"
+      :method="dialogMethod" :id="currentId" :currentLabel="currentLabel"
+      :currentDescription="currentDescription"
       @category-added-or-modified="fetchData(); showDialog = false;"
       ></category-form>
    </div>
