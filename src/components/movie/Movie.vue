@@ -1,6 +1,21 @@
 <template>
-  <div>
-    {{ movie.title }}
+  <div class="full-size">
+    <div class="md-layout full-size">
+      <div class="md-layout-item md-size-20 col-20">
+        <span v-if="category.label === null" class="md-caption">
+          undefined category
+        </span>
+        <span v-else>
+          {{ category.label }}
+        </span>
+      </div>
+      <div class="md-layout-item md-size-60 col-60">
+        {{ movie.title }}
+      </div>
+      <div class="md-layout-item md-size-20 col-20">
+        {{ location.location }}
+      </div>
+    </div>
   </div>
 </template>
 
@@ -15,5 +30,14 @@ export default {
 };
 </script>
 
-<style>
+<style scoped lang="scss">
+.full-size {
+  width: 100%;
+}
+.col-20 {
+  width: 20%;
+}
+.col-60 {
+  width: 60%;
+}
 </style>
