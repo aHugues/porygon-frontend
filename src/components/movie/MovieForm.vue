@@ -1,71 +1,161 @@
 <template>
-<div>
-  <md-card>
-    <form novalidate @submit.prevent="validateLocation">
-    <md-card-header>
-      <div v-if="method === 'create'" class="md-title">Create Location</div>
-      <div v-if="method === 'modify'" class="md-title">Edit Location</div>
-    </md-card-header>
+<div class="movie-edit-form">
+    <form novalidate @submit.prevent="validateMovie">
+      <div class="md-layout md-gutter">
 
-    <md-card-content>
+        <div class="md-layout-item md-size-100">
+          <md-field :class="getValidationClass('title')">
+            <label for="title">Title</label>
+            <md-input name="title" id="title" v-model="movie.title"/>
+            <span class="md-error" v-if="!$v.movie.title.required">The title is required</span>
+            <span class="md-error" v-if="!$v.movie.title.maxLength">The title is too long</span>
+          </md-field>
+        </div>
 
+        <div class="md-layout-item md-size-50 md-small-size-100">
+          <md-field :class="getValidationClass('year')">
+            <label for="year">Year</label>
+            <md-input name="year" id="year" v-model="movie.year"/>
+            <span class="md-error" v-if="!$v.movie.year.required">The year is required</span>
+            <span class="md-error" v-if="!$v.movie.year.between">
+              The year should be between 1920 and 210
+            </span>
+            <span class="md-error" v-if="!$v.movie.year.integer">
+              The year should be a number
+            </span>
+          </md-field>
+        </div>
 
-      <md-field :class="getValidationClass('location')">
-        <label for="location">Location</label>
-        <md-input name="location" id="location" v-model="location"/>
-        <span class="md-error" v-if="!$v.location.required">The label is required</span>
-        <span class="md-error" v-if="!$v.location.maxLength">The label is too long</span>
-      </md-field>
+        <div class="md-layout-item md-size-50 md-small-size-100">
+          <md-field :class="getValidationClass('duration')">
+            <label for="duration">Duration (mins.)</label>
+            <md-input name="duration" id="duration" v-model="movie.duration"/>
+            <span class="md-error" v-if="!$v.movie.duration.required">
+              The duration is required
+            </span>
+            <span class="md-error" v-if="!$v.movie.duration.between">
+              The duration should be between 0 and 600
+            </span>
+            <span class="md-error" v-if="!$v.movie.duration.integer">
+              The duration should be a number
+            </span>
+          </md-field>
+        </div>
 
-      <md-switch name="physical" id="physical" v-model="physical">Physical Location</md-switch>
+        <div class="md-layout-item md-size-100">
+          <md-field :class="getValidationClass('director')">
+            <label for="director">Director</label>
+            <md-input name="director" id="director" v-model="movie.director"/>
+            <span class="md-error" v-if="!$v.movie.director.maxLength">
+              The director is too long
+            </span>
+          </md-field>
+        </div>
 
-    </md-card-content>
+        <div class="md-layout-item md-size-100">
+          <md-field :class="getValidationClass('actors')">
+            <label for="actors">Actors</label>
+            <md-input name="actors" id="actors" v-model="movie.actors"/>
+            <span class="md-error" v-if="!$v.movie.actors.maxLength">
+              The actors list is too long
+            </span>
+          </md-field>
+        </div>
 
-    <md-card-actions>
-      <md-button v-if="method === 'modify'" @click="deleteLocation" class="md-primary">
-        Delete location
-      </md-button>
+        <div class="md-layout-item md-size-100">
+          <md-field>
+            <label for="support">Supports</label>
+            <md-select v-model="supports" name="supports" id="supports" multiple>
+              <md-option value="dvd">DvD</md-option>
+              <md-option value="bluray">Bluray</md-option>
+              <md-option value="digital">Digital</md-option>
+            </md-select>
+          </md-field>
+        </div>
+
+        <div class="md-layout-item md-size-100">
+          <md-field>
+            <label for="location">Location</label>
+            <md-select v-model="movie.location_id" name="location" id="location">
+              <md-option v-for="(location, key) in locations" :key="key"
+              :value="location.id">{{ location.location }}</md-option>
+            </md-select>
+          </md-field>
+        </div>
+
+        <div class="md-layout-item md-size-100">
+          <md-field>
+            <label for="category">Category</label>
+            <md-select v-model="movie.category_id" name="category" id="category">
+              <md-option v-for="(category, key) in categories" :key="key"
+              :value="category.id">{{ category.label }}</md-option>
+            </md-select>
+          </md-field>
+        </div>
+
+        <div class="md-layout-item md-size-100">
+          <md-field :class="getValidationClass('remarks')">
+            <label for="remarks">Remarks</label>
+            <md-input name="remarks" id="remarks" v-model="movie.remarks"/>
+            <span class="md-error" v-if="!$v.movie.remarks.maxLength">
+              The remarks are too long
+            </span>
+          </md-field>
+        </div>
+
+      </div>
+
       <md-button v-if="method === 'create'" type="submit" class="md-accent">
-        Create location
+        Create movie
       </md-button>
       <md-button v-if="method === 'modify'" type="submit" class="md-accent">
-        Edit location
+        Edit movie
       </md-button>
-    </md-card-actions>
+      <md-button v-if="method === 'modify'" @click="deleteMovie" class="md-primary">
+        Delete movie
+      </md-button>
     </form>
-  </md-card>
 
 </div>
 </template>
 
 <script>
 import { validationMixin } from 'vuelidate';
-import { required, maxLength } from 'vuelidate/lib/validators';
+import {
+  required, maxLength, between, integer,
+} from 'vuelidate/lib/validators';
 import axios from 'axios';
 import config from '../../config';
 
 export default {
-  name: 'LocationForm',
+  name: 'MovieForm',
   mixins: [validationMixin],
+  created() {
+    this.getLocationsList();
+    this.getCategoriesList();
+  },
   mounted() {
     if (this.method === 'modify') {
-      this.location = this.currentLocation;
-      this.physical = this.currentPhysical;
+      this.currentMovie = this.movie;
+      const mapping = {
+        is_dvd: 'dvd',
+        is_bluray: 'bluray',
+        is_digital: 'digital',
+      };
+      Object.keys(mapping).forEach((key) => {
+        if (this.movie[key]) {
+          this.supports.push(mapping[key]);
+        }
+      });
     }
-  },
-  watch: {
-    currentLocation(newLocation) {
-      this.location = newLocation;
-    },
-    currentPhysical(newPhysical) {
-      this.physical = newPhysical;
-    },
   },
   data() {
     return {
-      location: '',
-      physical: true,
+      currentMovie: {},
       environment: process.env.NODE_ENV,
+      locations: [],
+      categories: [],
+      supports: [],
     };
   },
   computed: {
@@ -73,12 +163,30 @@ export default {
     authenticationRequired() { return config[this.environment].porygonApiAuthentication; },
   },
   validations: {
-    location: {
-      required,
-      maxLength: maxLength(32),
-    },
-    physical: {
-      required,
+    movie: {
+      title: {
+        required,
+        maxLength: maxLength(128),
+      },
+      duration: {
+        required,
+        between: between(0, 600),
+        integer,
+      },
+      year: {
+        required,
+        between: between(1910, 2100),
+        integer,
+      },
+      director: {
+        maxLength: maxLength(128),
+      },
+      actors: {
+        maxLength: maxLength(128),
+      },
+      remarks: {
+        maxLength: maxLength(255),
+      },
     },
   },
   props: {
@@ -87,18 +195,18 @@ export default {
       required: true,
       validator: value => ['create', 'modify'].indexOf(value) !== -1,
     },
-    id: Number,
-    currentLocation: String,
-    currentPhysical: Boolean,
+    movie: Object,
+    location: Object,
+    category: Object,
   },
   methods: {
-    deleteLocation() {
+    deleteMovie() {
       axios({
         method: 'delete',
-        url: `${this.apiBaseUrl}/locations/${this.id}`,
+        url: `${this.apiBaseUrl}/movies/${this.id}`,
         headers: this.buildHeaders(),
       })
-        .then(() => this.$emit('location-added-or-modified'))
+        .then(() => this.$emit('movie-added-or-modified'))
         .catch(error => console.error(error));
     },
     buildHeaders() {
@@ -109,7 +217,7 @@ export default {
       return headers;
     },
     getValidationClass(fieldName) {
-      const field = this.$v[fieldName];
+      const field = this.$v.movie[fieldName];
       let returnedClass = {};
 
       if (field) {
@@ -120,25 +228,36 @@ export default {
 
       return returnedClass;
     },
-    saveLocation() {
+    getLocationsList() {
+      axios
+        .get(`${this.apiBaseUrl}/locations`, {
+          headers: this.buildHeaders(),
+        })
+        .then((response) => { this.locations = response.data; });
+    },
+    getCategoriesList() {
+      axios
+        .get(`${this.apiBaseUrl}/categories`, {
+          headers: this.buildHeaders(),
+        })
+        .then((response) => { this.categories = response.data; });
+    },
+    saveMovie() {
       const method = (this.method === 'create') ? 'post' : 'put';
-      const urlId = (this.method === 'modify') ? `/${this.id}` : '';
+      const urlId = (this.method === 'modify') ? `/${this.movie.id}` : '';
       axios({
         method,
-        url: `${this.apiBaseUrl}/locations${urlId}`,
+        url: `${this.apiBaseUrl}/movies${urlId}`,
         headers: this.buildHeaders(),
-        data: {
-          location: this.location,
-          is_physical: this.physical,
-        },
+        data: this.movie,
       })
-        .then(() => this.$emit('location-added-or-modified'))
+        .then(() => this.$emit('movie-added-or-modified'))
         .catch(error => console.error(error));
     },
-    validateLocation() {
+    validateMovie() {
       this.$v.$touch();
       if (!this.$v.$invalid) {
-        this.saveLocation();
+        this.saveMovie();
       }
     },
   },
@@ -146,5 +265,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
+.movie-edit-form {
+  width: 90%;
+  margin: auto;
+}
 </style>

@@ -9,12 +9,16 @@
     </md-empty-state>
 
     <div v-if="movies.length > 0">
-      <md-list>
+      <md-list :md-expand-single="true">
         <div v-for="(movie, key) in movies" :key="key">
-          <md-list-item @click="onSelect(movie.Movie.id)">
+          <md-list-item @click="onSelect(movie.Movie.id)" md-expand
+          :md-expanded.sync="expanded[key - 1]">
             <movie
             :movie="movie.Movie" :category="movie.Category" :location="movie.Location"
             ></movie>
+            <movie-form :movie="movie.Movie" :category="movie.Category" :location="movie.Location"
+            :method="'modify'" slot="md-expand"
+            @movie-added-or-modified="refreshList(key - 1)"></movie-form>
           </md-list-item>
           <md-divider></md-divider>
         </div>
@@ -27,7 +31,7 @@
 
 import axios from 'axios';
 import Movie from '@/components/movie/Movie.vue';
-// import LocationForm from '@/components/location/LocationForm.vue';
+import MovieForm from '@/components/movie/MovieForm.vue';
 import config from '../config';
 
 export default {
@@ -40,10 +44,12 @@ export default {
       movies: [],
       environment: process.env.NODE_ENV,
       showDialog: false,
+      expanded: [],
     };
   },
   components: {
     Movie,
+    MovieForm,
   },
   computed: {
     apiBaseUrl() { return config[this.environment].porygonApiBaseUrl; },
@@ -62,7 +68,15 @@ export default {
         .get(`${this.apiBaseUrl}/movies`, {
           headers: this.buildHeaders(),
         })
-        .then((response) => { this.movies = response.data; });
+        .then((response) => {
+          this.expanded = Array(response.data.length);
+          this.expanded.fill(false);
+          this.movies = response.data;
+        });
+    },
+    refreshList(id) {
+      this.expanded[id] = false;
+      this.fetchData();
     },
     onSelect(id) {
       console.log(`Selected movie ${id}`);

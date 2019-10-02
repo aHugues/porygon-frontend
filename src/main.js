@@ -2,7 +2,7 @@ import Vue from 'vue';
 import {
   MdButton, MdApp, MdDrawer, MdToolbar, MdContent, MdLayout, MdAvatar, MdList,
   MdIcon, MdEmptyState, MdMenu, MdSwitch, MdSnackbar, MdField, MdCard, MdDivider,
-  MdDialogAlert,
+  MdDialogAlert, MdCheckbox,
 } from 'vue-material/dist/components';
 import * as Keycloak from 'keycloak-js';
 import App from './App.vue';
@@ -31,6 +31,7 @@ Vue.use(MdSnackbar);
 Vue.use(MdField);
 Vue.use(MdCard);
 Vue.use(MdDivider);
+Vue.use(MdCheckbox);
 Vue.use(MdDialogAlert);
 
 const keycloak = Keycloak(keycloakConfig);
