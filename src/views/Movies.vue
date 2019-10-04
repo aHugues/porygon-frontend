@@ -28,6 +28,13 @@
         </div>
       </md-list>
     </div>
+
+    <div class="add-button-wrapper" v-if="movies.length > 0">
+     <md-button class="md-fab md-primary" @click="newMovie()">
+       <md-icon>add</md-icon>
+     </md-button>
+   </div>
+
   </div>
 </template>
 
@@ -94,3 +101,12 @@ export default {
   },
 };
 </script>
+
+<style lang="scss" scoped>
+.add-button-wrapper {
+  position: fixed;
+  bottom: 10px;
+  right: 10px;
+  z-index: 10;
+}
+</style>

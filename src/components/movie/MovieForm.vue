@@ -103,6 +103,8 @@
           </md-field>
         </div>
 
+        {{ movie }}
+
       </div>
 
       <md-button v-if="method === 'create'" type="submit" class="md-accent">
@@ -147,9 +149,6 @@ export default {
           this.supports.push(mapping[key]);
         }
       });
-    } else {
-      this.movie = {};
-      this.supports = [false, false, false];
     }
   },
   watch: {
