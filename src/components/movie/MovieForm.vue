@@ -105,8 +105,6 @@
 
       </div>
 
-      {{ movie }}
-
       <md-button v-if="method === 'create'" type="submit" class="md-accent">
         Create movie
       </md-button>
@@ -153,6 +151,18 @@ export default {
       this.movie = {};
       this.supports = [false, false, false];
     }
+  },
+  watch: {
+    supports(newSupports) {
+      const mapping = {
+        dvd: 'is_dvd',
+        bluray: 'is_bluray',
+        digital: 'is_digital',
+      };
+      const vars = ['is_dvd', 'is_bluray', 'is_digital'];
+      vars.forEach(element => { this.movie[element] = false; })
+      this.supports.forEach(support => { this.movie[mapping[support]] = true; })
+    },
   },
   data() {
     return {
