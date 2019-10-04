@@ -1,11 +1,15 @@
 <template>
   <div class="movies">
+
+    <movie-form v-if="showDialog" :method="'create'" :movie="{}"
+        @movie-added-or-modified="refreshList(-1)"></movie-form>
+
     <md-empty-state
       v-if="movies.length == 0 && !showDialog"
       md-icon="movie"
       md-label="Create your first movie"
       md-description="Creating movies, you'll be able to store and order your movies library.">
-      <md-button class="md-primary md-raised">Create your first movie</md-button>
+      <md-button @click="newMovie()" class="md-primary md-raised">Create your first movie</md-button>
     </md-empty-state>
 
     <div v-if="movies.length > 0">
@@ -16,7 +20,7 @@
             <movie
             :movie="movie.Movie" :category="movie.Category" :location="movie.Location"
             ></movie>
-            <movie-form :movie="movie.Movie" :category="movie.Category" :location="movie.Location"
+            <movie-form :currentMovie="movie.Movie" :currentCategory="movie.Category" :currentLocation="movie.Location"
             :method="'modify'" slot="md-expand"
             @movie-added-or-modified="refreshList(key - 1)"></movie-form>
           </md-list-item>
@@ -75,12 +79,18 @@ export default {
         });
     },
     refreshList(id) {
-      this.expanded[id] = false;
+      if (id > 0) {
+        this.expanded[id] = false;
+      }
+      this.showDialog = false;
       this.fetchData();
     },
     onSelect(id) {
       console.log(`Selected movie ${id}`);
     },
+    newMovie() {
+      this.showDialog = true;
+    }
   },
 };
 </script>

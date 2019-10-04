@@ -105,6 +105,8 @@
 
       </div>
 
+      {{ movie }}
+
       <md-button v-if="method === 'create'" type="submit" class="md-accent">
         Create movie
       </md-button>
@@ -136,7 +138,7 @@ export default {
   },
   mounted() {
     if (this.method === 'modify') {
-      this.currentMovie = this.movie;
+      this.movie = this.currentMovie;
       const mapping = {
         is_dvd: 'dvd',
         is_bluray: 'bluray',
@@ -147,11 +149,14 @@ export default {
           this.supports.push(mapping[key]);
         }
       });
+    } else {
+      this.movie = {};
+      this.supports = [false, false, false];
     }
   },
   data() {
     return {
-      currentMovie: {},
+      movie: {},
       environment: process.env.NODE_ENV,
       locations: [],
       categories: [],
@@ -195,9 +200,9 @@ export default {
       required: true,
       validator: value => ['create', 'modify'].indexOf(value) !== -1,
     },
-    movie: Object,
-    location: Object,
-    category: Object,
+    currentMovie: Object,
+    currentLocation: Object,
+    currentCategory: Object,
   },
   methods: {
     deleteMovie() {
