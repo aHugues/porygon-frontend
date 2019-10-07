@@ -50,6 +50,9 @@ keycloak.init({ onLoad: 'login-required' })
         localStorage.setItem('vue-token', keycloak.token);
         localStorage.setItem('vue-refresh-token', keycloak.refreshToken);
 
+        const accountUrl = `${keycloakConfig.url}/realms/${keycloakConfig.realm}/account`;
+        localStorage.setItem('vue-user-url', accountUrl);
+
         Vue.prototype.$keycloak = keycloak;
 
         new Vue({

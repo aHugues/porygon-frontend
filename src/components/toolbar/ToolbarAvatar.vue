@@ -24,6 +24,15 @@
         </md-menu-item> -->
 
         <md-menu-item>
+          <md-button target="_blank" :href="userAccountUrl">
+            <div class="logout-button-content">
+              <md-icon>account_box</md-icon>
+              <div>Account</div>
+            </div>
+          </md-button>
+        </md-menu-item>
+
+        <md-menu-item>
           <md-button @click="logout">
             <div class="logout-button-content">
               <md-icon>logout</md-icon>
@@ -31,6 +40,7 @@
             </div>
           </md-button>
         </md-menu-item>
+
       </md-menu-content>
     </md-menu>
 
@@ -57,6 +67,7 @@ export default {
   computed: {
     firstNameInitial() { return localStorage.getItem('vue-user-firstname')[0]; },
     lastNameInitial() { return localStorage.getItem('vue-user-lastname')[0]; },
+    userAccountUrl() { return localStorage.getItem('vue-user-url'); },
   },
   data: () => ({
     darkTheme: undefined,
