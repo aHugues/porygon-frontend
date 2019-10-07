@@ -66,5 +66,24 @@ describe('ToolbarAvatar.vue', () => {
     wrapper.vm.$forceUpdate();
     expect(wrapper.vm.darkTheme).toEqual(true);
     expect(global.window.localStorage.getItem('vue-user-theme')).toEqual('porygon-dark');
+    wrapper.vm.darkTheme = false;
+    wrapper.vm.$forceUpdate();
+    expect(wrapper.vm.darkTheme).toEqual(false);
+    expect(global.window.localStorage.getItem('vue-user-theme')).toEqual('porygon-light');
+  });
+
+  it('correctly calls the logout function', () => {
+    setGlobals();
+    Object.keys(localStorageLight).forEach((key) => {
+      global.window.localStorage.setItem(key, localStorageLight[key]);
+    });
+    const keycloak = { logout: (url) => { expect(url).toBe('/'); } };
+    const wrapper = shallowMount(ToolbarAvatar, {
+      stubs: ['md-button', 'md-icon', 'md-switch', 'md-menu-item', 'md-menu-content', 'md-avatar', 'md-menu'],
+      mocks: {
+        $keycloak: keycloak,
+      },
+    });
+    wrapper.vm.logout();
   });
 });
