@@ -8,6 +8,16 @@ const localStorageLight = {
   'vue-user-lastname': 'Doe',
 };
 
+const localStorageComposed = {
+  'vue-user-theme': 'porygon-light',
+  'vue-user-firstname': 'John-John',
+  'vue-user-lastname': 'Doe',
+};
+
+const localStorageUndefined = {
+  'vue-user-theme': 'porygon-light',
+};
+
 const localStorageDark = {
   'vue-user-theme': 'porygon-dark',
   'vue-user-firstname': 'John',
@@ -45,8 +55,31 @@ describe('ToolbarAvatar.vue', () => {
     const wrapper = shallowMount(ToolbarAvatar, {
       stubs: ['md-button', 'md-icon', 'md-switch', 'md-menu-item', 'md-menu-content', 'md-avatar', 'md-menu'],
     });
-    expect(wrapper.vm.firstNameInitial).toEqual('J');
-    expect(wrapper.vm.lastNameInitial).toEqual('D');
+    expect(wrapper.vm.userInitials).toEqual('J');
+  });
+
+  it('correctly computes the initials for composed nouns', () => {
+    setGlobals();
+    Object.keys(localStorageComposed).forEach((key) => {
+      global.window.localStorage.setItem(key, localStorageComposed[key]);
+    });
+    const wrapper = shallowMount(ToolbarAvatar, {
+      stubs: ['md-button', 'md-icon', 'md-switch', 'md-menu-item', 'md-menu-content', 'md-avatar', 'md-menu'],
+    });
+    expect(wrapper.vm.userInitials).toEqual('JJ');
+  });
+
+  it('correctly computes the initials when unknown', () => {
+    setGlobals();
+    global.window.localStorage.clear();
+    Object.keys(localStorageUndefined).forEach((key) => {
+      global.window.localStorage.setItem(key, localStorageUndefined[key]);
+    });
+    const wrapper = shallowMount(ToolbarAvatar, {
+      stubs: ['md-button', 'md-icon', 'md-switch', 'md-menu-item', 'md-menu-content', 'md-avatar', 'md-menu'],
+    });
+    expect(global.window.localStorage.getItem('vue-user-firstname')).not.toBeTruthy();
+    expect(wrapper.vm.userInitials).toEqual('-');
   });
 
   it('correctly updates the theme when updated', () => {

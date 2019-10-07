@@ -4,7 +4,7 @@
 
       <md-button md-menu-trigger class="md-icon-button">
         <md-avatar class="md-avatar-icon md-accent">
-          {{ firstNameInitial }}{{ lastNameInitial }}
+          {{ userInitials }}
         </md-avatar>
       </md-button>
 
@@ -65,8 +65,20 @@ export default {
     },
   },
   computed: {
-    firstNameInitial() { return localStorage.getItem('vue-user-firstname')[0]; },
-    lastNameInitial() { return localStorage.getItem('vue-user-lastname')[0]; },
+    userInitials() { 
+      const firstname = localStorage.getItem('vue-user-firstname');
+      let initials = '';
+      if(firstname) {
+        const firstnameArray = firstname.split('-')
+        initials += firstnameArray[0][0];
+        if (firstnameArray[1]) {
+          initials += firstnameArray[1][0];
+        }
+      } else {
+        initials = '-'
+      }
+      return initials;
+    },
     userAccountUrl() { return localStorage.getItem('vue-user-url'); },
   },
   data: () => ({
