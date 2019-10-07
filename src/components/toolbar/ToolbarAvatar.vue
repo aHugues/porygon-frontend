@@ -65,17 +65,17 @@ export default {
     },
   },
   computed: {
-    userInitials() { 
+    userInitials() {
       const firstname = localStorage.getItem('vue-user-firstname');
       let initials = '';
-      if(firstname) {
-        const firstnameArray = firstname.split('-')
+      if (firstname) {
+        const firstnameArray = firstname.split('-');
         initials += firstnameArray[0][0];
         if (firstnameArray[1]) {
           initials += firstnameArray[1][0];
         }
       } else {
-        initials = '-'
+        initials = '-';
       }
       return initials;
     },

@@ -152,15 +152,15 @@ export default {
     }
   },
   watch: {
-    supports(newSupports) {
+    supports() {
       const mapping = {
         dvd: 'is_dvd',
         bluray: 'is_bluray',
         digital: 'is_digital',
       };
       const vars = ['is_dvd', 'is_bluray', 'is_digital'];
-      vars.forEach(element => { this.movie[element] = false; })
-      this.supports.forEach(support => { this.movie[mapping[support]] = true; })
+      vars.forEach((element) => { this.movie[element] = false; });
+      this.supports.forEach((support) => { this.movie[mapping[support]] = true; });
     },
   },
   data() {
