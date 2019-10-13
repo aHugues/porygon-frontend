@@ -99,10 +99,6 @@ import config from '../../config';
 export default {
   name: 'SerieForm',
   mixins: [validationMixin],
-  created() {
-    this.getLocationsList();
-    this.getCategoriesList();
-  },
   mounted() {
     if (this.method === 'modify') {
       this.serie = this.currentSerie;
@@ -134,8 +130,6 @@ export default {
     return {
       serie: {},
       environment: process.env.NODE_ENV,
-      locations: [],
-      categories: [],
       supports: [],
     };
   },
@@ -167,8 +161,8 @@ export default {
       validator: value => ['create', 'modify'].indexOf(value) !== -1,
     },
     currentSerie: Object,
-    currentLocation: Object,
-    currentCategory: Object,
+    locations: Array,
+    categories: Array,
   },
   methods: {
     deleteSerie() {
@@ -198,20 +192,6 @@ export default {
       }
 
       return returnedClass;
-    },
-    getLocationsList() {
-      axios
-        .get(`${this.apiBaseUrl}/locations`, {
-          headers: this.buildHeaders(),
-        })
-        .then((response) => { this.locations = response.data; });
-    },
-    getCategoriesList() {
-      axios
-        .get(`${this.apiBaseUrl}/categories`, {
-          headers: this.buildHeaders(),
-        })
-        .then((response) => { this.categories = response.data; });
     },
     saveSerie() {
       const method = (this.method === 'create') ? 'post' : 'put';

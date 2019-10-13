@@ -2,6 +2,7 @@
   <div class="movies">
 
     <movie-form v-if="showDialog" :method="'create'" :movie="{}"
+        :categories="categories" :locations="locations"
         @movie-added-or-modified="refreshList(-1)"></movie-form>
 
     <md-empty-state
@@ -23,7 +24,7 @@
             :movie="movie.Movie" :category="movie.Category" :location="movie.Location"
             ></movie>
             <movie-form :currentMovie="movie.Movie"
-            :currentCategory="movie.Category" :currentLocation="movie.Location"
+            :categories="categories" :locations="locations"
             :method="'modify'" slot="md-expand"
             @movie-added-or-modified="refreshList(key - 1)"></movie-form>
           </md-list-item>
@@ -59,6 +60,8 @@ export default {
       environment: process.env.NODE_ENV,
       showDialog: false,
       expanded: [],
+      categories: [],
+      locations: [],
     };
   },
   components: {
@@ -77,7 +80,21 @@ export default {
       }
       return headers;
     },
-    fetchData() {
+    fetchLocations() {
+      axios
+        .get(`${this.apiBaseUrl}/locations`, {
+          headers: this.buildHeaders(),
+        })
+        .then((response) => { this.locations = response.data; });
+    },
+    fetchCategories() {
+      axios
+        .get(`${this.apiBaseUrl}/categories`, {
+          headers: this.buildHeaders(),
+        })
+        .then((response) => { this.categories = response.data; });
+    },
+    fetchMovies() {
       axios
         .get(`${this.apiBaseUrl}/movies`, {
           headers: this.buildHeaders(),
@@ -87,6 +104,11 @@ export default {
           this.expanded.fill(false);
           this.movies = response.data;
         });
+    },
+    fetchData() {
+      this.fetchMovies();
+      this.fetchLocations();
+      this.fetchCategories();
     },
     refreshList(id) {
       if (id > 0) {

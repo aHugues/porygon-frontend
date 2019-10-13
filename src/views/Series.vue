@@ -2,6 +2,7 @@
   <div class="series">
 
     <serie-form v-if="showDialog" :method="'create'" :serie="{}"
+        :categories="categories" :locations="locations"
         @serie-added-or-modified="refreshList(-1)"></serie-form>
 
     <md-empty-state
@@ -23,7 +24,7 @@
             :serie="serie.Serie" :category="serie.Category" :location="serie.Location"
             ></serie>
              <serie-form :currentSerie="serie.Serie"
-            :currentCategory="serie.Category" :currentLocation="serie.Location"
+            :categories="categories" :locations="locations"
             :method="'modify'" slot="md-expand"
             @serie-added-or-modified="refreshList(key - 1)"></serie-form>
           </md-list-item>
@@ -58,6 +59,8 @@ export default {
       environment: process.env.NODE_ENV,
       showDialog: false,
       expanded: [],
+      categories: [],
+      locations: [],
     };
   },
   components: {
@@ -76,7 +79,21 @@ export default {
       }
       return headers;
     },
-    fetchData() {
+    fetchLocations() {
+      axios
+        .get(`${this.apiBaseUrl}/locations`, {
+          headers: this.buildHeaders(),
+        })
+        .then((response) => { this.locations = response.data; });
+    },
+    fetchCategories() {
+      axios
+        .get(`${this.apiBaseUrl}/categories`, {
+          headers: this.buildHeaders(),
+        })
+        .then((response) => { this.categories = response.data; });
+    },
+    fetchSeries() {
       axios
         .get(`${this.apiBaseUrl}/series`, {
           headers: this.buildHeaders(),
@@ -86,6 +103,11 @@ export default {
           this.expanded.fill(false);
           this.series = response.data;
         });
+    },
+    fetchData() {
+      this.fetchSeries();
+      this.fetchLocations();
+      this.fetchCategories();
     },
     refreshList(id) {
       if (id > 0) {
