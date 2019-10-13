@@ -217,7 +217,7 @@ export default {
     deleteMovie() {
       axios({
         method: 'delete',
-        url: `${this.apiBaseUrl}/movies/${this.id}`,
+        url: `${this.apiBaseUrl}/movies/${this.movie.id}`,
         headers: this.buildHeaders(),
       })
         .then(() => this.$emit('movie-added-or-modified'))
