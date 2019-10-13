@@ -103,8 +103,6 @@
           </md-field>
         </div>
 
-        {{ movie }}
-
       </div>
 
       <md-button v-if="method === 'create'" type="submit" class="md-accent">
