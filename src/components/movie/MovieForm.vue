@@ -5,10 +5,24 @@
 
         <div class="md-layout-item md-size-100">
           <md-field :class="getValidationClass('title')">
-            <label for="title">Title</label>
+            <label for="title"> Original title</label>
             <md-input name="title" id="title" v-model="movie.title"/>
-            <span class="md-error" v-if="!$v.movie.title.required">The title is required</span>
-            <span class="md-error" v-if="!$v.movie.title.maxLength">The title is too long</span>
+            <span class="md-error" v-if="!$v.movie.title.required">
+              The original title is required
+            </span>
+            <span class="md-error" v-if="!$v.movie.title.maxLength">
+              The original title is too long
+            </span>
+          </md-field>
+        </div>
+
+        <div class="md-layout-item md-size-100">
+          <md-field :class="getValidationClass('french_title')">
+            <label for="french_title">French Title</label>
+            <md-input name="french_title" id="french_title" v-model="movie.french_title"/>
+            <span class="md-error" v-if="!$v.movie.french_title.maxLength">
+              The french title is too long
+            </span>
           </md-field>
         </div>
 
@@ -172,6 +186,9 @@ export default {
     movie: {
       title: {
         required,
+        maxLength: maxLength(128),
+      },
+      french_title: {
         maxLength: maxLength(128),
       },
       duration: {
