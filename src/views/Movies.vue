@@ -2,7 +2,7 @@
   <div class="movies">
 
     <div v-if="loading" class="loader">
-      LOADING
+      <md-progress-spinner md-mode="indeterminate"></md-progress-spinner>
     </div>
 
     <movie-form v-if="!loading && showDialog" :method="'create'" :movie="{}"
@@ -142,10 +142,21 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.movies {
+  height: 100%;
+}
+
 .add-button-wrapper {
   position: fixed;
   bottom: 10px;
   right: 10px;
   z-index: 10;
+}
+
+.loader {
+  text-align: center;
+  width: 100%;
+  height: 100%;
+  padding-top: 30%;
 }
 </style>
