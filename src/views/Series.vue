@@ -1,12 +1,16 @@
 <template>
   <div class="series">
 
-    <serie-form v-if="showDialog" :method="'create'" :serie="{}"
+    <div v-if="loading" class="loader">
+      LOADING
+    </div>
+
+    <serie-form v-if="!loading && showDialog" :method="'create'" :serie="{}"
         :categories="categories" :locations="locations"
         @serie-added-or-modified="refreshList(-1)"></serie-form>
 
     <md-empty-state
-      v-if="series.length == 0 && !showDialog"
+      v-if="!loading && series.length == 0 && !showDialog"
       md-icon="tv"
       md-label="Create your first series"
       md-description="Creating series, you'll be able to store and order your series library.">
@@ -15,7 +19,7 @@
       </md-button>
     </md-empty-state>
 
-     <div v-if="series.length > 0">
+     <div v-if="!loading && series.length > 0">
       <md-list :md-expand-single="true">
         <div v-for="(serie, key) in series" :key="key">
           <md-list-item @click="onSelect(serie.Serie.id)" md-expand
@@ -33,7 +37,7 @@
       </md-list>
     </div>
 
-    <div class="add-button-wrapper" v-if="series.length > 0">
+    <div class="add-button-wrapper" v-if="!loading && series.length > 0">
      <md-button class="md-fab md-primary" @click="newSerie()">
        <md-icon>add</md-icon>
      </md-button>
@@ -61,7 +65,16 @@ export default {
       expanded: [],
       categories: [],
       locations: [],
+      loading: true,
+      resourcesLoaded: 0,
     };
+  },
+  watch: {
+    resourcesLoaded(newValue) {
+      if (newValue === 3) {
+        this.loading = false;
+      }
+    },
   },
   components: {
     Serie,
@@ -84,14 +97,14 @@ export default {
         .get(`${this.apiBaseUrl}/locations`, {
           headers: this.buildHeaders(),
         })
-        .then((response) => { this.locations = response.data; });
+        .then((response) => { this.locations = response.data; this.resourcesLoaded += 1; });
     },
     fetchCategories() {
       axios
         .get(`${this.apiBaseUrl}/categories`, {
           headers: this.buildHeaders(),
         })
-        .then((response) => { this.categories = response.data; });
+        .then((response) => { this.categories = response.data; this.resourcesLoaded += 1; });
     },
     fetchSeries() {
       axios
@@ -102,6 +115,7 @@ export default {
           this.expanded = Array(response.data.length);
           this.expanded.fill(false);
           this.series = response.data;
+          this.resourcesLoaded += 1;
         });
     },
     fetchData() {

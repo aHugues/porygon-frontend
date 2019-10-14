@@ -1,12 +1,16 @@
 <template>
   <div class="movies">
 
-    <movie-form v-if="showDialog" :method="'create'" :movie="{}"
+    <div v-if="loading" class="loader">
+      LOADING
+    </div>
+
+    <movie-form v-if="!loading && showDialog" :method="'create'" :movie="{}"
         :categories="categories" :locations="locations"
         @movie-added-or-modified="refreshList(-1)"></movie-form>
 
     <md-empty-state
-      v-if="movies.length == 0 && !showDialog"
+      v-if="!loading && movies.length == 0 && !showDialog"
       md-icon="movie"
       md-label="Create your first movie"
       md-description="Creating movies, you'll be able to store and order your movies library.">
@@ -15,7 +19,7 @@
       </md-button>
     </md-empty-state>
 
-    <div v-if="movies.length > 0">
+    <div v-if="!loading && movies.length > 0">
       <md-list :md-expand-single="true">
         <div v-for="(movie, key) in movies" :key="key">
           <md-list-item @click="onSelect(movie.Movie.id)" md-expand
@@ -33,7 +37,7 @@
       </md-list>
     </div>
 
-    <div class="add-button-wrapper" v-if="movies.length > 0">
+    <div class="add-button-wrapper" v-if="!loading && movies.length > 0">
      <md-button class="md-fab md-primary" @click="newMovie()">
        <md-icon>add</md-icon>
      </md-button>
@@ -62,7 +66,16 @@ export default {
       expanded: [],
       categories: [],
       locations: [],
+      loading: true,
+      resourcesLoaded: 0,
     };
+  },
+  watch: {
+    resourcesLoaded(newValue) {
+      if (newValue === 3) {
+        this.loading = false;
+      }
+    },
   },
   components: {
     Movie,
@@ -85,14 +98,14 @@ export default {
         .get(`${this.apiBaseUrl}/locations`, {
           headers: this.buildHeaders(),
         })
-        .then((response) => { this.locations = response.data; });
+        .then((response) => { this.locations = response.data; this.resourcesLoaded += 1; });
     },
     fetchCategories() {
       axios
         .get(`${this.apiBaseUrl}/categories`, {
           headers: this.buildHeaders(),
         })
-        .then((response) => { this.categories = response.data; });
+        .then((response) => { this.categories = response.data; this.resourcesLoaded += 1; });
     },
     fetchMovies() {
       axios
@@ -103,12 +116,13 @@ export default {
           this.expanded = Array(response.data.length);
           this.expanded.fill(false);
           this.movies = response.data;
+          this.resourcesLoaded += 1;
         });
     },
     fetchData() {
-      this.fetchMovies();
       this.fetchLocations();
       this.fetchCategories();
+      this.fetchMovies();
     },
     refreshList(id) {
       if (id > 0) {
