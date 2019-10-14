@@ -2,12 +2,16 @@
   <div id="app">
     <md-app md-waterfall md-mode="fixed">
       <md-app-toolbar class="md-primary toolbar-wrapper">
+        <md-button v-if="pageWidth<600"
+        class="md-icon-button" @click="showNavigation = true">
+          <md-icon>menu</md-icon>
+        </md-button>
         <toolbar-title title="Porygon"></toolbar-title>
         <div class="separator-2"></div>
         <toolbar-avatar></toolbar-avatar>
       </md-app-toolbar>
 
-      <md-app-drawer md-permanent="full">
+      <md-app-drawer md-permanent="full" :md-active.sync="showNavigation" md-swipeable>
         <md-toolbar class="md-transparent" md-elevation="0">
           <h3 class="md-title">Navigation</h3>
         </md-toolbar>
@@ -52,6 +56,17 @@ import ToolbarTitle from '@/components/toolbar/ToolbarTitle.vue';
 import ToolbarAvatar from '@/components/toolbar/ToolbarAvatar.vue';
 
 export default {
+  data() {
+    return {
+      showNavigation: false,
+      pageWidth: window.innerWidth,
+    };
+  },
+  mounted() {
+    window.onresize = () => {
+      this.pageWidth = window.innerWidth;
+    };
+  },
   created() {
     let currentTheme = localStorage.getItem('vue-user-theme');
     if (currentTheme === null || currentTheme === undefined) {
