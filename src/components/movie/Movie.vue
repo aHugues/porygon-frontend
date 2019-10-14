@@ -10,7 +10,8 @@
         </span>
       </div>
       <div class="md-layout-item md-size-60 col-60">
-        {{ movie.title }}
+        <div>{{ movie.title }}</div>
+        <div class="md-caption">{{ movie.french_title }}</div>
       </div>
       <div class="md-layout-item md-size-20 col-20">
         {{ location.location }}
