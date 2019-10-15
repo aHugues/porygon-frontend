@@ -41,4 +41,7 @@ export default {
 .col-60 {
   width: 60%;
 }
+.md-layout-item {
+  margin: auto;
+}
 </style>
