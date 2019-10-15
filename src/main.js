@@ -49,7 +49,6 @@ if (process.env.NODE_ENV === 'production') {
           const { userInfo } = keycloak;
           localStorage.setItem('vue-user-firstname', userInfo.given_name);
           localStorage.setItem('vue-user-lastname', userInfo.family_name);
-          localStorage.setItem('vue-user-firstname', userInfo.given_name);
           localStorage.setItem('vue-token', keycloak.token);
           localStorage.setItem('vue-refresh-token', keycloak.refreshToken);
 
@@ -79,6 +78,11 @@ if (process.env.NODE_ENV === 'production') {
       console.error('Authentication failed.');
     });
 } else {
+  // set default values for dev environment
+  localStorage.setItem('vue-user-firstname', 'Test');
+  localStorage.setItem('vue-user-lastname', 'User');
+  localStorage.setItem('vue-user-url', 'https://google.com');
+
   new Vue({
     router,
     render: h => h(App),
