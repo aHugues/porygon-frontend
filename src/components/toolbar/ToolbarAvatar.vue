@@ -10,6 +10,17 @@
 
       <md-menu-content>
         <md-menu-item>
+          <div class="version-wrapper">
+            <div class="version-number md-body-2">Porygon v{{ porygonVersion }}</div>
+            <div class="dev-version md-caption">(development version)</div>
+          </div>
+        </md-menu-item>
+
+        <div class="divider-container">
+          <md-divider></md-divider>
+        </div>
+
+        <md-menu-item>
           <md-switch v-model="darkTheme">Dark Theme</md-switch>
         </md-menu-item>
 
@@ -80,6 +91,7 @@ export default {
       return initials;
     },
     userAccountUrl() { return localStorage.getItem('vue-user-url'); },
+    porygonVersion() { return process.env.PACKAGE_VERSION || '0'; },
   },
   data: () => ({
     darkTheme: undefined,
@@ -110,5 +122,24 @@ export default {
 }
 .md-button {
   margin: 0;
+}
+
+.divider-container {
+  width: 80%;
+  margin: auto;
+}
+
+.version-wrapper {
+  text-align: center;
+  width: 100%;
+}
+
+.version-number {
+  width: 100%;
+  text-align: center;
+}
+
+.dev-version {
+  width: 100%;
 }
 </style>
