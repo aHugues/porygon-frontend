@@ -27,10 +27,13 @@
             <movie
             :movie="movie.Movie" :category="movie.Category" :location="movie.Location"
             ></movie>
-            <movie-form :currentMovie="movie.Movie"
-            :categories="categories" :locations="locations"
-            :method="'modify'" slot="md-expand"
-            @movie-added-or-modified="refreshList(key - 1)"></movie-form>
+            <div slot="md-expand">
+              <movie-form :currentMovie="movie.Movie"
+              v-if="expanded[key - 1]"
+              :categories="categories" :locations="locations"
+              :method="'modify'"
+              @movie-added-or-modified="refreshList(key - 1)"></movie-form>
+            </div>
           </md-list-item>
           <md-divider></md-divider>
         </div>

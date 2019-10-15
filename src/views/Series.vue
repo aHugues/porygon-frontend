@@ -27,10 +27,13 @@
             <serie
             :serie="serie.Serie" :category="serie.Category" :location="serie.Location"
             ></serie>
-             <serie-form :currentSerie="serie.Serie"
-            :categories="categories" :locations="locations"
-            :method="'modify'" slot="md-expand"
-            @serie-added-or-modified="refreshList(key - 1)"></serie-form>
+            <div slot="md-expand">
+              <serie-form :currentSerie="serie.Serie"
+              v-if="expanded[key - 1]"
+              :categories="categories" :locations="locations"
+              :method="'modify'"
+              @serie-added-or-modified="refreshList(key - 1)"></serie-form>
+            </div>
           </md-list-item>
           <md-divider></md-divider>
         </div>
