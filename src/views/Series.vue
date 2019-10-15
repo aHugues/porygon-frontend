@@ -21,8 +21,8 @@
 
      <div v-if="!loading && series.length > 0">
       <md-list :md-expand-single="true">
-        <div v-for="(serie, key) in series" :key="key">
-          <md-list-item @click="onSelect(serie.Serie.id)" md-expand
+        <div v-for="(serie, key) in series" :key="key" :id="`movie-elt-${key}`">
+          <md-list-item @click="onSelect(key)" md-expand
           :md-expanded.sync="expanded[key - 1]">
             <serie
             :serie="serie.Serie" :category="serie.Category" :location="serie.Location"
@@ -135,6 +135,15 @@ export default {
     },
     newSerie() {
       this.showDialog = true;
+    },
+    scrollTo(id) {
+      const container = this.$el.querySelector(`#serie-elt-${id}`);
+      this.$nextTick(() => {
+        container.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start',
+        });
+      });
     },
   },
 };

@@ -21,8 +21,8 @@
 
     <div v-if="!loading && movies.length > 0">
       <md-list :md-expand-single="true">
-        <div v-for="(movie, key) in movies" :key="key">
-          <md-list-item @click="onSelect(movie.Movie.id)" md-expand
+        <div v-for="(movie, key) in movies" :key="key" :id="`movie-elt-${key}`">
+          <md-list-item @click="onSelect(key)" md-expand
           :md-expanded.sync="expanded[key - 1]">
             <movie
             :movie="movie.Movie" :category="movie.Category" :location="movie.Location"
@@ -133,9 +133,19 @@ export default {
     },
     onSelect(id) {
       console.log(`Selected movie ${id}`);
+      this.scrollTo(id);
     },
     newMovie() {
       this.showDialog = true;
+    },
+    scrollTo(id) {
+      const container = this.$el.querySelector(`#movie-elt-${id}`);
+      this.$nextTick(() => {
+        container.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start',
+        });
+      });
     },
   },
 };
