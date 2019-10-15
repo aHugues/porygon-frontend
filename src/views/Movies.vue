@@ -21,16 +21,19 @@
 
     <div v-if="!loading && movies.length > 0">
       <md-list :md-expand-single="true">
-        <div v-for="(movie, key) in movies" :key="key">
-          <md-list-item @click="onSelect(movie.Movie.id)" md-expand
+        <div v-for="(movie, key) in movies" :key="key" :id="`movie-elt-${key}`">
+          <md-list-item @click="onSelect(key)" md-expand
           :md-expanded.sync="expanded[key - 1]">
             <movie
             :movie="movie.Movie" :category="movie.Category" :location="movie.Location"
             ></movie>
-            <movie-form :currentMovie="movie.Movie"
-            :categories="categories" :locations="locations"
-            :method="'modify'" slot="md-expand"
-            @movie-added-or-modified="refreshList(key - 1)"></movie-form>
+            <div slot="md-expand">
+              <movie-form :currentMovie="movie.Movie"
+              v-if="expanded[key - 1]"
+              :categories="categories" :locations="locations"
+              :method="'modify'"
+              @movie-added-or-modified="refreshList(key - 1)"></movie-form>
+            </div>
           </md-list-item>
           <md-divider></md-divider>
         </div>
@@ -133,9 +136,19 @@ export default {
     },
     onSelect(id) {
       console.log(`Selected movie ${id}`);
+      this.scrollTo(id);
     },
     newMovie() {
       this.showDialog = true;
+    },
+    scrollTo(id) {
+      const container = this.$el.querySelector(`#movie-elt-${id}`);
+      this.$nextTick(() => {
+        container.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start',
+        });
+      });
     },
   },
 };

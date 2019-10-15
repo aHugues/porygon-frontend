@@ -36,43 +36,55 @@ Vue.use(MdDialogAlert);
 Vue.use(MdProgress);
 
 const keycloak = Keycloak(keycloakConfig);
-keycloak.init({ onLoad: 'login-required' })
-  .success((auth) => {
-    if (!auth) {
-      window.location.reload();
-    }
 
-    keycloak.loadUserInfo()
-      .success(() => {
-        const { userInfo } = keycloak;
-        localStorage.setItem('vue-user-firstname', userInfo.given_name);
-        localStorage.setItem('vue-user-lastname', userInfo.family_name);
-        localStorage.setItem('vue-user-firstname', userInfo.given_name);
-        localStorage.setItem('vue-token', keycloak.token);
-        localStorage.setItem('vue-refresh-token', keycloak.refreshToken);
+if (process.env.NODE_ENV === 'production') {
+  keycloak.init({ onLoad: 'login-required' })
+    .success((auth) => {
+      if (!auth) {
+        window.location.reload();
+      }
 
-        const accountUrl = `${keycloakConfig.url}/realms/${keycloakConfig.realm}/account`;
-        localStorage.setItem('vue-user-url', accountUrl);
+      keycloak.loadUserInfo()
+        .success(() => {
+          const { userInfo } = keycloak;
+          localStorage.setItem('vue-user-firstname', userInfo.given_name);
+          localStorage.setItem('vue-user-lastname', userInfo.family_name);
+          localStorage.setItem('vue-token', keycloak.token);
+          localStorage.setItem('vue-refresh-token', keycloak.refreshToken);
 
-        Vue.prototype.$keycloak = keycloak;
+          const accountUrl = `${keycloakConfig.url}/realms/${keycloakConfig.realm}/account`;
+          localStorage.setItem('vue-user-url', accountUrl);
 
-        new Vue({
-          router,
-          render: h => h(App),
-        }).$mount('#app');
-      })
-      .error(() => {
-        console.error('Impossible to load user profile');
-      });
+          Vue.prototype.$keycloak = keycloak;
 
-    setTimeout(() => {
-      keycloak.updateToken(70)
-        .success(() => {})
+          new Vue({
+            router,
+            render: h => h(App),
+          }).$mount('#app');
+        })
         .error(() => {
-          console.error('Failed to refresh token');
+          console.error('Impossible to load user profile');
         });
-    }, 60000);
-  })
-  .error(() => {
-    console.error('Authentication failed.');
-  });
+
+      setTimeout(() => {
+        keycloak.updateToken(70)
+          .success(() => {})
+          .error(() => {
+            console.error('Failed to refresh token');
+          });
+      }, 60000);
+    })
+    .error(() => {
+      console.error('Authentication failed.');
+    });
+} else {
+  // set default values for dev environment
+  localStorage.setItem('vue-user-firstname', 'Test');
+  localStorage.setItem('vue-user-lastname', 'User');
+  localStorage.setItem('vue-user-url', 'https://google.com');
+
+  new Vue({
+    router,
+    render: h => h(App),
+  }).$mount('#app');
+}

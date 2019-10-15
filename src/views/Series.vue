@@ -21,16 +21,19 @@
 
      <div v-if="!loading && series.length > 0">
       <md-list :md-expand-single="true">
-        <div v-for="(serie, key) in series" :key="key">
-          <md-list-item @click="onSelect(serie.Serie.id)" md-expand
+        <div v-for="(serie, key) in series" :key="key" :id="`movie-elt-${key}`">
+          <md-list-item @click="onSelect(key)" md-expand
           :md-expanded.sync="expanded[key - 1]">
             <serie
             :serie="serie.Serie" :category="serie.Category" :location="serie.Location"
             ></serie>
-             <serie-form :currentSerie="serie.Serie"
-            :categories="categories" :locations="locations"
-            :method="'modify'" slot="md-expand"
-            @serie-added-or-modified="refreshList(key - 1)"></serie-form>
+            <div slot="md-expand">
+              <serie-form :currentSerie="serie.Serie"
+              v-if="expanded[key - 1]"
+              :categories="categories" :locations="locations"
+              :method="'modify'"
+              @serie-added-or-modified="refreshList(key - 1)"></serie-form>
+            </div>
           </md-list-item>
           <md-divider></md-divider>
         </div>
@@ -135,6 +138,15 @@ export default {
     },
     newSerie() {
       this.showDialog = true;
+    },
+    scrollTo(id) {
+      const container = this.$el.querySelector(`#serie-elt-${id}`);
+      this.$nextTick(() => {
+        container.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start',
+        });
+      });
     },
   },
 };
