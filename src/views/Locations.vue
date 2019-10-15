@@ -95,11 +95,17 @@ export default {
       this.showDialog = true;
     },
     editLocation(id, location, physical) {
-      this.dialogMethod = 'modify';
-      this.currentId = id;
-      this.currentLocation = location;
-      this.currentPhysical = physical;
-      this.showDialog = true;
+      // unselect if already selected
+      if (id === this.currentId) {
+        this.showDialog = false;
+        this.currentId = -1;
+      } else {
+        this.dialogMethod = 'modify';
+        this.currentId = id;
+        this.currentLocation = location;
+        this.currentPhysical = physical;
+        this.showDialog = true;
+      }
     },
   },
   components: {

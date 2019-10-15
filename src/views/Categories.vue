@@ -91,11 +91,16 @@ export default {
       this.showDialog = true;
     },
     editCategory(id, label, description) {
-      this.dialogMethod = 'modify';
-      this.currentId = id;
-      this.currentLabel = label;
-      this.currentDescription = description;
-      this.showDialog = true;
+      if (id === this.currentId) {
+        this.showDialog = false;
+        this.currentId = -1;
+      } else {
+        this.dialogMethod = 'modify';
+        this.currentId = id;
+        this.currentLabel = label;
+        this.currentDescription = description;
+        this.showDialog = true;
+      }
     },
   },
   components: {
