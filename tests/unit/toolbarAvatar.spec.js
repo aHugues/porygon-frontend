@@ -24,6 +24,10 @@ const localStorageDark = {
   'vue-user-lastname': 'Doe',
 };
 
+const $ml = {
+  list: ['english', 'french'],
+};
+
 describe('ToolbarAvatar.vue', () => {
   it('selects the correct theme when light', () => {
     setGlobals();
@@ -31,7 +35,10 @@ describe('ToolbarAvatar.vue', () => {
       global.window.localStorage.setItem(key, localStorageLight[key]);
     });
     const wrapper = shallowMount(ToolbarAvatar, {
-      stubs: ['md-button', 'md-icon', 'md-switch', 'md-menu-item', 'md-menu-content', 'md-avatar', 'md-menu'],
+      stubs: ['md-button', 'md-icon', 'md-switch', 'md-menu-item', 'md-menu-content', 'md-avatar', 'md-menu', 'md-list', 'md-list-item', 'md-divider'],
+      mocks: {
+        $ml,
+      },
     });
     expect(wrapper.vm.darkTheme).toEqual(false);
   });
@@ -42,7 +49,10 @@ describe('ToolbarAvatar.vue', () => {
       global.window.localStorage.setItem(key, localStorageDark[key]);
     });
     const wrapper = shallowMount(ToolbarAvatar, {
-      stubs: ['md-button', 'md-icon', 'md-switch', 'md-menu-item', 'md-menu-content', 'md-avatar', 'md-menu'],
+      stubs: ['md-button', 'md-icon', 'md-switch', 'md-menu-item', 'md-menu-content', 'md-avatar', 'md-menu', 'md-list', 'md-list-item', 'md-divider'],
+      mocks: {
+        $ml,
+      },
     });
     expect(wrapper.vm.darkTheme).toEqual(true);
   });
@@ -53,7 +63,10 @@ describe('ToolbarAvatar.vue', () => {
       global.window.localStorage.setItem(key, localStorageDark[key]);
     });
     const wrapper = shallowMount(ToolbarAvatar, {
-      stubs: ['md-button', 'md-icon', 'md-switch', 'md-menu-item', 'md-menu-content', 'md-avatar', 'md-menu'],
+      stubs: ['md-button', 'md-icon', 'md-switch', 'md-menu-item', 'md-menu-content', 'md-avatar', 'md-menu', 'md-list', 'md-list-item', 'md-divider'],
+      mocks: {
+        $ml,
+      },
     });
     expect(wrapper.vm.userInitials).toEqual('J');
   });
@@ -64,7 +77,10 @@ describe('ToolbarAvatar.vue', () => {
       global.window.localStorage.setItem(key, localStorageComposed[key]);
     });
     const wrapper = shallowMount(ToolbarAvatar, {
-      stubs: ['md-button', 'md-icon', 'md-switch', 'md-menu-item', 'md-menu-content', 'md-avatar', 'md-menu'],
+      stubs: ['md-button', 'md-icon', 'md-switch', 'md-menu-item', 'md-menu-content', 'md-avatar', 'md-menu', 'md-list', 'md-list-item', 'md-divider'],
+      mocks: {
+        $ml,
+      },
     });
     expect(wrapper.vm.userInitials).toEqual('JJ');
   });
@@ -76,7 +92,10 @@ describe('ToolbarAvatar.vue', () => {
       global.window.localStorage.setItem(key, localStorageUndefined[key]);
     });
     const wrapper = shallowMount(ToolbarAvatar, {
-      stubs: ['md-button', 'md-icon', 'md-switch', 'md-menu-item', 'md-menu-content', 'md-avatar', 'md-menu'],
+      stubs: ['md-button', 'md-icon', 'md-switch', 'md-menu-item', 'md-menu-content', 'md-avatar', 'md-menu', 'md-list', 'md-list-item', 'md-divider'],
+      mocks: {
+        $ml,
+      },
     });
     expect(global.window.localStorage.getItem('vue-user-firstname')).not.toBeTruthy();
     expect(wrapper.vm.userInitials).toEqual('-');
@@ -89,9 +108,10 @@ describe('ToolbarAvatar.vue', () => {
     });
     const material = { theming: () => null };
     const wrapper = shallowMount(ToolbarAvatar, {
-      stubs: ['md-button', 'md-icon', 'md-switch', 'md-menu-item', 'md-menu-content', 'md-avatar', 'md-menu'],
+      stubs: ['md-button', 'md-icon', 'md-switch', 'md-menu-item', 'md-menu-content', 'md-avatar', 'md-menu', 'md-list', 'md-list-item', 'md-divider'],
       mocks: {
         $material: material,
+        $ml,
       },
     });
     expect(wrapper.vm.darkTheme).toEqual(false);
@@ -112,9 +132,10 @@ describe('ToolbarAvatar.vue', () => {
     });
     const keycloak = { logout: (url) => { expect(url).toBe('/'); } };
     const wrapper = shallowMount(ToolbarAvatar, {
-      stubs: ['md-button', 'md-icon', 'md-switch', 'md-menu-item', 'md-menu-content', 'md-avatar', 'md-menu'],
+      stubs: ['md-button', 'md-icon', 'md-switch', 'md-menu-item', 'md-menu-content', 'md-avatar', 'md-menu', 'md-list', 'md-list-item', 'md-divider'],
       mocks: {
         $keycloak: keycloak,
+        $ml,
       },
     });
     wrapper.vm.logout();
