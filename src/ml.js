@@ -8,10 +8,26 @@ export default new MLCreate({
   save: process.env.NODE_ENV === 'production',
   languages: [
     new MLanguage('english').create({
-      title: 'Hello',
+      navigation: {
+        title: 'Navigation',
+        home: 'Home',
+        movies: 'Movies',
+        series: 'Series',
+        locations: 'Locations',
+        categories: 'Categories',
+      },
+      test: 'english',
     }),
     new MLanguage('french').create({
-      title: 'Bonjour',
+      navigation: {
+        title: 'Navigation',
+        home: 'Accueil',
+        movies: 'Films',
+        series: 'Séries',
+        locations: 'Emplacements',
+        categories: 'Catégories',
+      },
+      test: 'français',
     }),
   ],
 });
