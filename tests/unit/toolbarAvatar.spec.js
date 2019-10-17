@@ -26,6 +26,13 @@ const localStorageDark = {
 
 const $ml = {
   list: ['english', 'french'],
+  get: () => ({
+    dev_version: 'Development version',
+    dark_theme: 'Dark theme',
+    languages: 'Languages',
+    account: 'Account',
+    logout: 'Logout',
+  }),
 };
 
 describe('ToolbarAvatar.vue', () => {

@@ -12,7 +12,7 @@
         <md-menu-item>
           <div class="version-wrapper">
             <div class="version-number md-body-2">Porygon v{{ porygonVersion }}</div>
-            <div class="dev-version md-caption">(development version)</div>
+            <div class="dev-version md-caption">({{ $ml.get('menu').dev_version }})</div>
           </div>
         </md-menu-item>
 
@@ -21,7 +21,7 @@
         </div>
 
         <md-menu-item>
-          <md-switch v-model="darkTheme">Dark Theme</md-switch>
+          <md-switch v-model="darkTheme">{{ $ml.get('menu').dark_theme }}</md-switch>
         </md-menu-item>
 
         <md-menu-item>
@@ -29,7 +29,7 @@
             <md-list-item md-expand :md-expanded.sync="expandLanguages"
             @click.stop class="language-selector">
               <md-icon>language</md-icon>
-              <span class="md-list-item-text">Languages</span>
+              <span class="md-list-item-text">{{ $ml.get('menu').languages }}</span>
 
               <md-list slot="md-expand">
                 <md-list-item v-for="lang in $ml.list" :key="lang" @click="$ml.change(lang)">
@@ -47,7 +47,7 @@
           <md-button target="_blank" :href="userAccountUrl">
             <div class="logout-button-content">
               <md-icon>account_box</md-icon>
-              <div>Account</div>
+              <div>{{ $ml.get('menu').account }}</div>
             </div>
           </md-button>
         </md-menu-item>
@@ -56,7 +56,7 @@
           <md-button @click="logout">
             <div class="logout-button-content">
               <md-icon>logout</md-icon>
-              <div>Logout</div>
+              <div>{{ $ml.get('menu').logout }}</div>
             </div>
           </md-button>
         </md-menu-item>

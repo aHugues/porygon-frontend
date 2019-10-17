@@ -16,7 +16,13 @@ export default new MLCreate({
         locations: 'Locations',
         categories: 'Categories',
       },
-      test: 'english',
+      menu: {
+        dev_version: 'Development version',
+        dark_theme: 'Dark theme',
+        languages: 'Languages',
+        account: 'Account',
+        logout: 'Logout',
+      },
     }),
     new MLanguage('french').create({
       navigation: {
@@ -27,7 +33,13 @@ export default new MLCreate({
         locations: 'Emplacements',
         categories: 'Catégories',
       },
-      test: 'français',
+      menu: {
+        dev_version: 'Version de développement',
+        dark_theme: 'Thème sombre',
+        languages: 'Langues',
+        account: 'Profil',
+        logout: 'Déconnexion',
+      },
     }),
   ],
 });
