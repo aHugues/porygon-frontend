@@ -3,10 +3,10 @@
    <md-empty-state
     v-if="locations.length == 0 && !showDialog"
     md-icon="folder"
-    md-label="Create your first location"
-    md-description="Creating locations, you'll be able to store and order movies and series.">
+    :md-label="$ml.get('location').empty_button"
+    :md-description="$ml.get('location').empty_button">
     <md-button @click="newLocation()" class="md-primary md-raised">
-      Create your first location
+      {{ $ml.get('location').empty_button }}
     </md-button>
    </md-empty-state>
 

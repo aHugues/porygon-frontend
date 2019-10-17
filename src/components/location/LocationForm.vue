@@ -3,33 +3,39 @@
   <md-card>
     <form novalidate @submit.prevent="validateLocation">
     <md-card-header>
-      <div v-if="method === 'create'" class="md-title">Create Location</div>
-      <div v-if="method === 'modify'" class="md-title">Edit Location</div>
+      <div v-if="method === 'create'" class="md-title">{{ $ml.get('location').create }}</div>
+      <div v-if="method === 'modify'" class="md-title">{{ $ml.get('location').edit }}</div>
     </md-card-header>
 
     <md-card-content>
 
 
       <md-field :class="getValidationClass('location')">
-        <label for="location">Location</label>
+        <label for="location">{{ $ml.get('location').location }}</label>
         <md-input name="location" id="location" v-model="location"/>
-        <span class="md-error" v-if="!$v.location.required">The label is required</span>
-        <span class="md-error" v-if="!$v.location.maxLength">The label is too long</span>
+        <span class="md-error" v-if="!$v.location.required">
+          {{ $ml.get('location').location_required }}
+        </span>
+        <span class="md-error" v-if="!$v.location.maxLength">
+          {{ $ml.get('location').location_too_long }}
+        </span>
       </md-field>
 
-      <md-switch name="physical" id="physical" v-model="physical">Physical Location</md-switch>
+      <md-switch name="physical" id="physical" v-model="physical">
+        {{ $ml.get('location').physical_location }}
+      </md-switch>
 
     </md-card-content>
 
     <md-card-actions>
       <md-button v-if="method === 'modify'" @click="deleteLocation" class="md-primary">
-        Delete location
+        {{ $ml.get('location').delete }}
       </md-button>
       <md-button v-if="method === 'create'" type="submit" class="md-accent">
-        Create location
+        {{ $ml.get('location').create }}
       </md-button>
       <md-button v-if="method === 'modify'" type="submit" class="md-accent">
-        Edit location
+        {{ $ml.get('location').edit }}
       </md-button>
     </md-card-actions>
     </form>
