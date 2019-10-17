@@ -3,10 +3,10 @@
    <md-empty-state
     v-if="categories.length == 0 && !showDialog"
     md-icon="category"
-    md-label="Create your first category"
+    :md-label="$ml.get('category').empty_button"
     md-description="Creating category, you'll be able to better organize movies and series.">
     <md-button @click="newCategory()" class="md-primary md-raised">
-      Create your first category
+      {{ $ml.get('category').empty_button }}
     </md-button>
    </md-empty-state>
 

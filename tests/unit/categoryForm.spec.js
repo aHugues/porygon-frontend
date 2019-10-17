@@ -23,6 +23,21 @@ jest.mock('axios', () => ({
   default: jest.fn(request => Promise.resolve({ request, data: 'data' })),
 }));
 
+const $ml = {
+  get: () => ({
+    undefined: 'Undefined category',
+    label: 'Label',
+    description: 'Description',
+    edit: 'Edit category',
+    delete: 'Delete category',
+    create: 'Create category',
+    empty_button: 'Create your first category',
+    empty_description: "Creating category, you'll be able to better organize movies and series.",
+    label_required: 'The label is required',
+    label_too_long: 'The label is too long',
+  }),
+};
+
 const vueToken = 'thisIsAToken';
 
 const stubs = ['md-card', 'md-card-header', 'md-card-content',
@@ -35,6 +50,9 @@ describe('CategoryForm.vue', () => {
       stubs,
       propsData: {
         method: 'create',
+      },
+      mocks: {
+        $ml,
       },
     });
 
@@ -51,6 +69,9 @@ describe('CategoryForm.vue', () => {
         currentLabel: 'test category',
         currentDescription: 'test description',
       },
+      mocks: {
+        $ml,
+      },
     });
 
     expect(wrapper.contains('md-card-stub')).toBe(true);
@@ -65,6 +86,9 @@ describe('CategoryForm.vue', () => {
       propsData: {
         method: 'create',
       },
+      mocks: {
+        $ml,
+      },
     });
     // wrapper.vm.saveLocation();
     expect(wrapper.vm.apiBaseUrl).toBe('http://example.com:4000');
@@ -76,6 +100,9 @@ describe('CategoryForm.vue', () => {
       stubs,
       propsData: {
         method: 'create',
+      },
+      mocks: {
+        $ml,
       },
     });
     wrapper.vm.saveCategory();
@@ -90,6 +117,9 @@ describe('CategoryForm.vue', () => {
       propsData: {
         method: 'modify',
       },
+      mocks: {
+        $ml,
+      },
     });
     wrapper.vm.deleteCategory();
     wrapper.vm.$nextTick(() => {
@@ -103,6 +133,9 @@ describe('CategoryForm.vue', () => {
       propsData: {
         id: 42,
         method: 'modify',
+      },
+      mocks: {
+        $ml,
       },
     });
     wrapper.vm.saveCategory();
@@ -123,6 +156,9 @@ describe('CategoryForm.vue', () => {
       propsData: {
         id: 42,
         method: 'modify',
+      },
+      mocks: {
+        $ml,
       },
     });
     wrapper.vm.deleteCategory();
@@ -147,6 +183,7 @@ describe('CategoryForm.vue', () => {
       },
       mocks: {
         'this.authenticationRequired': true,
+        $ml,
       },
     });
     const headers = wrapper.vm.buildHeaders();

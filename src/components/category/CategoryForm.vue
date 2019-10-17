@@ -3,22 +3,26 @@
   <md-card>
     <form novalidate @submit.prevent="validateCategory">
     <md-card-header>
-      <div v-if="method === 'create'" class="md-title">Create category</div>
-      <div v-if="method === 'modify'" class="md-title">Edit category</div>
+      <div v-if="method === 'create'" class="md-title">{{ $ml.get('category').create }}</div>
+      <div v-if="method === 'modify'" class="md-title">{{ $ml.get('category').edit }}</div>
     </md-card-header>
 
     <md-card-content>
 
 
       <md-field :class="getValidationClass('label')">
-        <label for="label">Label</label>
+        <label for="label">{{ $ml.get('category').label }}</label>
         <md-input name="label" id="label" v-model="label"/>
-        <span class="md-error" v-if="!$v.label.required">The label is required</span>
-        <span class="md-error" v-if="!$v.label.maxLength">The label is too long</span>
+        <span class="md-error" v-if="!$v.label.required">
+          {{ $ml.get('category').label_required }}
+        </span>
+        <span class="md-error" v-if="!$v.label.maxLength">
+          {{ $ml.get('category').label_too_long }}
+        </span>
       </md-field>
 
       <md-field :class="getValidationClass('description')">
-        <label for="description">description</label>
+        <label for="description">{{ $ml.get('category').description }}</label>
         <md-input name="description" id="description" v-model="description"/>
       </md-field>
 
@@ -26,13 +30,13 @@
 
     <md-card-actions>
       <md-button v-if="method === 'modify'" @click="deleteCategory" class="md-primary">
-        Delete category
+        {{ $ml.get('category').delete }}
       </md-button>
       <md-button v-if="method === 'create'" type="submit" class="md-accent">
-        Create category
+        {{ $ml.get('category').create }}
       </md-button>
       <md-button v-if="method === 'modify'" type="submit" class="md-accent">
-        Edit category
+        {{ $ml.get('category').edit }}
       </md-button>
     </md-card-actions>
     </form>
