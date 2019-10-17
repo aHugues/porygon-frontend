@@ -24,15 +24,24 @@
           <md-switch v-model="darkTheme">Dark Theme</md-switch>
         </md-menu-item>
 
-        <!-- <md-menu-item>
-          <md-field>
-            <label for="language">Language</label>
-            <md-select v-model="language" name="language" id="language">
-              <md-option value="fr">French</md-option>
-              <md-option value="en">English</md-option>
-            </md-select>
-          </md-field>
-        </md-menu-item> -->
+        <md-menu-item>
+          <md-list md-expand-single>
+            <md-list-item md-expand :md-expanded.sync="expandLanguages"
+            @click.stop class="language-selector">
+              <md-icon>language</md-icon>
+              <span class="md-list-item-text">Languages</span>
+
+              <md-list slot="md-expand">
+                <md-list-item v-for="lang in $ml.list" :key="lang" @click="$ml.change(lang)">
+                  <span>
+                    <span class="lang-flag">{{ emojis[lang] }}</span>
+                    <span class="lang-name">{{ lang }}</span>
+                  </span>
+                </md-list-item>
+              </md-list>
+            </md-list-item>
+          </md-list>
+        </md-menu-item>
 
         <md-menu-item>
           <md-button target="_blank" :href="userAccountUrl">
@@ -59,6 +68,8 @@
 </template>
 
 <script>
+import emojis from '../../emoji';
+
 export default {
   name: 'ToolbarAvatar',
   created() {
@@ -97,6 +108,8 @@ export default {
     darkTheme: undefined,
     language: 'en',
     showSnackbar: false,
+    expandLanguages: false,
+    emojis,
   }),
   methods: {
     logout() {
@@ -142,4 +155,20 @@ export default {
 .dev-version {
   width: 100%;
 }
+
+.lang-flag {
+  padding-left: 5px;
+  padding-right: 15px;
+}
+
+// .language-selector {
+//   background-color: yellow;
+//   div {
+//     background-color: red;
+//     padding-left: -16px;
+//     div:first-child {
+//       background-color: pink;
+//     }
+//   }
+// }
 </style>
