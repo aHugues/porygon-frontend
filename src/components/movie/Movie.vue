@@ -3,7 +3,7 @@
     <div class="md-layout full-size">
       <div class="md-layout-item md-size-20 col-20">
         <span v-if="category.label === null" class="md-caption">
-          undefined category
+          {{ $ml.get('category').undefined }}
         </span>
         <span v-else>
           {{ category.label }}
