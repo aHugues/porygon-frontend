@@ -80,7 +80,7 @@
 
         <div class="md-layout-item md-size-100">
           <md-field>
-            <label for="support">{{ $ml.get('movie').support }}</label>
+            <label for="support">{{ $ml.get('movie').supports }}</label>
             <md-select v-model="supports" name="supports" id="supports" multiple>
               <md-option value="dvd">DvD</md-option>
               <md-option value="bluray">Bluray</md-option>
