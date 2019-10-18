@@ -13,34 +13,35 @@
 
       <md-app-drawer md-permanent="full" :md-active.sync="showNavigation" md-swipeable>
         <md-toolbar class="md-transparent" md-elevation="0">
-          <h3 class="md-title">Navigation</h3>
+          <h3 class="md-title">{{ $ml.get('navigation').title }}</h3>
         </md-toolbar>
 
         <md-list>
           <md-list-item to="/" exact>
                 <md-icon>home</md-icon>
-                <span class="md-list-item-text">Home</span>
+                <span class="md-list-item-text">{{ $ml.get('navigation').home }}</span>
           </md-list-item>
 
           <md-list-item to="/movies">
               <md-icon>movie</md-icon>
-              <span class="md-list-item-text">Movies</span>
+              <span class="md-list-item-text">{{ $ml.get('navigation').movies }}</span>
           </md-list-item>
 
           <md-list-item to="/series">
               <md-icon>tv</md-icon>
-              <span class="md-list-item-text">Series</span>
+              <span class="md-list-item-text">{{ $ml.get('navigation').series }}</span>
           </md-list-item>
 
           <md-list-item to="/locations">
               <md-icon>folder</md-icon>
-              <span class="md-list-item-text">Locations</span>
+              <span class="md-list-item-text">{{ $ml.get('navigation').locations }}</span>
           </md-list-item>
 
           <md-list-item to="/categories">
               <md-icon>category</md-icon>
-              <span class="md-list-item-text">Categories</span>
+              <span class="md-list-item-text">{{ $ml.get('navigation').categories }}</span>
           </md-list-item>
+
         </md-list>
       </md-app-drawer>
 
@@ -74,6 +75,10 @@ export default {
       localStorage.setItem('vue-user-theme', 'porygon-light');
     }
     this.$material.theming.theme = currentTheme;
+    const currentLanguage = localStorage.getItem('vue-user-language');
+    if (currentLanguage !== null && currentLanguage !== undefined) {
+      this.$ml.change(currentLanguage);
+    }
   },
   name: 'app',
   components: {

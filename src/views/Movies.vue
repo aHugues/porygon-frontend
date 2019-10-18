@@ -12,10 +12,10 @@
     <md-empty-state
       v-if="!loading && movies.length == 0 && !showDialog"
       md-icon="movie"
-      md-label="Create your first movie"
-      md-description="Creating movies, you'll be able to store and order your movies library.">
+      :md-label="$ml.get('movie').empty_button"
+      :md-description="$ml.get('movie').empty_description">
       <md-button @click="newMovie()" class="md-primary md-raised">
-        Create your first movie
+        {{ $ml.get('movie').empty_button }}
       </md-button>
     </md-empty-state>
 

@@ -10,6 +10,8 @@ import router from './router';
 import keycloakConfig from './keycloak.json';
 import './registerServiceWorker';
 import 'vue-material/dist/vue-material.min.css';
+import './ml';
+
 
 // import Keycloak from './keycloak';
 // import 'vue-material/dist/theme/default.css';

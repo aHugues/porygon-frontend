@@ -12,7 +12,7 @@
         <md-menu-item>
           <div class="version-wrapper">
             <div class="version-number md-body-2">Porygon v{{ porygonVersion }}</div>
-            <div class="dev-version md-caption">(development version)</div>
+            <div class="dev-version md-caption">({{ $ml.get('menu').dev_version }})</div>
           </div>
         </md-menu-item>
 
@@ -21,24 +21,33 @@
         </div>
 
         <md-menu-item>
-          <md-switch v-model="darkTheme">Dark Theme</md-switch>
+          <md-switch v-model="darkTheme">{{ $ml.get('menu').dark_theme }}</md-switch>
         </md-menu-item>
 
-        <!-- <md-menu-item>
-          <md-field>
-            <label for="language">Language</label>
-            <md-select v-model="language" name="language" id="language">
-              <md-option value="fr">French</md-option>
-              <md-option value="en">English</md-option>
-            </md-select>
-          </md-field>
-        </md-menu-item> -->
+        <md-menu-item>
+          <md-list md-expand-single>
+            <md-list-item md-expand :md-expanded.sync="expandLanguages"
+            @click.stop class="language-selector">
+              <md-icon>language</md-icon>
+              <span class="md-list-item-text">{{ $ml.get('menu').languages }}</span>
+
+              <md-list slot="md-expand">
+                <md-list-item v-for="lang in $ml.list" :key="lang" @click="updateLanguage(lang)">
+                  <span>
+                    <span class="lang-flag">{{ emojis[lang] }}</span>
+                    <span class="lang-name">{{ lang }}</span>
+                  </span>
+                </md-list-item>
+              </md-list>
+            </md-list-item>
+          </md-list>
+        </md-menu-item>
 
         <md-menu-item>
           <md-button target="_blank" :href="userAccountUrl">
             <div class="logout-button-content">
               <md-icon>account_box</md-icon>
-              <div>Account</div>
+              <div>{{ $ml.get('menu').account }}</div>
             </div>
           </md-button>
         </md-menu-item>
@@ -47,7 +56,7 @@
           <md-button @click="logout">
             <div class="logout-button-content">
               <md-icon>logout</md-icon>
-              <div>Logout</div>
+              <div>{{ $ml.get('menu').logout }}</div>
             </div>
           </md-button>
         </md-menu-item>
@@ -59,6 +68,8 @@
 </template>
 
 <script>
+import emojis from '../../emoji';
+
 export default {
   name: 'ToolbarAvatar',
   created() {
@@ -97,10 +108,16 @@ export default {
     darkTheme: undefined,
     language: 'en',
     showSnackbar: false,
+    expandLanguages: false,
+    emojis,
   }),
   methods: {
     logout() {
       this.$keycloak.logout('/');
+    },
+    updateLanguage(newLanguage) {
+      localStorage.setItem('vue-user-language', newLanguage);
+      this.$ml.change(newLanguage);
     },
   },
 };
@@ -142,4 +159,20 @@ export default {
 .dev-version {
   width: 100%;
 }
+
+.lang-flag {
+  padding-left: 5px;
+  padding-right: 15px;
+}
+
+// .language-selector {
+//   background-color: yellow;
+//   div {
+//     background-color: red;
+//     padding-left: -16px;
+//     div:first-child {
+//       background-color: pink;
+//     }
+//   }
+// }
 </style>

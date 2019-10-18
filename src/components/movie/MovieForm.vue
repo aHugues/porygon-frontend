@@ -5,91 +5,93 @@
 
         <div class="md-layout-item md-size-100">
           <md-field :class="getValidationClass('title')">
-            <label for="title"> Original title</label>
+            <label for="title">{{ $ml.get('movie').title }}</label>
             <md-input name="title" id="title" v-model="movie.title"/>
             <span class="md-error" v-if="!$v.movie.title.required">
-              The original title is required
+              {{ $ml.get('movie').title_required }}
             </span>
             <span class="md-error" v-if="!$v.movie.title.maxLength">
-              The original title is too long
+              {{ $ml.get('movie').title_too_long }}
             </span>
           </md-field>
         </div>
 
         <div class="md-layout-item md-size-100">
           <md-field :class="getValidationClass('french_title')">
-            <label for="french_title">French Title</label>
+            <label for="french_title">{{ $ml.get('movie').french_title }}</label>
             <md-input name="french_title" id="french_title" v-model="movie.french_title"/>
             <span class="md-error" v-if="!$v.movie.french_title.maxLength">
-              The french title is too long
+              {{ $ml.get('movie').french_title_too_long }}
             </span>
           </md-field>
         </div>
 
         <div class="md-layout-item md-size-50 md-small-size-100">
           <md-field :class="getValidationClass('year')">
-            <label for="year">Year</label>
+            <label for="year">{{ $ml.get('movie').year }}</label>
             <md-input name="year" id="year" v-model="movie.year"/>
-            <span class="md-error" v-if="!$v.movie.year.required">The year is required</span>
+            <span class="md-error" v-if="!$v.movie.year.required">
+              {{ $ml.get('movie').year_required }}
+              </span>
             <span class="md-error" v-if="!$v.movie.year.between">
-              The year should be between 1920 and 210
+              {{ $ml.get('movie').year_between }}
             </span>
             <span class="md-error" v-if="!$v.movie.year.integer">
-              The year should be a number
+              {{ $ml.get('movie').year_integer }}
             </span>
           </md-field>
         </div>
 
         <div class="md-layout-item md-size-50 md-small-size-100">
           <md-field :class="getValidationClass('duration')">
-            <label for="duration">Duration (mins.)</label>
+            <label for="duration">{{ $ml.get('movie').duration }}</label>
             <md-input name="duration" id="duration" v-model="movie.duration"/>
             <span class="md-error" v-if="!$v.movie.duration.required">
-              The duration is required
+              {{ $ml.get('movie').duration_required }}
             </span>
             <span class="md-error" v-if="!$v.movie.duration.between">
-              The duration should be between 0 and 600
+              {{ $ml.get('movie').duration_between }}
             </span>
             <span class="md-error" v-if="!$v.movie.duration.integer">
-              The duration should be a number
+              {{ $ml.get('movie').duration_integer }}
             </span>
           </md-field>
         </div>
 
         <div class="md-layout-item md-size-100">
           <md-field :class="getValidationClass('director')">
-            <label for="director">Director</label>
+            <label for="director">{{ $ml.get('movie').director }}</label>
             <md-input name="director" id="director" v-model="movie.director"/>
             <span class="md-error" v-if="!$v.movie.director.maxLength">
-              The director is too long
+              {{ $ml.get('movie').director_too_long }}
             </span>
           </md-field>
         </div>
 
         <div class="md-layout-item md-size-100">
           <md-field :class="getValidationClass('actors')">
-            <label for="actors">Actors</label>
+            <label for="actors">{{ $ml.get('movie').actors }}</label>
             <md-input name="actors" id="actors" v-model="movie.actors"/>
             <span class="md-error" v-if="!$v.movie.actors.maxLength">
-              The actors list is too long
+              {{ $ml.get('movie').actors_too_long }}
             </span>
           </md-field>
         </div>
 
         <div class="md-layout-item md-size-100">
           <md-field>
-            <label for="support">Supports</label>
+            <label for="support">{{ $ml.get('movie').supports }}</label>
             <md-select v-model="supports" name="supports" id="supports" multiple>
               <md-option value="dvd">DvD</md-option>
               <md-option value="bluray">Bluray</md-option>
-              <md-option value="digital">Digital</md-option>
+              <md-option value="digital">{{ $ml.get('movie').support_digital }}</md-option>
             </md-select>
           </md-field>
         </div>
 
         <div class="md-layout-item md-size-100">
           <md-field>
-            <label for="location">Location</label>
+            <label for="location">{{ $ml.get('location').location }}</label>
             <md-select v-model="movie.location_id" name="location" id="location">
               <md-option v-for="(location, key) in locations" :key="key"
               :value="location.id">{{ location.location }}</md-option>
@@ -99,7 +101,7 @@
 
         <div class="md-layout-item md-size-100">
           <md-field>
-            <label for="category">Category</label>
+            <label for="category">{{ $ml.get('category').category }}</label>
             <md-select v-model="movie.category_id" name="category" id="category">
               <md-option v-for="(category, key) in categories" :key="key"
               :value="category.id">{{ category.label }}</md-option>
@@ -109,10 +111,10 @@
 
         <div class="md-layout-item md-size-100">
           <md-field :class="getValidationClass('remarks')">
-            <label for="remarks">Remarks</label>
+            <label for="remarks">{{ $ml.get('movie').remarks }}</label>
             <md-input name="remarks" id="remarks" v-model="movie.remarks"/>
             <span class="md-error" v-if="!$v.movie.remarks.maxLength">
-              The remarks are too long
+              {{ $ml.get('movie').remarks_too_long }}
             </span>
           </md-field>
         </div>
@@ -120,13 +122,13 @@
       </div>
 
       <md-button v-if="method === 'create'" type="submit" class="md-accent">
-        Create movie
+        {{ $ml.get('movie').create }}
       </md-button>
       <md-button v-if="method === 'modify'" type="submit" class="md-accent">
-        Edit movie
+        {{ $ml.get('movie').edit }}
       </md-button>
       <md-button v-if="method === 'modify'" @click="deleteMovie" class="md-primary">
-        Delete movie
+        {{ $ml.get('movie').delete }}
       </md-button>
     </form>
 

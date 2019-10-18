@@ -12,10 +12,10 @@
     <md-empty-state
       v-if="!loading && series.length == 0 && !showDialog"
       md-icon="tv"
-      md-label="Create your first series"
-      md-description="Creating series, you'll be able to store and order your series library.">
+      :md-label="$ml.get('serie').empty_button"
+      :md-description="$ml.get('serie').empty_description">
       <md-button @click="newSerie()" class="md-primary md-raised">
-        Create your first series
+        {{ $ml.get('serie').empty_button }}
       </md-button>
     </md-empty-state>
 

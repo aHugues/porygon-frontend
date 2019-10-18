@@ -23,6 +23,20 @@ jest.mock('axios', () => ({
   default: jest.fn(request => Promise.resolve({ request, data: 'data' })),
 }));
 
+const $ml = {
+  get: () => ({
+    location: 'Location',
+    physical_location: 'Physical location',
+    edit: 'Edit location',
+    delete: 'Delete location',
+    create: 'Create location',
+    empty_button: 'Create your first location',
+    empty_description: "Creating locations, you'll be able to store and order movies and series.",
+    location_required: 'The location is required',
+    location_too_long: 'The location is too long',
+  }),
+};
+
 const vueToken = 'thisIsAToken';
 
 const stubs = ['md-card', 'md-card-header', 'md-card-content',
@@ -35,6 +49,9 @@ describe('LocationForm.vue', () => {
       stubs,
       propsData: {
         method: 'create',
+      },
+      mocks: {
+        $ml,
       },
     });
 
@@ -51,6 +68,9 @@ describe('LocationForm.vue', () => {
         currentPhysical: true,
         currentLocation: 'test',
       },
+      mocks: {
+        $ml,
+      },
     });
 
     expect(wrapper.contains('md-card-stub')).toBe(true);
@@ -65,6 +85,9 @@ describe('LocationForm.vue', () => {
       propsData: {
         method: 'create',
       },
+      mocks: {
+        $ml,
+      },
     });
     // wrapper.vm.saveLocation();
     expect(wrapper.vm.apiBaseUrl).toBe('http://example.com:4000');
@@ -76,6 +99,9 @@ describe('LocationForm.vue', () => {
       stubs,
       propsData: {
         method: 'create',
+      },
+      mocks: {
+        $ml,
       },
     });
     wrapper.vm.saveLocation();
@@ -90,6 +116,9 @@ describe('LocationForm.vue', () => {
       propsData: {
         method: 'modify',
       },
+      mocks: {
+        $ml,
+      },
     });
     wrapper.vm.deleteLocation();
     wrapper.vm.$nextTick(() => {
@@ -103,6 +132,9 @@ describe('LocationForm.vue', () => {
       propsData: {
         id: 42,
         method: 'modify',
+      },
+      mocks: {
+        $ml,
       },
     });
     wrapper.vm.saveLocation();
@@ -123,6 +155,9 @@ describe('LocationForm.vue', () => {
       propsData: {
         id: 42,
         method: 'modify',
+      },
+      mocks: {
+        $ml,
       },
     });
     wrapper.vm.deleteLocation();
@@ -147,6 +182,7 @@ describe('LocationForm.vue', () => {
       },
       mocks: {
         'this.authenticationRequired': true,
+        $ml,
       },
     });
     const headers = wrapper.vm.buildHeaders();
