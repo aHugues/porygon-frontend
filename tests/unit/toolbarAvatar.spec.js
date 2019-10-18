@@ -6,6 +6,7 @@ const localStorageLight = {
   'vue-user-theme': 'porygon-light',
   'vue-user-firstname': 'John',
   'vue-user-lastname': 'Doe',
+  'vue-user-language': 'english',
 };
 
 const localStorageComposed = {
@@ -33,6 +34,7 @@ const $ml = {
     account: 'Account',
     logout: 'Logout',
   }),
+  change: () => {},
 };
 
 describe('ToolbarAvatar.vue', () => {
@@ -146,5 +148,24 @@ describe('ToolbarAvatar.vue', () => {
       },
     });
     wrapper.vm.logout();
+  });
+
+  it('correctly updates the language', () => {
+    setGlobals();
+    Object.keys(localStorageLight).forEach((key) => {
+      global.window.localStorage.setItem(key, localStorageLight[key]);
+    });
+    const material = { theming: () => null };
+    const wrapper = shallowMount(ToolbarAvatar, {
+      stubs: ['md-button', 'md-icon', 'md-switch', 'md-menu-item', 'md-menu-content', 'md-avatar', 'md-menu', 'md-list', 'md-list-item', 'md-divider'],
+      mocks: {
+        $material: material,
+        $ml,
+      },
+    });
+    expect(global.window.localStorage.getItem('vue-user-language')).toEqual('english');
+    wrapper.vm.updateLanguage('french');
+    wrapper.vm.$forceUpdate();
+    expect(global.window.localStorage.getItem('vue-user-language')).toEqual('french');
   });
 });
