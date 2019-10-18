@@ -37,6 +37,18 @@ const $ml = {
   }),
 };
 
+const validV = {
+  $touch: () => {},
+  $invalid: false,
+  location: {},
+};
+
+const invalidV = {
+  $touch: () => {},
+  $invalid: true,
+  location: {},
+};
+
 const vueToken = 'thisIsAToken';
 
 const stubs = ['md-card', 'md-card-header', 'md-card-content',
@@ -191,5 +203,83 @@ describe('LocationForm.vue', () => {
     expect(headers['Content-Type']).toBe('application/json');
 
     process.env.NODE_ENV = 'test';
+  });
+
+  it('Correctly watches currentLocation updates', () => {
+    const wrapper = shallowMount(LocationForm, {
+      stubs,
+      propsData: {
+        method: 'modify',
+        currentLocation: 'test location',
+        currentPhysical: true,
+      },
+      mocks: {
+        $ml,
+      },
+    });
+
+    expect(wrapper.vm.location).toEqual('test location');
+    wrapper.setProps({ currentLocation: 'updated location' });
+    expect(wrapper.vm.location).toEqual('updated location');
+  });
+
+  it('Correctly watches currentPhysical updates', () => {
+    const wrapper = shallowMount(LocationForm, {
+      stubs,
+      propsData: {
+        method: 'modify',
+        currentLocation: 'test location',
+        currentPhysical: true,
+      },
+      mocks: {
+        $ml,
+      },
+    });
+
+    expect(wrapper.vm.physical).toEqual(true);
+    wrapper.setProps({ currentPhysical: false });
+    expect(wrapper.vm.physical).toEqual(false);
+  });
+
+  it('correctly saves after validating', () => {
+    const wrapper = shallowMount(LocationForm, {
+      stubs,
+      propsData: {
+        method: 'create',
+      },
+      mocks: {
+        $ml,
+        $v: validV,
+      },
+    });
+    wrapper.vm.validateLocation();
+    wrapper.vm.$nextTick(() => {
+      expect(axios.mock.calls.length).toEqual(5);
+      const axiosArgs = axios.mock.calls[4][0];
+      expect(axiosArgs.method).toBe('post');
+      expect(axiosArgs.url).toBe('http://example.com:4000/locations');
+      expect(axiosArgs.headers['Content-Type']).toBe('application/json');
+      expect(axiosArgs.headers.Authorization).not.toBeDefined();
+      expect(axiosArgs.data.location).toEqual('');
+      expect(axiosArgs.data.is_physical).toEqual(true);
+    });
+  });
+
+  it('correctly detects invalid', () => {
+    const wrapper = shallowMount(LocationForm, {
+      stubs,
+      propsData: {
+        id: 42,
+        method: 'modify',
+      },
+      mocks: {
+        $ml,
+        $v: invalidV,
+      },
+    });
+    wrapper.vm.validateLocation();
+    wrapper.vm.$nextTick(() => {
+      expect(axios.mock.calls.length).toEqual(5);
+    });
   });
 });
