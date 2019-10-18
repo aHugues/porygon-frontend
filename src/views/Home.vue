@@ -2,8 +2,8 @@
   <div class="home">
     <md-empty-state
     md-icon="home"
-    md-label="Nothing here"
-    md-description="Work in progress.">
+    :md-label="$ml.get('home').title"
+    :md-description="$ml.get('home').subtitle">
    </md-empty-state>
   </div>
 </template>

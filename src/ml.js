@@ -46,6 +46,10 @@ export default new MLCreate({
         location_required: 'The location is required',
         location_too_long: 'The location is too long',
       },
+      home: {
+        title: 'Nothing here',
+        subtitle: 'Work in progress.',
+      },
     }),
     new MLanguage('french').create({
       navigation: {
@@ -85,6 +89,10 @@ export default new MLCreate({
         empty_description: 'En ajoutant des emplacements, vous pourrez y stocker des films et séries.',
         location_required: "L'emplacement est requis",
         location_too_long: "L'emplacement est trop long",
+      },
+      home: {
+        title: 'Cette page est vide',
+        subtitle: 'Développement en cours.',
       },
     }),
   ],
