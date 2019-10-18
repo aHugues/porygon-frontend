@@ -38,6 +38,18 @@ const $ml = {
   }),
 };
 
+const validV = {
+  $touch: () => {},
+  $invalid: false,
+  label: {},
+};
+
+const invalidV = {
+  $touch: () => {},
+  $invalid: true,
+  label: {},
+};
+
 const vueToken = 'thisIsAToken';
 
 const stubs = ['md-card', 'md-card-header', 'md-card-content',
@@ -192,5 +204,83 @@ describe('CategoryForm.vue', () => {
     expect(headers['Content-Type']).toBe('application/json');
 
     process.env.NODE_ENV = 'test';
+  });
+
+  it('Correctly watches currentLabel updates', () => {
+    const wrapper = shallowMount(CategoryForm, {
+      stubs,
+      propsData: {
+        method: 'modify',
+        currentLabel: 'test category',
+        currentDescription: 'test description',
+      },
+      mocks: {
+        $ml,
+      },
+    });
+
+    expect(wrapper.vm.label).toEqual('test category');
+    wrapper.setProps({ currentLabel: 'updated category' });
+    expect(wrapper.vm.label).toEqual('updated category');
+  });
+
+  it('Correctly watches currentDescription updates', () => {
+    const wrapper = shallowMount(CategoryForm, {
+      stubs,
+      propsData: {
+        method: 'modify',
+        currentLabel: 'test category',
+        currentDescription: 'test description',
+      },
+      mocks: {
+        $ml,
+      },
+    });
+
+    expect(wrapper.vm.description).toEqual('test description');
+    wrapper.setProps({ currentDescription: 'updated description' });
+    expect(wrapper.vm.description).toEqual('updated description');
+  });
+
+  it('correctly saves after validating', () => {
+    const wrapper = shallowMount(CategoryForm, {
+      stubs,
+      propsData: {
+        method: 'create',
+      },
+      mocks: {
+        $ml,
+        $v: validV,
+      },
+    });
+    wrapper.vm.validateCategory();
+    wrapper.vm.$nextTick(() => {
+      expect(axios.mock.calls.length).toEqual(5);
+      const axiosArgs = axios.mock.calls[4][0];
+      expect(axiosArgs.method).toBe('post');
+      expect(axiosArgs.url).toBe('http://example.com:4000/categories');
+      expect(axiosArgs.headers['Content-Type']).toBe('application/json');
+      expect(axiosArgs.headers.Authorization).not.toBeDefined();
+      expect(axiosArgs.data.label).toEqual('');
+      expect(axiosArgs.data.description).toEqual('');
+    });
+  });
+
+  it('correctly detects invalid', () => {
+    const wrapper = shallowMount(CategoryForm, {
+      stubs,
+      propsData: {
+        id: 42,
+        method: 'modify',
+      },
+      mocks: {
+        $ml,
+        $v: invalidV,
+      },
+    });
+    wrapper.vm.validateCategory();
+    wrapper.vm.$nextTick(() => {
+      expect(axios.mock.calls.length).toEqual(5);
+    });
   });
 });
