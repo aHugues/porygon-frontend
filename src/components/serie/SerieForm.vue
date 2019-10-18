@@ -5,47 +5,51 @@
 
         <div class="md-layout-item md-size-100">
           <md-field :class="getValidationClass('title')">
-            <label for="title">Title</label>
+            <label for="title">{{ $ml.get('serie').title }}</label>
             <md-input name="title" id="title" v-model="serie.title"/>
-            <span class="md-error" v-if="!$v.serie.title.required">The title is required</span>
-            <span class="md-error" v-if="!$v.serie.title.maxLength">The title is too long</span>
+            <span class="md-error" v-if="!$v.serie.title.required">
+              {{ $ml.get('serie').title_required }}
+            </span>
+            <span class="md-error" v-if="!$v.serie.title.maxLength">
+              {{ $ml.get('serie').title_too_long }}
+            </span>
           </md-field>
         </div>
 
         <div class="md-layout-item md-size-50 md-small-size-100">
           <md-field :class="getValidationClass('season')">
-            <label for="season">Season</label>
+            <label for="season">{{ $ml.get('serie').season }}</label>
             <md-input name="season" id="season" v-model="serie.season"/>
             <span class="md-error" v-if="!$v.serie.season.integer">
-              The season should be a number
+              {{ $ml.get('serie').season_integer }}
             </span>
           </md-field>
         </div>
 
         <div class="md-layout-item md-size-50 md-small-size-100">
           <md-field :class="getValidationClass('episodes')">
-            <label for="episodes">Number of episodes</label>
+            <label for="episodes">{{ $ml.get('serie').episodes }}</label>
             <md-input name="episodes" id="episodes" v-model="serie.episodes"/>
             <span class="md-error" v-if="!$v.serie.episodes.integer">
-              The number of episodes should be a number
+              {{ $ml.get('serie').episodes_integer }}
             </span>
           </md-field>
         </div>
 
         <div class="md-layout-item md-size-100">
           <md-field>
-            <label for="support">Supports</label>
+            <label for="support">{{ $ml.get('serie').supports }}</label>
             <md-select v-model="supports" name="supports" id="supports" multiple>
               <md-option value="dvd">DvD</md-option>
               <md-option value="bluray">Bluray</md-option>
-              <md-option value="digital">Digital</md-option>
+              <md-option value="digital">{{ $ml.get('serie').support_digital }}</md-option>
             </md-select>
           </md-field>
         </div>
 
         <div class="md-layout-item md-size-100">
           <md-field>
-            <label for="location">Location</label>
+            <label for="location">{{ $ml.get('location').location }}</label>
             <md-select v-model="serie.location_id" name="location" id="location">
               <md-option v-for="(location, key) in locations" :key="key"
               :value="location.id">{{ location.location }}</md-option>
@@ -55,7 +59,7 @@
 
         <div class="md-layout-item md-size-100">
           <md-field>
-            <label for="category">Category</label>
+            <label for="category">{{ $ml.get('category').category }}</label>
             <md-select v-model="serie.category_id" name="category" id="category">
               <md-option v-for="(category, key) in categories" :key="key"
               :value="category.id">{{ category.label }}</md-option>
@@ -65,10 +69,10 @@
 
         <div class="md-layout-item md-size-100">
           <md-field :class="getValidationClass('remarks')">
-            <label for="remarks">Remarks</label>
+            <label for="remarks">{{ $ml.get('serie').remarks }}</label>
             <md-input name="remarks" id="remarks" v-model="serie.remarks"/>
             <span class="md-error" v-if="!$v.serie.remarks.maxLength">
-              The remarks are too long
+              {{ $ml.get('serie').remarks_too_long }}
             </span>
           </md-field>
         </div>
@@ -76,13 +80,13 @@
       </div>
 
       <md-button v-if="method === 'create'" type="submit" class="md-accent">
-        Create serie
+        {{ $ml.get('serie').create }}
       </md-button>
       <md-button v-if="method === 'modify'" type="submit" class="md-accent">
-        Edit serie
+        {{ $ml.get('serie').edit }}
       </md-button>
       <md-button v-if="method === 'modify'" @click="deleteSerie" class="md-primary">
-        Delete serie
+        {{ $ml.get('serie').delete }}
       </md-button>
     </form>
 </div>
