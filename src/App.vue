@@ -75,6 +75,10 @@ export default {
       localStorage.setItem('vue-user-theme', 'porygon-light');
     }
     this.$material.theming.theme = currentTheme;
+    const currentLanguage = localStorage.getItem('vue-user-language');
+    if (currentLanguage !== null && currentLanguage !== undefined) {
+      this.$ml.change(currentLanguage);
+    }
   },
   name: 'app',
   components: {

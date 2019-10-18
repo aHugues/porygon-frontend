@@ -32,7 +32,7 @@
               <span class="md-list-item-text">{{ $ml.get('menu').languages }}</span>
 
               <md-list slot="md-expand">
-                <md-list-item v-for="lang in $ml.list" :key="lang" @click="$ml.change(lang)">
+                <md-list-item v-for="lang in $ml.list" :key="lang" @click="updateLanguage(lang)">
                   <span>
                     <span class="lang-flag">{{ emojis[lang] }}</span>
                     <span class="lang-name">{{ lang }}</span>
@@ -114,6 +114,10 @@ export default {
   methods: {
     logout() {
       this.$keycloak.logout('/');
+    },
+    updateLanguage(newLanguage) {
+      localStorage.setItem('vue-user-language', newLanguage);
+      this.$ml.change(newLanguage);
     },
   },
 };
