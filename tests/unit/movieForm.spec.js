@@ -99,7 +99,7 @@ describe('MovieForm.vue', () => {
     expect(wrapper.vm.$props.method).toBe('create');
   });
 
-  it('loads the current Location on modify mode', () => {
+  it('loads the current Movie on modify mode', () => {
     const wrapper = shallowMount(MovieForm, {
       stubs,
       propsData: {
@@ -208,7 +208,7 @@ describe('MovieForm.vue', () => {
     });
   });
 
-  it('sends the correct arguments when deleting a location', () => {
+  it('sends the correct arguments when deleting a movie', () => {
     const wrapper = shallowMount(MovieForm, {
       stubs,
       propsData: {
