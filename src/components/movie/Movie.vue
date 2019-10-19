@@ -1,7 +1,7 @@
 <template>
   <div class="full-size">
     <div class="md-layout full-size">
-      <div class="md-layout-item md-size-20 col-20">
+      <div class="md-layout-item md-xlarge-size-20 md-large-size-30 md-medium-size-40">
         <span v-if="category.label === null" class="md-caption">
           {{ $ml.get('category').undefined }}
         </span>
@@ -9,11 +9,11 @@
           {{ category.label }}
         </span>
       </div>
-      <div class="md-layout-item md-size-60 col-60">
+      <div class="md-layout-item md-xlarge-size-60 md-large-size-50 md-medium-size-50">
         <div>{{ movie.title }}</div>
         <div class="md-caption">{{ movie.french_title }}</div>
       </div>
-      <div class="md-layout-item md-size-20 col-20">
+      <div class="md-layout-item md-xlarge-size-20 md-medium-size-10">
         {{ location.location }}
       </div>
     </div>
