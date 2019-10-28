@@ -19,9 +19,13 @@ export default new MLCreate({
       menu: {
         dev_version: 'Development version',
         dark_theme: 'Dark theme',
+        light_theme: 'Light Theme',
+        theme: 'Theme',
         languages: 'Languages',
         account: 'Account',
         logout: 'Logout',
+        theme_selection: 'Select theme',
+        language_selection: 'Select language',
       },
       category: {
         category: 'Category',
@@ -110,9 +114,13 @@ export default new MLCreate({
       menu: {
         dev_version: 'Version de développement',
         dark_theme: 'Thème sombre',
+        light_theme: 'Thème clair',
         languages: 'Langues',
+        theme: 'Thème',
         account: 'Profil',
         logout: 'Déconnexion',
+        theme_selection: 'Sélectionner theme',
+        language_selection: 'Sélectionner langage',
       },
       category: {
         category: 'Catégorie',
