@@ -1,6 +1,7 @@
 <template>
   <div class="avatar-wrapper">
-    <md-menu md-align-trigger :md-close-on-select=false md-size="auto">
+    <md-menu md-align-trigger :MdCloseOnClick="false" :MdCloseOnSelect="false"
+    :md-active="menuOpened" md-size="big">
 
       <md-button md-menu-trigger class="md-icon-button">
         <md-avatar class="md-avatar-icon md-accent">
@@ -9,57 +10,122 @@
       </md-button>
 
       <md-menu-content>
-        <md-menu-item>
-          <div class="version-wrapper">
-            <div class="version-number md-body-2">Porygon v{{ porygonVersion }}</div>
-            <div class="dev-version md-caption">({{ $ml.get('menu').dev_version }})</div>
-          </div>
-        </md-menu-item>
+        <div class="menu-content-wrapper">
+          <transition name="slide-right">
+            <div class="menu-page" v-if="selectedTab==1">
+              <md-menu-item>
+                <div class="version-wrapper">
+                  <div class="version-number md-body-2">Porygon v{{ porygonVersion }}</div>
+                  <div class="dev-version md-caption">({{ $ml.get('menu').dev_version }})</div>
+                </div>
+              </md-menu-item>
 
-        <div class="divider-container">
-          <md-divider></md-divider>
-        </div>
+              <div class="divider-container">
+                <md-divider></md-divider>
+              </div>
 
-        <md-menu-item>
-          <md-switch v-model="darkTheme">{{ $ml.get('menu').dark_theme }}</md-switch>
-        </md-menu-item>
+              <md-menu-item>
+                <md-button @click.stop="selectedTab = 2">
+                  <div class="logout-button-content">
+                    <md-icon>color_lens</md-icon>
+                    <div>{{ $ml.get('menu').theme }}</div>
+                    <md-icon>arrow_right</md-icon>
+                  </div>
+                </md-button>
+              </md-menu-item>
 
-        <md-menu-item>
-          <md-list md-expand-single>
-            <md-list-item md-expand :md-expanded.sync="expandLanguages"
-            @click.stop class="language-selector">
-              <md-icon>language</md-icon>
-              <span class="md-list-item-text">{{ $ml.get('menu').languages }}</span>
+              <md-menu-item>
+                <md-button @click.stop="selectedTab = 3">
+                  <div class="logout-button-content">
+                    <md-icon>language</md-icon>
+                    <div>{{ $ml.get('menu').languages }}</div>
+                    <md-icon>arrow_right</md-icon>
+                  </div>
+                </md-button>
+              </md-menu-item>
 
-              <md-list slot="md-expand">
-                <md-list-item v-for="lang in $ml.list" :key="lang" @click="updateLanguage(lang)">
-                  <span>
+              <md-menu-item>
+                <md-button target="_blank" :href="userAccountUrl">
+                  <div class="logout-button-content">
+                    <md-icon>account_box</md-icon>
+                    <div>{{ $ml.get('menu').account }}</div>
+                    <md-icon></md-icon>
+                  </div>
+                </md-button>
+              </md-menu-item>
+
+              <md-menu-item>
+                <md-button @click="logout">
+                  <div class="logout-button-content">
+                    <md-icon>logout</md-icon>
+                    <div>{{ $ml.get('menu').logout }}</div>
+                    <md-icon></md-icon>
+                  </div>
+                </md-button>
+              </md-menu-item>
+            </div>
+          </transition>
+
+          <transition name="slide-left">
+            <div class="menu-page" v-if="selectedTab==2">
+              <md-menu-item>
+                <md-button @click.stop="selectedTab=1">
+                  <div class="logout-button-content">
+                    <md-icon>chevron_left</md-icon>
+                    <div>{{ $ml.get('menu').theme_selection }}</div>
+                  </div>
+                </md-button>
+              </md-menu-item>
+
+              <div class="divider-container">
+                <md-divider></md-divider>
+              </div>
+
+              <md-menu-item>
+                <md-button @click.stop="darkTheme = false">
+                  <div class="logout-button-content">
+                    <span>{{ $ml.get('menu').light_theme }}</span>
+                  </div>
+                </md-button>
+              </md-menu-item>
+
+              <md-menu-item>
+                <md-button @click.stop="darkTheme = true">
+                  <div class="logout-button-content">
+                    <span>{{ $ml.get('menu').dark_theme }}</span>
+                  </div>
+                </md-button>
+              </md-menu-item>
+            </div>
+          </transition>
+
+          <transition name="slide-left">
+            <div class="menu-page" v-if="selectedTab==3">
+              <md-menu-item>
+                <md-button  @click.stop="selectedTab=1">
+                  <div class="logout-button-content">
+                    <md-icon>chevron_left</md-icon>
+                    <div>{{ $ml.get('menu').language_selection }}</div>
+                  </div>
+                </md-button>
+              </md-menu-item>
+
+              <div class="divider-container">
+                <md-divider></md-divider>
+              </div>
+
+              <md-menu-item v-for="lang in $ml.list" :key="lang">
+                <md-button @click.stop="updateLanguage(lang)">
+                  <div class="logout-button-content">
                     <span class="lang-flag">{{ emojis[lang] }}</span>
                     <span class="lang-name">{{ lang }}</span>
-                  </span>
-                </md-list-item>
-              </md-list>
-            </md-list-item>
-          </md-list>
-        </md-menu-item>
-
-        <md-menu-item>
-          <md-button target="_blank" :href="userAccountUrl">
-            <div class="logout-button-content">
-              <md-icon>account_box</md-icon>
-              <div>{{ $ml.get('menu').account }}</div>
+                    <span class="lang-flag"></span>
+                  </div>
+                </md-button>
+              </md-menu-item>
             </div>
-          </md-button>
-        </md-menu-item>
-
-        <md-menu-item>
-          <md-button @click="logout">
-            <div class="logout-button-content">
-              <md-icon>logout</md-icon>
-              <div>{{ $ml.get('menu').logout }}</div>
-            </div>
-          </md-button>
-        </md-menu-item>
+          </transition>
+        </div>
 
       </md-menu-content>
     </md-menu>
@@ -84,6 +150,7 @@ export default {
     darkTheme(newTheme) {
       const selectedTheme = (newTheme) ? 'porygon-dark' : 'porygon-light';
       localStorage.setItem('vue-user-theme', selectedTheme);
+      this.$material.theming.theme = selectedTheme;
     },
   },
   computed: {
@@ -110,6 +177,8 @@ export default {
     showSnackbar: false,
     expandLanguages: false,
     emojis,
+    selectedTab: 1,
+    menuOpened: false,
   }),
   methods: {
     logout() {
@@ -128,7 +197,7 @@ export default {
   display: flex;
 }
 .logout-button-content {
-  width: 120px;
+  width: 190px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -165,6 +234,32 @@ export default {
   padding-right: 15px;
 }
 
+.slide-left-enter-active, .slide-left-leave-active,
+.slide-right-leave-active, .slide-right-enter-active {
+  transition: all 0.3s ease;
+  overflow: hidden;
+}
+
+.slide-left-enter, .slide-left-leave-to {
+  transform: translateX(200px);
+  overflow: hidden;
+}
+
+.slide-right-leave-to, .slide-right-enter {
+  transform: translateX(-200px);
+  overflow: hidden;
+}
+
+.menu-content-wrapper {
+  overflow: hidden;
+  display: flex;
+  flex-direction: row;
+}
+
+.menu-page {
+  flex: 1;
+  overflow: hidden;
+}
 // .language-selector {
 //   background-color: yellow;
 //   div {
