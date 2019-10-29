@@ -120,4 +120,9 @@ export default {
 .md-drawer {
   max-width: 300px !important;
 }
+
+.md-menu-content-container {
+  overflow: hidden !important;
+  max-width: 224px;
+}
 </style>

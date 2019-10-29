@@ -1,7 +1,12 @@
 <template>
   <div class="categories">
+
+    <div v-if="loading" class="loader">
+      <md-progress-spinner md-mode="indeterminate"></md-progress-spinner>
+    </div>
+
    <md-empty-state
-    v-if="categories.length == 0 && !showDialog"
+    v-if="!loading && categories.length == 0 && !showDialog"
     md-icon="category"
     :md-label="$ml.get('category').empty_button"
     md-description="Creating category, you'll be able to better organize movies and series.">
@@ -10,7 +15,12 @@
     </md-button>
    </md-empty-state>
 
-   <div class="edit-form-wrapper" v-if="showDialog">
+   <div class="edit-form-wrapper" v-if="!loading && showDialog">
+      <div class="close-button-wrapper">
+        <md-button class="md-icon-button" @click="showDialog = false; currentId = -1">
+          <md-icon>close</md-icon>
+        </md-button>
+      </div>
       <category-form
       :method="dialogMethod" :id="currentId" :currentLabel="currentLabel"
       :currentDescription="currentDescription"
@@ -18,11 +28,11 @@
       ></category-form>
    </div>
 
-  <div v-if="categories.length > 0 && showDialog" class="divider-wrapper">
+  <div v-if="!loading && categories.length > 0 && showDialog" class="divider-wrapper">
     <md-divider></md-divider>
   </div>
 
-   <div class="md-layout" v-if="categories.length > 0">
+   <div class="md-layout" v-if="!loading && categories.length > 0">
      <div
       v-for="(category, key) in categories" :key="key"
       @click="editCategory(category.id, category.label, category.description)"
@@ -36,7 +46,7 @@
      </div>
    </div>
 
-   <div class="add-button-wrapper" v-if="categories.length > 0">
+   <div class="add-button-wrapper" v-if="!loading && categories.length > 0">
      <md-button class="md-fab md-primary" @click="newCategory()">
        <md-icon>add</md-icon>
      </md-button>
@@ -65,6 +75,7 @@ export default {
       currentId: -1,
       currentLabel: '',
       currentDescription: '',
+      loading: true,
     };
   },
   computed: {
@@ -84,7 +95,10 @@ export default {
         .get(`${this.apiBaseUrl}/categories`, {
           headers: this.buildHeaders(),
         })
-        .then((response) => { this.categories = response.data; });
+        .then((response) => {
+          this.categories = response.data;
+          this.loading = false;
+        });
     },
     newCategory() {
       this.dialogMethod = 'create';
@@ -117,11 +131,29 @@ export default {
   right: 10px;
   z-index: 10;
 }
+
+.close-button-wrapper {
+  position: absolute;
+  top: 5px;
+  right: 15px;
+}
+
+.edit-form-wrapper {
+  position: relative;
+}
+
 .md-dialog-alert {
   background-color: var(--md-theme-default-background, #fff);
 }
 .divider-wrapper {
   margin-top: 18px;
   margin-bottom: 10px;
+}
+
+.loader {
+  text-align: center;
+  width: 100%;
+  height: 100%;
+  padding-top: 30%;
 }
 </style>

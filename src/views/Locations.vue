@@ -1,7 +1,12 @@
 <template>
   <div class="locations">
+
+    <div v-if="loading" class="loader">
+      <md-progress-spinner md-mode="indeterminate"></md-progress-spinner>
+    </div>
+
    <md-empty-state
-    v-if="locations.length == 0 && !showDialog"
+    v-if="!loading && locations.length == 0 && !showDialog"
     md-icon="folder"
     :md-label="$ml.get('location').empty_button"
     :md-description="$ml.get('location').empty_button">
@@ -11,6 +16,11 @@
    </md-empty-state>
 
    <div class="edit-form-wrapper" v-if="showDialog">
+      <div class="close-button-wrapper">
+        <md-button class="md-icon-button" @click="showDialog = false; currentId = -1">
+          <md-icon>close</md-icon>
+        </md-button>
+      </div>
       <location-form
       :method="dialogMethod" :id="currentId" :currentLocation="currentLocation"
       :currentPhysical="currentPhysical"
@@ -18,12 +28,12 @@
       ></location-form>
    </div>
 
-  <div v-if="locations.length > 0 && showDialog" class="divider-wrapper">
+  <div v-if="!loading && locations.length > 0 && showDialog" class="divider-wrapper">
     <md-divider></md-divider>
   </div>
 
 
-    <div class="md-layout" v-if="locations.length > 0">
+    <div class="md-layout" v-if="!loading && locations.length > 0">
      <div
       v-for="(location, key) in locations" :key="key"
       @click="editLocation(location.id, location.location, Boolean(location.is_physical))"
@@ -38,7 +48,7 @@
      </div>
    </div>
 
-    <div class="add-button-wrapper" v-if="locations.length > 0">
+    <div class="add-button-wrapper" v-if="!loading && locations.length > 0">
      <md-button class="md-fab md-primary" @click="newLocation()">
        <md-icon>add</md-icon>
      </md-button>
@@ -69,6 +79,7 @@ export default {
       currentId: -1,
       currentLocation: '',
       currentPhysical: true,
+      loading: true,
     };
   },
   computed: {
@@ -88,7 +99,10 @@ export default {
         .get(`${this.apiBaseUrl}/locations`, {
           headers: this.buildHeaders(),
         })
-        .then((response) => { this.locations = response.data; });
+        .then((response) => {
+          this.locations = response.data;
+          this.loading = false;
+        });
     },
     newLocation() {
       this.dialogMethod = 'create';
@@ -116,6 +130,17 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
+.close-button-wrapper {
+  position: absolute;
+  top: 5px;
+  right: 15px;
+}
+
+.edit-form-wrapper {
+  position: relative;
+}
+
 .add-button-wrapper {
   position: fixed;
   bottom: 10px;
@@ -128,5 +153,12 @@ export default {
 .divider-wrapper {
   margin-top: 18px;
   margin-bottom: 10px;
+}
+
+.loader {
+  text-align: center;
+  width: 100%;
+  height: 100%;
+  padding-top: 30%;
 }
 </style>

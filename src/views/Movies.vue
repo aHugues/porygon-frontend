@@ -5,9 +5,15 @@
       <md-progress-spinner md-mode="indeterminate"></md-progress-spinner>
     </div>
 
-    <movie-form v-if="!loading && showDialog" :method="'create'" :movie="{}"
-        :categories="categories" :locations="locations"
-        @movie-added-or-modified="refreshList(-1)"></movie-form>
+    <div v-if="!loading && showDialog" :method="'create'" class="add-form-wrapper">
+      <div class="close-button-wrapper">
+        <md-button class="md-icon-button" @click="showDialog = false">
+          <md-icon>close</md-icon>
+        </md-button>
+      </div>
+      <movie-form :movie="{}" :categories="categories" :locations="locations"
+          @movie-added-or-modified="refreshList(-1)"></movie-form>
+    </div>
 
     <md-empty-state
       v-if="!loading && movies.length == 0 && !showDialog"
@@ -155,6 +161,16 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.close-button-wrapper {
+  position: absolute;
+  top: 5px;
+  right: 15px;
+}
+
+.add-form-wrapper {
+  position: relative;
+}
+
 .movies {
   height: 100%;
 }
