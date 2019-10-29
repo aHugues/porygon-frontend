@@ -5,9 +5,16 @@
       <md-progress-spinner md-mode="indeterminate"></md-progress-spinner>
     </div>
 
-    <serie-form v-if="!loading && showDialog" :method="'create'" :serie="{}"
-        :categories="categories" :locations="locations"
-        @serie-added-or-modified="refreshList(-1)"></serie-form>
+    <div v-if="!loading && showDialog" :method="'create'" class="add-form-wrapper">
+      <div class="close-button-wrapper">
+        <md-button class="md-icon-button" @click="showDialog = false">
+          <md-icon>close</md-icon>
+        </md-button>
+      </div>
+      <serie-form :method="'create'" :serie="{}"
+          :categories="categories" :locations="locations"
+          @serie-added-or-modified="refreshList(-1)"></serie-form>
+    </div>
 
     <md-empty-state
       v-if="!loading && series.length == 0 && !showDialog"
@@ -153,6 +160,16 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.close-button-wrapper {
+  position: absolute;
+  top: 5px;
+  right: 15px;
+}
+
+.add-form-wrapper {
+  position: relative;
+}
+
 .series {
   height: 100%;
 }

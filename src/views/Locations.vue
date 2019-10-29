@@ -16,6 +16,11 @@
    </md-empty-state>
 
    <div class="edit-form-wrapper" v-if="showDialog">
+      <div class="close-button-wrapper">
+        <md-button class="md-icon-button" @click="showDialog = false; currentId = -1">
+          <md-icon>close</md-icon>
+        </md-button>
+      </div>
       <location-form
       :method="dialogMethod" :id="currentId" :currentLocation="currentLocation"
       :currentPhysical="currentPhysical"
@@ -125,6 +130,17 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
+.close-button-wrapper {
+  position: absolute;
+  top: 5px;
+  right: 15px;
+}
+
+.edit-form-wrapper {
+  position: relative;
+}
+
 .add-button-wrapper {
   position: fixed;
   bottom: 10px;

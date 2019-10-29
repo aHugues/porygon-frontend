@@ -16,6 +16,11 @@
    </md-empty-state>
 
    <div class="edit-form-wrapper" v-if="!loading && showDialog">
+      <div class="close-button-wrapper">
+        <md-button class="md-icon-button" @click="showDialog = false; currentId = -1">
+          <md-icon>close</md-icon>
+        </md-button>
+      </div>
       <category-form
       :method="dialogMethod" :id="currentId" :currentLabel="currentLabel"
       :currentDescription="currentDescription"
@@ -126,6 +131,17 @@ export default {
   right: 10px;
   z-index: 10;
 }
+
+.close-button-wrapper {
+  position: absolute;
+  top: 5px;
+  right: 15px;
+}
+
+.edit-form-wrapper {
+  position: relative;
+}
+
 .md-dialog-alert {
   background-color: var(--md-theme-default-background, #fff);
 }
