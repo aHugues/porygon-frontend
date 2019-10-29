@@ -11,8 +11,8 @@
 
       <md-menu-content>
         <div class="menu-content-wrapper">
-          <transition name="slide-right">
-            <div class="menu-page" v-if="selectedTab==1">
+          <!-- <transition name="slide-right"> -->
+            <div class="menu-page" :class="{ 'slide-left': selectedTab !== 1 }">
               <md-menu-item>
                 <div class="version-wrapper">
                   <div class="version-number md-body-2">Porygon v{{ porygonVersion }}</div>
@@ -64,67 +64,70 @@
                 </md-button>
               </md-menu-item>
             </div>
-          </transition>
+          <!-- </transition> -->
 
-          <transition name="slide-left">
-            <div class="menu-page" v-if="selectedTab==2">
-              <md-menu-item>
-                <md-button @click.stop="selectedTab=1">
-                  <div class="logout-button-content">
-                    <md-icon>chevron_left</md-icon>
-                    <div>{{ $ml.get('menu').theme_selection }}</div>
-                  </div>
-                </md-button>
-              </md-menu-item>
+            <div class="menu-page" :class="{ 'slide-left': selectedTab !== 1 }">
 
-              <div class="divider-container">
-                <md-divider></md-divider>
+              <div v-if="selectedTab == 2">
+                <md-menu-item>
+                  <md-button @click.stop="selectedTab=1">
+                    <div class="logout-button-content">
+                      <md-icon>chevron_left</md-icon>
+                      <div>{{ $ml.get('menu').theme_selection }}</div>
+                    </div>
+                  </md-button>
+                </md-menu-item>
+
+                <div class="divider-container">
+                  <md-divider></md-divider>
+                </div>
+
+                <md-menu-item>
+                  <md-button @click.stop="darkTheme = false">
+                    <div class="logout-button-content">
+                      <md-icon>brightness_5</md-icon>
+                      <span>{{ $ml.get('menu').light_theme }}</span>
+                      <span class="lang-flag"></span>
+                    </div>
+                  </md-button>
+                </md-menu-item>
+
+                <md-menu-item>
+                  <md-button @click.stop="darkTheme = true">
+                    <div class="logout-button-content">
+                      <md-icon>brightness_6</md-icon>
+                      <span>{{ $ml.get('menu').dark_theme }}</span>
+                      <span class="lang-flag"></span>
+                    </div>
+                  </md-button>
+                </md-menu-item>
               </div>
 
-              <md-menu-item>
-                <md-button @click.stop="darkTheme = false">
-                  <div class="logout-button-content">
-                    <span>{{ $ml.get('menu').light_theme }}</span>
-                  </div>
-                </md-button>
-              </md-menu-item>
+              <div v-if="selectedTab == 3">
+                <md-menu-item>
+                  <md-button  @click.stop="selectedTab=1">
+                    <div class="logout-button-content">
+                      <md-icon>chevron_left</md-icon>
+                      <div>{{ $ml.get('menu').language_selection }}</div>
+                    </div>
+                  </md-button>
+                </md-menu-item>
 
-              <md-menu-item>
-                <md-button @click.stop="darkTheme = true">
-                  <div class="logout-button-content">
-                    <span>{{ $ml.get('menu').dark_theme }}</span>
-                  </div>
-                </md-button>
-              </md-menu-item>
-            </div>
-          </transition>
+                <div class="divider-container">
+                  <md-divider></md-divider>
+                </div>
 
-          <transition name="slide-left">
-            <div class="menu-page" v-if="selectedTab==3">
-              <md-menu-item>
-                <md-button  @click.stop="selectedTab=1">
-                  <div class="logout-button-content">
-                    <md-icon>chevron_left</md-icon>
-                    <div>{{ $ml.get('menu').language_selection }}</div>
-                  </div>
-                </md-button>
-              </md-menu-item>
-
-              <div class="divider-container">
-                <md-divider></md-divider>
+                <md-menu-item v-for="lang in $ml.list" :key="lang">
+                  <md-button @click.stop="updateLanguage(lang)">
+                    <div class="logout-button-content">
+                      <span class="lang-flag">{{ emojis[lang] }}</span>
+                      <span class="lang-name">{{ lang }}</span>
+                      <span class="lang-flag"></span>
+                    </div>
+                  </md-button>
+                </md-menu-item>
               </div>
-
-              <md-menu-item v-for="lang in $ml.list" :key="lang">
-                <md-button @click.stop="updateLanguage(lang)">
-                  <div class="logout-button-content">
-                    <span class="lang-flag">{{ emojis[lang] }}</span>
-                    <span class="lang-name">{{ lang }}</span>
-                    <span class="lang-flag"></span>
-                  </div>
-                </md-button>
-              </md-menu-item>
             </div>
-          </transition>
         </div>
 
       </md-menu-content>
@@ -234,31 +237,42 @@ export default {
   padding-right: 15px;
 }
 
-.slide-left-enter-active, .slide-left-leave-active,
-.slide-right-leave-active, .slide-right-enter-active {
-  transition: all 0.3s ease;
-  overflow: hidden;
+// .slide-left-enter-active, .slide-left-leave-active,
+// .slide-right-leave-active, .slide-right-enter-active, .menu-page {
+//   transition: all 5s ease;
+//   overflow: hidden;
+// }
+
+.slide-left {
+  transform: translateX(-100%);
 }
 
-.slide-left-enter, .slide-left-leave-to {
-  transform: translateX(200px);
-  overflow: hidden;
+.slide-right {
+  transform: translateX(100%);
 }
 
-.slide-right-leave-to, .slide-right-enter {
-  transform: translateX(-200px);
-  overflow: hidden;
-}
+// .slide-left-enter, .slide-left-leave-to {
+//   transform: translateX(300px);
+//   overflow: hidden;
+// }
+
+// .slide-right-leave-to, .slide-right-enter {
+//   transform: translateX(-300px);
+//   overflow: hidden;
+// }
 
 .menu-content-wrapper {
   overflow: hidden;
   display: flex;
   flex-direction: row;
+  width: 200%;
 }
 
 .menu-page {
   flex: 1;
   overflow: hidden;
+  width: 100%;
+  transition: all 0.3s ease;
 }
 // .language-selector {
 //   background-color: yellow;
