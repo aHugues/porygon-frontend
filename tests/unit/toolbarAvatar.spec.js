@@ -54,6 +54,7 @@ describe('ToolbarAvatar.vue', () => {
 
   it('selects the correct theme when dark', () => {
     setGlobals();
+    const material = { theming: () => null };
     Object.keys(localStorageDark).forEach((key) => {
       global.window.localStorage.setItem(key, localStorageDark[key]);
     });
@@ -61,6 +62,7 @@ describe('ToolbarAvatar.vue', () => {
       stubs: ['md-button', 'md-icon', 'md-switch', 'md-menu-item', 'md-menu-content', 'md-avatar', 'md-menu', 'md-list', 'md-list-item', 'md-divider'],
       mocks: {
         $ml,
+        $material: material,
       },
     });
     expect(wrapper.vm.darkTheme).toEqual(true);
@@ -68,6 +70,7 @@ describe('ToolbarAvatar.vue', () => {
 
   it('correctly computes the initials', () => {
     setGlobals();
+    const material = { theming: () => null };
     Object.keys(localStorageDark).forEach((key) => {
       global.window.localStorage.setItem(key, localStorageDark[key]);
     });
@@ -75,6 +78,7 @@ describe('ToolbarAvatar.vue', () => {
       stubs: ['md-button', 'md-icon', 'md-switch', 'md-menu-item', 'md-menu-content', 'md-avatar', 'md-menu', 'md-list', 'md-list-item', 'md-divider'],
       mocks: {
         $ml,
+        $material: material,
       },
     });
     expect(wrapper.vm.userInitials).toEqual('J');
@@ -82,6 +86,7 @@ describe('ToolbarAvatar.vue', () => {
 
   it('correctly computes the initials for composed nouns', () => {
     setGlobals();
+    const material = { theming: () => null };
     Object.keys(localStorageComposed).forEach((key) => {
       global.window.localStorage.setItem(key, localStorageComposed[key]);
     });
@@ -89,6 +94,7 @@ describe('ToolbarAvatar.vue', () => {
       stubs: ['md-button', 'md-icon', 'md-switch', 'md-menu-item', 'md-menu-content', 'md-avatar', 'md-menu', 'md-list', 'md-list-item', 'md-divider'],
       mocks: {
         $ml,
+        $material: material,
       },
     });
     expect(wrapper.vm.userInitials).toEqual('JJ');
@@ -96,6 +102,7 @@ describe('ToolbarAvatar.vue', () => {
 
   it('correctly computes the initials when unknown', () => {
     setGlobals();
+    const material = { theming: () => null };
     global.window.localStorage.clear();
     Object.keys(localStorageUndefined).forEach((key) => {
       global.window.localStorage.setItem(key, localStorageUndefined[key]);
@@ -104,6 +111,7 @@ describe('ToolbarAvatar.vue', () => {
       stubs: ['md-button', 'md-icon', 'md-switch', 'md-menu-item', 'md-menu-content', 'md-avatar', 'md-menu', 'md-list', 'md-list-item', 'md-divider'],
       mocks: {
         $ml,
+        $material: material,
       },
     });
     expect(global.window.localStorage.getItem('vue-user-firstname')).not.toBeTruthy();
@@ -139,12 +147,14 @@ describe('ToolbarAvatar.vue', () => {
     Object.keys(localStorageLight).forEach((key) => {
       global.window.localStorage.setItem(key, localStorageLight[key]);
     });
+    const material = { theming: () => null };
     const keycloak = { logout: (url) => { expect(url).toBe('/'); } };
     const wrapper = shallowMount(ToolbarAvatar, {
       stubs: ['md-button', 'md-icon', 'md-switch', 'md-menu-item', 'md-menu-content', 'md-avatar', 'md-menu', 'md-list', 'md-list-item', 'md-divider'],
       mocks: {
         $keycloak: keycloak,
         $ml,
+        $material: material,
       },
     });
     wrapper.vm.logout();
