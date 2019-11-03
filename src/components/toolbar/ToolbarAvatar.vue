@@ -120,7 +120,7 @@
                 <md-menu-item v-for="lang in $ml.list" :key="lang">
                   <md-button @click.stop="updateLanguage(lang)">
                     <div class="logout-button-content">
-                      <span class="lang-flag">{{ emojis[lang] }}</span>
+                      <span class="lang-flag"><img :src="`/img/flags/${flags[lang]}.png`"/></span>
                       <span class="lang-name">{{ lang }}</span>
                       <span class="lang-flag"></span>
                     </div>
@@ -137,7 +137,7 @@
 </template>
 
 <script>
-import emojis from '../../emoji';
+import flags from '../../flags';
 
 export default {
   name: 'ToolbarAvatar',
@@ -179,7 +179,7 @@ export default {
     language: 'en',
     showSnackbar: false,
     expandLanguages: false,
-    emojis,
+    flags,
     selectedTab: 1,
     menuOpened: false,
   }),
@@ -235,6 +235,10 @@ export default {
 .lang-flag {
   padding-left: 5px;
   padding-right: 15px;
+
+  img {
+    padding-bottom: 3px;
+  }
 }
 
 // .slide-left-enter-active, .slide-left-leave-active,
