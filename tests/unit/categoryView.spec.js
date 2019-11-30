@@ -38,6 +38,8 @@ const stubs = [
   'category-form',
   'md-button',
   'md-empty-state',
+  'md-icon',
+  'md-progress-spinner',
 ];
 
 const vueToken = 'thisIsAToken';

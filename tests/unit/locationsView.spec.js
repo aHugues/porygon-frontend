@@ -37,6 +37,8 @@ const stubs = [
   'location-form',
   'md-button',
   'md-empty-state',
+  'md-progress-spinner',
+  'md-icon',
 ];
 
 const vueToken = 'thisIsAToken';
