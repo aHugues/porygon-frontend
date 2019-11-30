@@ -1,5 +1,5 @@
 <template>
-  <div class="series">
+  <div id="series-list" class="series">
 
     <div v-if="loading" class="loader">
       <md-progress-spinner md-mode="indeterminate"></md-progress-spinner>
@@ -28,7 +28,7 @@
 
      <div v-if="!loading && series.length > 0">
       <md-list :md-expand-single="true">
-        <div v-for="(serie, key) in series" :key="key" :id="`movie-elt-${key}`">
+        <div v-for="(serie, key) in series" :key="key" :id="`serie-elt-${key}`">
           <md-list-item @click="onSelect(key)" md-expand
           :md-expanded.sync="expanded[key - 1]">
             <serie
@@ -66,6 +66,8 @@ export default {
   name: 'SeriesView',
   created() {
     this.fetchData();
+    window.addEventListener('md-collapsed', () => { this.scrollTo(this.selectedId); });
+    window.addEventListener('md-expanded', () => { this.scrollTo(this.selectedId); });
   },
   data() {
     return {
@@ -76,6 +78,7 @@ export default {
       categories: [],
       locations: [],
       loading: true,
+      selectedId: -1,
       resourcesLoaded: 0,
     };
   },
@@ -142,17 +145,19 @@ export default {
     },
     onSelect(id) {
       console.log(`Selected serie ${id}`);
+      this.selectedId = id;
+      this.$nextTick(() => {
+        this.scrollTo(id);
+      });
     },
     newSerie() {
       this.showDialog = true;
     },
     scrollTo(id) {
-      const container = this.$el.querySelector(`#serie-elt-${id}`);
       this.$nextTick(() => {
-        container.scrollIntoView({
-          behavior: 'smooth',
-          block: 'start',
-        });
+        const container = document.getElementById(`serie-elt-${id}`);
+        const wrapper = document.getElementById('series-list');
+        wrapper.scrollTo(0, container.offsetTop);
       });
     },
   },

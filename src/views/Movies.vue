@@ -1,5 +1,5 @@
 <template>
-  <div class="movies">
+  <div id="movies-list" class="movies">
 
     <div v-if="loading" class="loader">
       <md-progress-spinner md-mode="indeterminate"></md-progress-spinner>
@@ -66,6 +66,8 @@ export default {
   name: 'MoviesView',
   created() {
     this.fetchData();
+    window.addEventListener('md-collapsed', () => { this.scrollTo(this.selectedId); });
+    window.addEventListener('md-expanded', () => { this.scrollTo(this.selectedId); });
   },
   data() {
     return {
@@ -76,6 +78,7 @@ export default {
       categories: [],
       locations: [],
       loading: true,
+      selectedId: -1,
       resourcesLoaded: 0,
     };
   },
@@ -142,18 +145,19 @@ export default {
     },
     onSelect(id) {
       console.log(`Selected movie ${id}`);
-      this.scrollTo(id);
+      this.selectedId = id;
+      this.$nextTick(() => {
+        this.scrollTo(id);
+      });
     },
     newMovie() {
       this.showDialog = true;
     },
     scrollTo(id) {
-      const container = this.$el.querySelector(`#movie-elt-${id}`);
       this.$nextTick(() => {
-        container.scrollIntoView({
-          behavior: 'smooth',
-          block: 'start',
-        });
+        const container = document.getElementById(`movie-elt-${id}`);
+        const wrapper = document.getElementById('movies-list');
+        wrapper.scrollTo(0, container.offsetTop);
       });
     },
   },
