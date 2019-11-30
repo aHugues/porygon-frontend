@@ -1,7 +1,7 @@
 <template>
   <div class="full-size">
     <div class="md-layout full-size">
-      <div class="md-layout-item md-xlarge-size-20 md-large-size-30 md-medium-size-40">
+      <div class="md-layout-item md-xlarge-size-20 md-large-size-30 md-medium-size-70">
         <span v-if="category.label === null" class="md-caption">
           {{ $ml.get('category').undefined }}
         </span>
@@ -9,10 +9,14 @@
           {{ category.label }}
         </span>
       </div>
-      <div class="md-layout-item md-xlarge-size-60 md-large-size-50 md-medium-size-50">
+      <div v-if="width < 1280" class="md-layout-item md-xlarge-size-20 md-medium-size-30">
+        {{ location.location }}
+      </div>
+      <div class="md-layout-item md-xlarge-size-60 md-large-size-50
+                  md-medium-size-100 series-title-wrapper">
         {{ serie.title }}
       </div>
-      <div class="md-layout-item md-xlarge-size-20 md-medium-size-10">
+      <div v-if="width >= 1280" class="md-layout-item md-xlarge-size-20 md-medium-size-30">
         {{ location.location }}
       </div>
     </div>
@@ -26,6 +30,23 @@ export default {
     serie: Object,
     location: Object,
     category: Object,
+  },
+  data() {
+    return {
+      width: 0,
+    };
+  },
+  created() {
+    window.addEventListener('resize', this.handleResize);
+    this.handleResize();
+  },
+  destroyed() {
+    window.removeEventListener('resize', this.handleResize);
+  },
+  methods: {
+    handleResize() {
+      this.width = window.innerWidth;
+    },
   },
 };
 </script>
@@ -43,4 +64,11 @@ export default {
 .md-layout-item {
   margin: auto;
 }
+
+@media only screen and (max-width: 1279px) {
+  .series-title-wrapper {
+    padding-top: 10px;
+  }
+}
+
 </style>
