@@ -164,9 +164,11 @@ describe('MoviesView', () => {
       });
 
       wrapper.vm.onSelect(3);
-      expect(wrapper.vm.scrollTo.mock.calls.length).toBe(1);
-      expect(wrapper.vm.scrollTo.mock.calls[0][0]).toBe(3);
-      done();
+      wrapper.vm.$nextTick(() => {
+        expect(wrapper.vm.scrollTo.mock.calls.length).toBe(1);
+        expect(wrapper.vm.scrollTo.mock.calls[0][0]).toBe(3);
+        done();
+      });
     });
   });
 
