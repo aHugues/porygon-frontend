@@ -11,7 +11,7 @@
           <md-icon>close</md-icon>
         </md-button>
       </div>
-      <movie-form :movie="{}" :categories="categories" :locations="locations"
+      <movie-form :method="'create'"  :movie="{}" :categories="categories" :locations="locations"
           @movie-added-or-modified="refreshList(-1)"></movie-form>
     </div>
 
