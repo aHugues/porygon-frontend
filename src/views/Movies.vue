@@ -5,7 +5,7 @@
       <md-progress-spinner md-mode="indeterminate"></md-progress-spinner>
     </div>
 
-    <div v-if="!loading && showDialog" :method="'create'" class="add-form-wrapper">
+    <div v-if="!loading && showDialog && !errored" :method="'create'" class="add-form-wrapper">
       <div class="close-button-wrapper">
         <md-button class="md-icon-button" @click="showDialog = false">
           <md-icon>close</md-icon>
@@ -16,7 +16,7 @@
     </div>
 
     <md-empty-state
-      v-if="!loading && movies.length == 0 && !showDialog"
+      v-if="!loading && movies.length == 0 && !showDialog && !errored"
       md-icon="movie"
       :md-label="$ml.get('movie').empty_button"
       :md-description="$ml.get('movie').empty_description">
@@ -25,7 +25,17 @@
       </md-button>
     </md-empty-state>
 
-    <div v-if="!loading && movies.length > 0">
+    <md-empty-state
+      v-if="errored"
+      md-icon="movie"
+      :md-label="$ml.get('error').reload_button"
+      :md-description="$ml.get('error').errored_description">
+      <md-button @click="reloadPage()" class="md-primary md-raised">
+        {{ $ml.get('error').reload_button }}
+      </md-button>
+    </md-empty-state>
+
+    <div v-if="!loading && movies.length > 0 && !errored">
       <md-list :md-expand-single="true">
         <div v-for="(movie, key) in movies" :key="key" :id="`movie-elt-${key}`">
           <md-list-item @click="onSelect(key)" md-expand
@@ -46,11 +56,15 @@
       </md-list>
     </div>
 
-    <div class="add-button-wrapper" v-if="!loading && movies.length > 0">
+    <div class="add-button-wrapper" v-if="!loading && movies.length > 0 && !errored">
      <md-button class="md-fab md-primary" @click="newMovie()">
        <md-icon>add</md-icon>
      </md-button>
    </div>
+
+   <md-snackbar :md-active.sync="errorDisplayed">
+     <span>{{ $ml.get('error').resources[resource] }}</span>
+   </md-snackbar>
 
   </div>
 </template>
@@ -79,6 +93,9 @@ export default {
       locations: [],
       loading: true,
       selectedId: -1,
+      errorDisplayed: false,
+      errored: false,
+      resource: '',
       resourcesLoaded: 0,
     };
   },
@@ -110,25 +127,58 @@ export default {
         .get(`${this.apiBaseUrl}/locations`, {
           headers: this.buildHeaders(),
         })
-        .then((response) => { this.locations = response.data; this.resourcesLoaded += 1; });
+        .catch(() => {
+          this.resource = 'locations_list';
+          this.errored = true;
+          this.errorDisplayed = true;
+          this.locations = [];
+          this.resourcesLoaded += 1;
+        })
+        .then((response) => {
+          if (response) {
+            this.locations = response.data;
+            this.resourcesLoaded += 1;
+          }
+        });
     },
     fetchCategories() {
       axios
         .get(`${this.apiBaseUrl}/categories`, {
           headers: this.buildHeaders(),
         })
-        .then((response) => { this.categories = response.data; this.resourcesLoaded += 1; });
+        .catch(() => {
+          this.resource = 'categories_list';
+          this.errored = true;
+          this.errorDisplayed = true;
+          this.categories = [];
+          this.resourcesLoaded += 1;
+        })
+        .then((response) => {
+          if (response) {
+            this.categories = response.data;
+            this.resourcesLoaded += 1;
+          }
+        });
     },
     fetchMovies() {
       axios
         .get(`${this.apiBaseUrl}/movies`, {
           headers: this.buildHeaders(),
         })
-        .then((response) => {
-          this.expanded = Array(response.data.length);
-          this.expanded.fill(false);
-          this.movies = response.data;
+        .catch(() => {
+          this.resource = 'movies_list';
+          this.errored = true;
+          this.errorDisplayed = true;
+          this.movies = [];
           this.resourcesLoaded += 1;
+        })
+        .then((response) => {
+          if (response) {
+            this.expanded = Array(response.data.length);
+            this.expanded.fill(false);
+            this.movies = response.data;
+            this.resourcesLoaded += 1;
+          }
         });
     },
     fetchData() {
@@ -149,6 +199,9 @@ export default {
       this.$nextTick(() => {
         this.scrollTo(id);
       });
+    },
+    reloadPage() {
+      this.$router.go();
     },
     newMovie() {
       this.showDialog = true;

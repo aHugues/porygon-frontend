@@ -34,6 +34,9 @@ const $ml = {
     empty_description: "Creating locations, you'll be able to store and order movies and series.",
     location_required: 'The location is required',
     location_too_long: 'The location is too long',
+    form_error: {
+      location: "Erreur lors de l'ajout ou de la modification de l'emplacement",
+    },
   }),
 };
 
@@ -51,7 +54,7 @@ const invalidV = {
 
 const vueToken = 'thisIsAToken';
 
-const stubs = ['md-card', 'md-card-header', 'md-card-content',
+const stubs = ['md-card', 'md-card-header', 'md-card-content', 'md-snackbar',
   'md-card-actions', 'md-field', 'md-switch', 'md-input', 'md-button'];
 
 

@@ -6,7 +6,7 @@
     </div>
 
    <md-empty-state
-    v-if="!loading && locations.length == 0 && !showDialog"
+    v-if="!loading && locations.length == 0 && !showDialog && !errored"
     md-icon="folder"
     :md-label="$ml.get('location').empty_button"
     :md-description="$ml.get('location').empty_button">
@@ -15,7 +15,17 @@
     </md-button>
    </md-empty-state>
 
-   <div class="edit-form-wrapper" v-if="showDialog">
+    <md-empty-state
+      v-if="errored"
+      md-icon="folder"
+      :md-label="$ml.get('error').reload_button"
+      :md-description="$ml.get('error').errored_description">
+      <md-button @click="reloadPage()" class="md-primary md-raised">
+        {{ $ml.get('error').reload_button }}
+      </md-button>
+    </md-empty-state>
+
+   <div class="edit-form-wrapper" v-if="showDialog && !errored">
       <div class="close-button-wrapper">
         <md-button class="md-icon-button" @click="showDialog = false; currentId = -1">
           <md-icon>close</md-icon>
@@ -33,7 +43,7 @@
   </div>
 
 
-    <div class="md-layout" v-if="!loading && locations.length > 0">
+    <div class="md-layout" v-if="!loading && locations.length > 0 && !errored">
      <div
       v-for="(location, key) in locations" :key="key"
       @click="editLocation(location.id, location.location, Boolean(location.is_physical))"
@@ -48,11 +58,15 @@
      </div>
    </div>
 
-    <div class="add-button-wrapper" v-if="!loading && locations.length > 0">
+    <div class="add-button-wrapper" v-if="!loading && locations.length > 0 && !errored">
      <md-button class="md-fab md-primary" @click="newLocation()">
        <md-icon>add</md-icon>
      </md-button>
    </div>
+
+  <md-snackbar :md-active.sync="errorDisplayed">
+     <span>{{ $ml.get('error').resources[resource] }}</span>
+   </md-snackbar>
 
   </div>
 </template>
@@ -80,6 +94,9 @@ export default {
       currentLocation: '',
       currentPhysical: true,
       loading: true,
+      errorDisplayed: false,
+      errored: false,
+      resource: 'locations_list',
     };
   },
   computed: {
@@ -99,14 +116,25 @@ export default {
         .get(`${this.apiBaseUrl}/locations`, {
           headers: this.buildHeaders(),
         })
-        .then((response) => {
-          this.locations = response.data;
+        .catch(() => {
+          this.errored = true;
+          this.errorDisplayed = true;
+          this.locations = [];
           this.loading = false;
+        })
+        .then((response) => {
+          if (response) {
+            this.locations = response.data;
+            this.loading = false;
+          }
         });
     },
     newLocation() {
       this.dialogMethod = 'create';
       this.showDialog = true;
+    },
+    reloadPage() {
+      this.$router.go();
     },
     editLocation(id, location, physical) {
       // unselect if already selected

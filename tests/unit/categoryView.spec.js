@@ -30,6 +30,14 @@ const $ml = {
     empty_description: "Creating category, you'll be able to better organize movies and series.",
     label_required: 'The label is required',
     label_too_long: 'The label is too long',
+    reload_button: 'Reload page',
+    errored_description: 'An error has occured during loading. Please reload this page.',
+    resources: {
+      movies_list: 'Error loading movies list from the server',
+      series_list: 'Error loading series list from the server',
+      locations_list: 'Error loading locations list from the server',
+      categories_list: 'Error loading categories list from the server',
+    },
   }),
 };
 
@@ -40,6 +48,7 @@ const stubs = [
   'md-empty-state',
   'md-icon',
   'md-progress-spinner',
+  'md-snackbar',
 ];
 
 const vueToken = 'thisIsAToken';

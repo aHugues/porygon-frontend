@@ -132,6 +132,10 @@
       </md-button>
     </form>
 
+  <md-snackbar :md-active.sync="errored">
+     <span>{{ $ml.get('error').form_error.movie }}</span>
+   </md-snackbar>
+
 </div>
 </template>
 
@@ -178,6 +182,7 @@ export default {
       movie: {},
       environment: process.env.NODE_ENV,
       supports: [],
+      errored: false,
     };
   },
   computed: {
@@ -232,7 +237,10 @@ export default {
         headers: this.buildHeaders(),
       })
         .then(() => this.$emit('movie-added-or-modified'))
-        .catch(error => console.error(error));
+        .catch((error) => {
+          this.errored = true;
+          console.error(error);
+        });
     },
     buildHeaders() {
       const headers = { 'Content-Type': 'application/json' };
@@ -263,7 +271,10 @@ export default {
         data: this.movie,
       })
         .then(() => this.$emit('movie-added-or-modified'))
-        .catch(error => console.error(error));
+        .catch((error) => {
+          this.errored = true;
+          console.error(error);
+        });
     },
     validateMovie() {
       this.$v.$touch();

@@ -37,6 +37,9 @@ const $ml = {
     season_integer: 'The season should be a number',
     episodes_integer: 'The number of episodes should be a number',
     remarks_too_long: 'The remarks are too long',
+    form_error: {
+      serie: "Erreur lors de l'ajout ou de la modification de la série",
+    },
   }),
 };
 
@@ -64,7 +67,8 @@ const invalidV = {
 
 const vueToken = 'thisIsAToken';
 
-const stubs = ['md-field', 'md-switch', 'md-input', 'md-button', 'md-select', 'md-option'];
+const stubs = ['md-field', 'md-switch', 'md-input', 'md-snackbar',
+  'md-button', 'md-select', 'md-option'];
 
 describe('SerieForm.vue', () => {
   it('correctly loads', () => {

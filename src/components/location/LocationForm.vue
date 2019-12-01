@@ -41,6 +41,10 @@
     </form>
   </md-card>
 
+  <md-snackbar :md-active.sync="errored">
+     <span>{{ $ml.get('error').form_error.location }}</span>
+   </md-snackbar>
+
 </div>
 </template>
 
@@ -72,6 +76,7 @@ export default {
       location: '',
       physical: true,
       environment: process.env.NODE_ENV,
+      errored: false,
     };
   },
   computed: {
@@ -105,7 +110,10 @@ export default {
         headers: this.buildHeaders(),
       })
         .then(() => this.$emit('location-added-or-modified'))
-        .catch(error => console.error(error));
+        .catch((error) => {
+          this.errored = true;
+          console.error(error);
+        });
     },
     buildHeaders() {
       const headers = { 'Content-Type': 'application/json' };
@@ -139,7 +147,10 @@ export default {
         },
       })
         .then(() => this.$emit('location-added-or-modified'))
-        .catch(error => console.error(error));
+        .catch((error) => {
+          this.errored = true;
+          console.error(error);
+        });
     },
     validateLocation() {
       this.$v.$touch();

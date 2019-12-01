@@ -47,6 +47,9 @@ const $ml = {
     director_too_long: 'The director is too long',
     actors_too_long: 'The actors list is too long',
     remarks_too_long: 'The remarks are too long',
+    form_error: {
+      movie: "Erreur lors de l'ajout ou de la modification du film",
+    },
   }),
 };
 
@@ -80,7 +83,8 @@ const invalidV = {
 
 const vueToken = 'thisIsAToken';
 
-const stubs = ['md-field', 'md-switch', 'md-input', 'md-button', 'md-select', 'md-option'];
+const stubs = ['md-field', 'md-switch', 'md-snackbar',
+  'md-input', 'md-button', 'md-select', 'md-option'];
 
 describe('MovieForm.vue', () => {
   it('correctly loads', () => {
