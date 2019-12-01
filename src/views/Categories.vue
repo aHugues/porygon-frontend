@@ -6,7 +6,7 @@
     </div>
 
    <md-empty-state
-    v-if="!loading && categories.length == 0 && !showDialog"
+    v-if="!loading && categories.length == 0 && !showDialog && !errored"
     md-icon="category"
     :md-label="$ml.get('category').empty_button"
     md-description="Creating category, you'll be able to better organize movies and series.">
@@ -15,7 +15,17 @@
     </md-button>
    </md-empty-state>
 
-   <div class="edit-form-wrapper" v-if="!loading && showDialog">
+    <md-empty-state
+      v-if="errored"
+      md-icon="category"
+      :md-label="$ml.get('error').reload_button"
+      :md-description="$ml.get('error').errored_description">
+      <md-button @click="reloadPage()" class="md-primary md-raised">
+        {{ $ml.get('error').reload_button }}
+      </md-button>
+    </md-empty-state>
+
+   <div class="edit-form-wrapper" v-if="!loading && showDialog && !errored">
       <div class="close-button-wrapper">
         <md-button class="md-icon-button" @click="showDialog = false; currentId = -1">
           <md-icon>close</md-icon>
@@ -28,11 +38,11 @@
       ></category-form>
    </div>
 
-  <div v-if="!loading && categories.length > 0 && showDialog" class="divider-wrapper">
+  <div v-if="!loading && categories.length > 0 && showDialog && !errored" class="divider-wrapper">
     <md-divider></md-divider>
   </div>
 
-   <div class="md-layout" v-if="!loading && categories.length > 0">
+   <div class="md-layout" v-if="!loading && categories.length > 0 && !errored">
      <div
       v-for="(category, key) in categories" :key="key"
       @click="editCategory(category.id, category.label, category.description)"
@@ -46,11 +56,16 @@
      </div>
    </div>
 
-   <div class="add-button-wrapper" v-if="!loading && categories.length > 0">
+   <div class="add-button-wrapper" v-if="!loading && categories.length > 0 && !errored">
      <md-button class="md-fab md-primary" @click="newCategory()">
        <md-icon>add</md-icon>
      </md-button>
    </div>
+
+  <md-snackbar :md-active.sync="errorDisplayed">
+     <span>{{ $ml.get('error').resources[resource] }}</span>
+   </md-snackbar>
+
   </div>
 </template>
 
@@ -76,6 +91,9 @@ export default {
       currentLabel: '',
       currentDescription: '',
       loading: true,
+      errorDisplayed: false,
+      errored: false,
+      resource: 'categories_list',
     };
   },
   computed: {
@@ -95,14 +113,25 @@ export default {
         .get(`${this.apiBaseUrl}/categories`, {
           headers: this.buildHeaders(),
         })
-        .then((response) => {
-          this.categories = response.data;
+        .catch(() => {
+          this.errored = true;
+          this.errorDisplayed = true;
+          this.categories = [];
           this.loading = false;
+        })
+        .then((response) => {
+          if (response) {
+            this.categories = response.data;
+            this.loading = false;
+          }
         });
     },
     newCategory() {
       this.dialogMethod = 'create';
       this.showDialog = true;
+    },
+    reloadPage() {
+      this.$router.go();
     },
     editCategory(id, label, description) {
       if (id === this.currentId) {

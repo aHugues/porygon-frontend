@@ -101,6 +101,22 @@ export default new MLCreate({
         title: 'Nothing here',
         subtitle: 'Work in progress.',
       },
+      error: {
+        reload_button: 'Reload page',
+        errored_description: 'An error has occured during loading. Please reload this page.',
+        resources: {
+          movies_list: 'Error loading movies list from the server',
+          series_list: 'Error loading series list from the server',
+          locations_list: 'Error loading locations list from the server',
+          categories_list: 'Error loading categories list from the server',
+        },
+        form_error: {
+          category: 'Error adding or modifying category',
+          location: 'Error adding or modifying location',
+          movie: 'Error adding or modifying movie',
+          serie: 'Error adding or modifying serie',
+        },
+      },
     }),
     new MLanguage('french').create({
       navigation: {
@@ -195,6 +211,22 @@ export default new MLCreate({
         season_integer: 'La saison doit être un nombre',
         episodes_integer: "Le nombre d'épisodes doit être un nombre",
         remarks_too_long: 'Les remarques sont trop longues',
+      },
+      error: {
+        reload_button: 'Recharger la page',
+        errored_description: "Une erreur s'est produite durant le chargement. Veuillez recharger la page.",
+        resources: {
+          movies_list: 'Erreur lors du téléchargement de la liste des films depuis le serveur',
+          series_list: 'Erreur lors du téléchargement de la liste des séries depuis le serveur',
+          locations_list: 'Erreur lors du téléchargement de la liste des emplacements depuis le serveur',
+          categories_list: 'Erreur lors du téléchargement de la liste des catégories depuis le serveur',
+        },
+        form_error: {
+          category: "Erreur lors de l'ajout ou de la modification de la catégorie",
+          location: "Erreur lors de l'ajout ou de la modification de l'emplacement",
+          movie: "Erreur lors de l'ajout ou de la modification du film",
+          serie: "Erreur lors de l'ajout ou de la modification de la série",
+        },
       },
     }),
   ],

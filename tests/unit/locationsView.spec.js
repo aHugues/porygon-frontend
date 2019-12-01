@@ -29,6 +29,14 @@ const $ml = {
     empty_description: "Creating locations, you'll be able to store and order movies and series.",
     location_required: 'The location is required',
     location_too_long: 'The location is too long',
+    reload_button: 'Reload page',
+    errored_description: 'An error has occured during loading. Please reload this page.',
+    resources: {
+      movies_list: 'Error loading movies list from the server',
+      series_list: 'Error loading series list from the server',
+      locations_list: 'Error loading locations list from the server',
+      categories_list: 'Error loading categories list from the server',
+    },
   }),
 };
 
@@ -39,6 +47,7 @@ const stubs = [
   'md-empty-state',
   'md-progress-spinner',
   'md-icon',
+  'md-snackbar',
 ];
 
 const vueToken = 'thisIsAToken';

@@ -89,6 +89,10 @@
         {{ $ml.get('serie').delete }}
       </md-button>
     </form>
+
+    <md-snackbar :md-active.sync="errored">
+     <span>{{ $ml.get('error').form_error.serie }}</span>
+   </md-snackbar>
 </div>
 </template>
 
@@ -135,6 +139,7 @@ export default {
       serie: {},
       environment: process.env.NODE_ENV,
       supports: [],
+      errored: false,
     };
   },
   computed: {
@@ -176,7 +181,10 @@ export default {
         headers: this.buildHeaders(),
       })
         .then(() => this.$emit('serie-added-or-modified'))
-        .catch(error => console.error(error));
+        .catch((error) => {
+          this.errored = true;
+          console.error(error);
+        });
     },
     buildHeaders() {
       const headers = { 'Content-Type': 'application/json' };
@@ -207,7 +215,10 @@ export default {
         data: this.serie,
       })
         .then(() => this.$emit('serie-added-or-modified'))
-        .catch(error => console.error(error));
+        .catch((error) => {
+          this.errored = true;
+          console.error(error);
+        });
     },
     validateSerie() {
       this.$v.$touch();

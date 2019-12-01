@@ -35,6 +35,9 @@ const $ml = {
     empty_description: "Creating category, you'll be able to better organize movies and series.",
     label_required: 'The label is required',
     label_too_long: 'The label is too long',
+    form_error: {
+      category: "Erreur lors de l'ajout ou de la modification de la catégorie",
+    },
   }),
 };
 
@@ -52,7 +55,7 @@ const invalidV = {
 
 const vueToken = 'thisIsAToken';
 
-const stubs = ['md-card', 'md-card-header', 'md-card-content',
+const stubs = ['md-card', 'md-card-header', 'md-card-content', 'md-snackbar',
   'md-card-actions', 'md-field', 'md-switch', 'md-input', 'md-button'];
 
 

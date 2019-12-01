@@ -42,6 +42,10 @@
     </form>
   </md-card>
 
+    <md-snackbar :md-active.sync="errored">
+     <span>{{ $ml.get('error').form_error.category }}</span>
+   </md-snackbar>
+
 </div>
 </template>
 
@@ -72,6 +76,7 @@ export default {
     return {
       label: '',
       description: '',
+      errored: false,
       environment: process.env.NODE_ENV,
     };
   },
@@ -104,7 +109,10 @@ export default {
         headers: this.buildHeaders(),
       })
         .then(() => this.$emit('category-added-or-modified'))
-        .catch(error => console.error(error));
+        .catch((error) => {
+          this.errored = true;
+          console.error(error);
+        });
     },
     buildHeaders() {
       const headers = { 'Content-Type': 'application/json' };
@@ -138,7 +146,10 @@ export default {
         },
       })
         .then(() => this.$emit('category-added-or-modified'))
-        .catch(error => console.error(error));
+        .catch((error) => {
+          console.error(error);
+          this.errored = true;
+        });
     },
     validateCategory() {
       this.$v.$touch();
