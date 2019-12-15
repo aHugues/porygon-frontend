@@ -12,8 +12,12 @@
       <div v-if="width < 1280" class="md-layout-item md-xlarge-size-20 md-medium-size-30">
         {{ location.location }}
       </div>
-      <div class="md-layout-item md-xlarge-size-60 md-large-size-50
-                  md-medium-size-100 series-title-wrapper">
+      <div class="md-layout-item md-xlarge-size-10 md-large-size-10
+                  md-medium-size-20 series-title-wrapper">
+        {{ $ml.get('serie').season }} {{ serie.season }}
+      </div>
+      <div class="md-layout-item md-xlarge-size-50 md-large-size-40
+                  md-medium-size-80 series-title-wrapper">
         {{ serie.title }}
       </div>
       <div v-if="width >= 1280" class="md-layout-item md-xlarge-size-20 md-medium-size-30">
