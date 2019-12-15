@@ -25,6 +25,7 @@ const $ml = {
     season: 'Season',
     episodes: 'Number of episodes',
     supports: 'Supports',
+    year: 'Year',
     support_digital: 'Digital',
     remarks: 'Remarks',
     edit: 'Edit serie',
@@ -34,6 +35,9 @@ const $ml = {
     empty_description: "Creating series, you'll be able to store and order your series library.",
     title_required: 'The title is required',
     title_too_long: 'The title is too long',
+    year_required: "L'année de sortie est requise",
+    year_between: "L'année de sortie doit être comprise entre 1920 et 2100",
+    year_integer: "L'année de sortie doit être un nombre",
     season_integer: 'The season should be a number',
     episodes_integer: 'The number of episodes should be a number',
     remarks_too_long: 'The remarks are too long',
@@ -51,6 +55,7 @@ const validV = {
     season: {},
     episodes: {},
     remarks: {},
+    year: {},
   },
 };
 
@@ -62,6 +67,7 @@ const invalidV = {
     season: {},
     episodes: {},
     remarks: {},
+    year: {},
   },
 };
 
@@ -98,6 +104,7 @@ describe('SerieForm.vue', () => {
           location_id: 1,
           is_dvd: true,
           episodes: 13,
+          year: 2019,
         },
       },
       mocks: {
@@ -110,6 +117,7 @@ describe('SerieForm.vue', () => {
     expect(wrapper.vm.serie.season).toBe(1);
     expect(wrapper.vm.serie.episodes).toBe(13);
     expect(wrapper.vm.serie.location_id).toBe(1);
+    expect(wrapper.vm.serie.year).toBe(2019);
     expect(wrapper.vm.supports).toContain('dvd');
     expect(wrapper.vm.supports).not.toContain('bluray');
   });
@@ -156,6 +164,7 @@ describe('SerieForm.vue', () => {
           location_id: 1,
           is_dvd: true,
           episodes: 13,
+          year: 2019,
         },
       },
       mocks: {
@@ -180,6 +189,7 @@ describe('SerieForm.vue', () => {
           location_id: 1,
           is_dvd: true,
           episodes: 13,
+          year: 2019,
         },
       },
       mocks: {
@@ -198,6 +208,7 @@ describe('SerieForm.vue', () => {
       expect(axiosArgs.data.title).toBe('test title');
       expect(axiosArgs.data.season).toBe(1);
       expect(axiosArgs.data.location_id).toBe(1);
+      expect(axiosArgs.data.year).toBe(2019);
       done();
     });
   });
@@ -213,6 +224,7 @@ describe('SerieForm.vue', () => {
           location_id: 1,
           is_dvd: true,
           episodes: 13,
+          year: 2019,
         },
         method: 'modify',
       },

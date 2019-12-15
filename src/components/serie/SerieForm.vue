@@ -37,6 +37,22 @@
         </div>
 
         <div class="md-layout-item md-size-100">
+          <md-field :class="getValidationClass('year')">
+            <label for="year">{{ $ml.get('serie').year }}</label>
+            <md-input name="year" id="year" v-model="serie.year"/>
+            <span class="md-error" v-if="!$v.serie.year.required">
+              {{ $ml.get('serie').year_required }}
+              </span>
+            <span class="md-error" v-if="!$v.serie.year.between">
+              {{ $ml.get('serie').year_between }}
+            </span>
+            <span class="md-error" v-if="!$v.serie.year.integer">
+              {{ $ml.get('serie').year_integer }}
+            </span>
+          </md-field>
+        </div>
+
+        <div class="md-layout-item md-size-100">
           <md-field>
             <label for="support">{{ $ml.get('serie').supports }}</label>
             <md-select v-model="supports" name="supports" id="supports" multiple>
@@ -99,7 +115,7 @@
 <script>
 import { validationMixin } from 'vuelidate';
 import {
-  required, maxLength, integer,
+  required, maxLength, integer, between,
 } from 'vuelidate/lib/validators';
 import axios from 'axios';
 import config from '../../config';
@@ -156,6 +172,11 @@ export default {
         integer,
       },
       episodes: {
+        integer,
+      },
+      year: {
+        required,
+        between: between(1910, 2100),
         integer,
       },
       remarks: {
