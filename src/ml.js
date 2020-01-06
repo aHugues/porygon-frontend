@@ -50,6 +50,8 @@ export default new MLCreate({
         empty_description: "Creating locations, you'll be able to store and order movies and series.",
         location_required: 'The location is required',
         location_too_long: 'The location is too long',
+        physical: 'Physical location',
+        digital: 'Digital location',
       },
       movie: {
         title: 'Original title',
@@ -165,6 +167,8 @@ export default new MLCreate({
         empty_description: 'En ajoutant des emplacements, vous pourrez y stocker des films et séries.',
         location_required: "L'emplacement est requis",
         location_too_long: "L'emplacement est trop long",
+        physical: 'Emplacement physique',
+        digital: 'Emplacement numérique',
       },
       home: {
         title: 'Cette page est vide',
