@@ -126,6 +126,7 @@ export default {
       axios
         .get(`${this.apiBaseUrl}/locations`, {
           headers: this.buildHeaders(),
+          withCredentials: true,
         })
         .catch(() => {
           this.resource = 'locations_list';
@@ -145,6 +146,7 @@ export default {
       axios
         .get(`${this.apiBaseUrl}/categories`, {
           headers: this.buildHeaders(),
+          withCredentials: true,
         })
         .catch(() => {
           this.resource = 'categories_list';
@@ -164,6 +166,7 @@ export default {
       axios
         .get(`${this.apiBaseUrl}/movies`, {
           headers: this.buildHeaders(),
+          withCredentials: true,
         })
         .catch(() => {
           this.resource = 'movies_list';

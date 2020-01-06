@@ -107,6 +107,7 @@ export default {
       axios({
         method: 'delete',
         url: `${this.apiBaseUrl}/locations/${this.id}`,
+        withCredentials: true,
         headers: this.buildHeaders(),
       })
         .then(() => this.$emit('location-added-or-modified'))
@@ -141,6 +142,7 @@ export default {
         method,
         url: `${this.apiBaseUrl}/locations${urlId}`,
         headers: this.buildHeaders(),
+        withCredentials: true,
         data: {
           location: this.location,
           is_physical: this.physical,

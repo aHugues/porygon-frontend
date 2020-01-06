@@ -235,6 +235,7 @@ export default {
         method: 'delete',
         url: `${this.apiBaseUrl}/movies/${this.movie.id}`,
         headers: this.buildHeaders(),
+        withCredentials: true,
       })
         .then(() => this.$emit('movie-added-or-modified'))
         .catch((error) => {
@@ -268,6 +269,7 @@ export default {
         method,
         url: `${this.apiBaseUrl}/movies${urlId}`,
         headers: this.buildHeaders(),
+        withCredentials: true,
         data: this.movie,
       })
         .then(() => this.$emit('movie-added-or-modified'))

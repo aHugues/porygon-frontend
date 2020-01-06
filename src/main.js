@@ -8,6 +8,7 @@ import * as Keycloak from 'keycloak-js';
 import App from './App.vue';
 import router from './router';
 import keycloakConfig from './keycloak.json';
+import appConfig from './config';
 import './registerServiceWorker';
 import 'vue-material/dist/vue-material.min.css';
 import './ml';
@@ -38,8 +39,9 @@ Vue.use(MdDialogAlert);
 Vue.use(MdProgress);
 
 const keycloak = Keycloak(keycloakConfig);
+const env = process.env.NODE_ENV || 'development';
 
-if (process.env.NODE_ENV === 'production') {
+if (appConfig[env].porygonApiAuthentication) {
   keycloak.init({ onLoad: 'login-required' })
     .success((auth) => {
       if (!auth) {

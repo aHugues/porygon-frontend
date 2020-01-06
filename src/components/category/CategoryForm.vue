@@ -107,6 +107,7 @@ export default {
         method: 'delete',
         url: `${this.apiBaseUrl}/categories/${this.id}`,
         headers: this.buildHeaders(),
+        withCredentials: true,
       })
         .then(() => this.$emit('category-added-or-modified'))
         .catch((error) => {
@@ -139,6 +140,7 @@ export default {
       axios({
         method,
         url: `${this.apiBaseUrl}/categories${urlId}`,
+        withCredentials: true,
         headers: this.buildHeaders(),
         data: {
           label: this.label,

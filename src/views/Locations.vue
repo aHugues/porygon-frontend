@@ -115,6 +115,7 @@ export default {
       axios
         .get(`${this.apiBaseUrl}/locations`, {
           headers: this.buildHeaders(),
+          withCredentials: true,
         })
         .catch(() => {
           this.errored = true;
