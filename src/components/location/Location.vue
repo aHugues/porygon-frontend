@@ -6,11 +6,17 @@
       </md-card-header>
 
       <md-card-content>
-        {{ physical }}
+        <div class="location-type">
+          <span class="location-type-icon">
+            <md-icon>{{ locationIcon }}</md-icon>
+          </span>
+          <span>{{ $ml.get('location')[locationLabel] }}</span>
+        </div>
       </md-card-content>
     </md-card>
   </div>
 </template>
+
 
 <script>
 export default {
@@ -29,6 +35,12 @@ export default {
       }
       return '';
     },
+    locationIcon() {
+      return this.physical ? 'apartment' : 'computer';
+    },
+    locationLabel() {
+      return this.physical ? 'physical' : 'digital';
+    },
   },
 };
 </script>
@@ -45,5 +57,10 @@ export default {
 
 .selected-dark {
   background-color: #645F60 !important;
+}
+
+.location-type-icon {
+  padding-left: 10px;
+  padding-right: 10px;
 }
 </style>
