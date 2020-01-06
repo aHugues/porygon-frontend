@@ -200,6 +200,7 @@ export default {
         method: 'delete',
         url: `${this.apiBaseUrl}/series/${this.serie.id}`,
         headers: this.buildHeaders(),
+        withCredentials: true,
       })
         .then(() => this.$emit('serie-added-or-modified'))
         .catch((error) => {
@@ -233,6 +234,7 @@ export default {
         method,
         url: `${this.apiBaseUrl}/series${urlId}`,
         headers: this.buildHeaders(),
+        withCredentials: true,
         data: this.serie,
       })
         .then(() => this.$emit('serie-added-or-modified'))

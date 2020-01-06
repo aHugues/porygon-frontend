@@ -112,6 +112,7 @@ export default {
       axios
         .get(`${this.apiBaseUrl}/categories`, {
           headers: this.buildHeaders(),
+          withCredentials: true,
         })
         .catch(() => {
           this.errored = true;
