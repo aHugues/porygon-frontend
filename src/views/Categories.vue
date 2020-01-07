@@ -5,25 +5,13 @@
       <md-progress-spinner md-mode="indeterminate"></md-progress-spinner>
     </div>
 
-   <md-empty-state
-    v-if="!loading && categories.length == 0 && !showDialog && !errored"
-    md-icon="category"
-    :md-label="$ml.get('category').empty_button"
-    md-description="Creating category, you'll be able to better organize movies and series.">
-    <md-button @click="newCategory()" class="md-primary md-raised">
-      {{ $ml.get('category').empty_button }}
-    </md-button>
-   </md-empty-state>
+    <empty-page
+      v-if="!loading && categories.length == 0 && !showDialog && !errored"
+      resource="category" :action="true"
+      @resource-created="newCategory()">
+    </empty-page>
 
-    <md-empty-state
-      v-if="errored"
-      md-icon="category"
-      :md-label="$ml.get('error').reload_button"
-      :md-description="$ml.get('error').errored_description">
-      <md-button @click="reloadPage()" class="md-primary md-raised">
-        {{ $ml.get('error').reload_button }}
-      </md-button>
-    </md-empty-state>
+<error-state v-if="errored" resource="category" @reload-page="reloadPage()"></error-state>
 
    <div class="edit-form-wrapper" v-if="!loading && showDialog && !errored">
       <div class="close-button-wrapper">
@@ -72,6 +60,8 @@
 <script>
 
 import axios from 'axios';
+import EmptyPage from '@/components/misc/EmptyPage.vue';
+import ErrorState from '@/components/misc/ErrorState.vue';
 import Category from '@/components/category/Category.vue';
 import CategoryForm from '@/components/category/CategoryForm.vue';
 import config from '../config';
@@ -150,6 +140,8 @@ export default {
   components: {
     Category,
     CategoryForm,
+    EmptyPage,
+    ErrorState,
   },
 };
 </script>
