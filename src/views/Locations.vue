@@ -5,25 +5,13 @@
       <md-progress-spinner md-mode="indeterminate"></md-progress-spinner>
     </div>
 
-   <md-empty-state
-    v-if="!loading && locations.length == 0 && !showDialog && !errored"
-    md-icon="folder"
-    :md-label="$ml.get('location').empty_button"
-    :md-description="$ml.get('location').empty_button">
-    <md-button @click="newLocation()" class="md-primary md-raised">
-      {{ $ml.get('location').empty_button }}
-    </md-button>
-   </md-empty-state>
+    <empty-page
+      v-if="!loading && locations.length == 0 && !showDialog && !errored"
+      resource="location" :action="true"
+      @resource-created="newLocation()">
+    </empty-page>
 
-    <md-empty-state
-      v-if="errored"
-      md-icon="folder"
-      :md-label="$ml.get('error').reload_button"
-      :md-description="$ml.get('error').errored_description">
-      <md-button @click="reloadPage()" class="md-primary md-raised">
-        {{ $ml.get('error').reload_button }}
-      </md-button>
-    </md-empty-state>
+    <error-state v-if="errored" resource="location" @reload-page="reloadPage()"></error-state>
 
    <div class="edit-form-wrapper" v-if="showDialog && !errored">
       <div class="close-button-wrapper">
@@ -74,6 +62,8 @@
 <script>
 
 import axios from 'axios';
+import EmptyPage from '@/components/misc/EmptyPage.vue';
+import ErrorState from '@/components/misc/ErrorState.vue';
 import Location from '@/components/location/Location.vue';
 import LocationForm from '@/components/location/LocationForm.vue';
 import config from '../config';
@@ -154,6 +144,8 @@ export default {
   components: {
     Location,
     LocationForm,
+    EmptyPage,
+    ErrorState,
   },
 };
 </script>

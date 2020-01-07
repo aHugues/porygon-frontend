@@ -1,15 +1,19 @@
 <template>
   <div class="home">
-    <md-empty-state
-    md-icon="home"
-    :md-label="$ml.get('home').title"
-    :md-description="$ml.get('home').subtitle">
-   </md-empty-state>
+     <empty-page
+      resource="home" :action="false">
+    </empty-page>
   </div>
 </template>
 
 <script>
+
+import EmptyPage from '@/components/misc/EmptyPage.vue';
+
 export default {
   name: 'home',
+  components: {
+    EmptyPage,
+  },
 };
 </script>

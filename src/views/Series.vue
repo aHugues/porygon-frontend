@@ -16,25 +16,13 @@
           @serie-added-or-modified="refreshList(-1)"></serie-form>
     </div>
 
-    <md-empty-state
+    <empty-page
       v-if="!loading && series.length == 0 && !showDialog && !errored"
-      md-icon="tv"
-      :md-label="$ml.get('serie').empty_button"
-      :md-description="$ml.get('serie').empty_description">
-      <md-button @click="newSerie()" class="md-primary md-raised">
-        {{ $ml.get('serie').empty_button }}
-      </md-button>
-    </md-empty-state>
+      resource="serie" :action="true"
+      @resource-created="newSerie()">
+    </empty-page>
 
-    <md-empty-state
-      v-if="errored"
-      md-icon="tv"
-      :md-label="$ml.get('error').reload_button"
-      :md-description="$ml.get('error').errored_description">
-      <md-button @click="reloadPage()" class="md-primary md-raised">
-        {{ $ml.get('error').reload_button }}
-      </md-button>
-    </md-empty-state>
+    <error-state v-if="errored" resource="serie" @reload-page="reloadPage()"></error-state>
 
      <div v-if="!loading && series.length > 0 && !errored">
       <md-list :md-expand-single="true">
@@ -72,6 +60,8 @@
 
 <script>
 import axios from 'axios';
+import EmptyPage from '@/components/misc/EmptyPage.vue';
+import ErrorState from '@/components/misc/ErrorState.vue';
 import Serie from '@/components/serie/Serie.vue';
 import SerieForm from '@/components/serie/SerieForm.vue';
 import config from '../config';
@@ -107,8 +97,10 @@ export default {
     },
   },
   components: {
+    EmptyPage,
     Serie,
     SerieForm,
+    ErrorState,
   },
   computed: {
     apiBaseUrl() { return config[this.environment].porygonApiBaseUrl; },

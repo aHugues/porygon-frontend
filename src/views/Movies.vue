@@ -15,25 +15,13 @@
           @movie-added-or-modified="refreshList(-1)"></movie-form>
     </div>
 
-    <md-empty-state
+    <empty-page
       v-if="!loading && movies.length == 0 && !showDialog && !errored"
-      md-icon="movie"
-      :md-label="$ml.get('movie').empty_button"
-      :md-description="$ml.get('movie').empty_description">
-      <md-button @click="newMovie()" class="md-primary md-raised">
-        {{ $ml.get('movie').empty_button }}
-      </md-button>
-    </md-empty-state>
+      resource="movie" :action="true"
+      @resource-created="newMovie()">
+    </empty-page>
 
-    <md-empty-state
-      v-if="errored"
-      md-icon="movie"
-      :md-label="$ml.get('error').reload_button"
-      :md-description="$ml.get('error').errored_description">
-      <md-button @click="reloadPage()" class="md-primary md-raised">
-        {{ $ml.get('error').reload_button }}
-      </md-button>
-    </md-empty-state>
+    <error-state v-if="errored" resource="movie" @reload-page="reloadPage()"></error-state>
 
     <div v-if="!loading && movies.length > 0 && !errored">
       <md-list :md-expand-single="true">
@@ -72,6 +60,8 @@
 <script>
 
 import axios from 'axios';
+import EmptyPage from '@/components/misc/EmptyPage.vue';
+import ErrorState from '@/components/misc/ErrorState.vue';
 import Movie from '@/components/movie/Movie.vue';
 import MovieForm from '@/components/movie/MovieForm.vue';
 import config from '../config';
@@ -109,6 +99,8 @@ export default {
   components: {
     Movie,
     MovieForm,
+    EmptyPage,
+    ErrorState,
   },
   computed: {
     apiBaseUrl() { return config[this.environment].porygonApiBaseUrl; },
