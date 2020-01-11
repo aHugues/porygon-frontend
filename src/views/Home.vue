@@ -1,19 +1,27 @@
 <template>
   <div class="home">
-     <empty-page
-      resource="home" :action="false">
-    </empty-page>
+    <div class="check-card">
+      <version-check></version-check>
+    </div>
   </div>
 </template>
 
 <script>
 
-import EmptyPage from '@/components/misc/EmptyPage.vue';
+import VersionCheck from '@/components/misc/VersionCheck.vue';
 
 export default {
   name: 'home',
   components: {
-    EmptyPage,
+    VersionCheck,
   },
 };
 </script>
+
+<style lang="scss" scoped>
+
+  .check-card {
+    width: 40%;
+  }
+
+</style>

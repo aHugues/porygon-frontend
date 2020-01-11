@@ -106,6 +106,12 @@ export default new MLCreate({
       home: {
         empty_title: 'Nothing here',
         empty_description: 'Work in progress.',
+        status_check: {
+          waiting: 'Status check pending...',
+          version_ok: 'Version {0}: OK',
+          version_error: 'Expecting min version {0} but found version {1}',
+          version_checking_error: 'Impossible to get version from the server.',
+        },
       },
       error: {
         reload_button: 'Reload page',
@@ -173,6 +179,12 @@ export default new MLCreate({
       home: {
         empty_title: 'Cette page est vide',
         empty_description: 'Développement en cours.',
+        status_check: {
+          waiting: 'Vérification en cours...',
+          version_ok: 'Version {0}: OK',
+          version_error: 'Version minimum {0} attendue, mais version {1} trouvée',
+          version_checking_error: 'Impossible de récupérer le numéro de version depuis le serveur.',
+        },
       },
       movie: {
         title: 'Titre original',
