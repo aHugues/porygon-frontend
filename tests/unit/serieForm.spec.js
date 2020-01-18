@@ -106,6 +106,16 @@ describe('SerieForm.vue', () => {
           episodes: 13,
           year: 2019,
         },
+        serieCategories: [
+          {
+            id: 1,
+            label: 'toto',
+          },
+          {
+            id: 2,
+            label: 'tata',
+          },
+        ],
       },
       mocks: {
         $ml,
@@ -120,6 +130,7 @@ describe('SerieForm.vue', () => {
     expect(wrapper.vm.serie.year).toBe(2019);
     expect(wrapper.vm.supports).toContain('dvd');
     expect(wrapper.vm.supports).not.toContain('bluray');
+    expect(wrapper.vm.serie.categories).toEqual([1, 2]);
   });
 
   it('generates the correct dev API urls', () => {
@@ -166,6 +177,16 @@ describe('SerieForm.vue', () => {
           episodes: 13,
           year: 2019,
         },
+        serieCategories: [
+          {
+            id: 1,
+            label: 'toto',
+          },
+          {
+            id: 2,
+            label: 'tata',
+          },
+        ],
       },
       mocks: {
         $ml,
@@ -191,6 +212,16 @@ describe('SerieForm.vue', () => {
           episodes: 13,
           year: 2019,
         },
+        serieCategories: [
+          {
+            id: 1,
+            label: 'toto',
+          },
+          {
+            id: 2,
+            label: 'tata',
+          },
+        ],
       },
       mocks: {
         $ml,
@@ -226,6 +257,16 @@ describe('SerieForm.vue', () => {
           episodes: 13,
           year: 2019,
         },
+        serieCategories: [
+          {
+            id: 1,
+            label: 'toto',
+          },
+          {
+            id: 2,
+            label: 'tata',
+          },
+        ],
         method: 'modify',
       },
       mocks: {
@@ -297,6 +338,16 @@ describe('SerieForm.vue', () => {
         currentSerie: {
           id: 42,
         },
+        serieCategories: [
+          {
+            id: 1,
+            label: 'toto',
+          },
+          {
+            id: 2,
+            label: 'tata',
+          },
+        ],
         method: 'modify',
       },
       mocks: {

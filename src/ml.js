@@ -29,6 +29,7 @@ export default new MLCreate({
       },
       category: {
         category: 'Category',
+        categories: 'Categories',
         undefined: 'Undefined category',
         label: 'Label',
         description: 'Description',
@@ -152,6 +153,7 @@ export default new MLCreate({
       },
       category: {
         category: 'Catégorie',
+        categories: 'Catégories',
         undefined: 'Catégorie non définie',
         label: 'Label',
         description: 'Description',
