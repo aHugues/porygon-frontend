@@ -48,25 +48,35 @@
       <md-app-content>
         <router-view/>
       </md-app-content>
+
     </md-app>
+
+    <md-snackbar :md-active.sync="authError">
+      <span>{{ $ml.get('error').auth }}</span>
+    </md-snackbar>
   </div>
 </template>
 
 <script>
+import axios from 'axios';
 import ToolbarTitle from '@/components/toolbar/ToolbarTitle.vue';
 import ToolbarAvatar from '@/components/toolbar/ToolbarAvatar.vue';
+import config from './config';
 
 export default {
   data() {
     return {
       showNavigation: false,
       pageWidth: window.innerWidth,
+      environment: process.env.NODE_ENV,
+      authError: false,
     };
   },
   mounted() {
     window.onresize = () => {
       this.pageWidth = window.innerWidth;
     };
+    this.checkLogin();
   },
   created() {
     let currentTheme = localStorage.getItem('vue-user-theme');
@@ -81,9 +91,37 @@ export default {
     }
   },
   name: 'app',
+  computed: {
+    apiBaseUrl() { return config[this.environment].porygonApiBaseUrl; },
+    authenticationRequired() { return config[this.environment].porygonApiAuthentication; },
+  },
   components: {
     ToolbarTitle,
     ToolbarAvatar,
+  },
+  methods: {
+    buildHeaders() {
+      const headers = { 'Content-Type': 'application/json' };
+      if (this.authenticationRequired) {
+        headers.Authorization = `Bearer ${localStorage.getItem('vue-token')}`;
+      }
+      return headers;
+    },
+    checkLogin() {
+      axios
+        .get(`${this.apiBaseUrl}/healthcheck`, {
+          headers: this.buildHeaders(),
+          withCredentials: true,
+        })
+        .then(() => {
+          this.authError = false;
+        })
+        .catch((error) => {
+          if (error.message.includes('401') || error.message.includes('403')) {
+            this.authError = true;
+          }
+        });
+    },
   },
 };
 </script>

@@ -117,6 +117,7 @@ export default new MLCreate({
       error: {
         reload_button: 'Reload page',
         errored_description: 'An error has occured during loading. Please reload this page.',
+        auth: 'An error has occured during authentication. Please reload this page.',
         resources: {
           movies_list: 'Error loading movies list from the server',
           series_list: 'Error loading series list from the server',
@@ -241,6 +242,7 @@ export default new MLCreate({
       error: {
         reload_button: 'Recharger la page',
         errored_description: "Une erreur s'est produite durant le chargement. Veuillez recharger la page.",
+        auth: "Une erreur s'est produite lors de l'authentification, veuillez recharger la page.",
         resources: {
           movies_list: 'Erreur lors du téléchargement de la liste des films depuis le serveur',
           series_list: 'Erreur lors du téléchargement de la liste des séries depuis le serveur',
