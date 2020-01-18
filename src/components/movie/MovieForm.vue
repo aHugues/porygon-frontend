@@ -1,8 +1,6 @@
 <template>
 <div class="movie-edit-form">
 
-  {{ movie }}
-
     <form novalidate @submit.prevent="validateMovie">
       <div class="md-layout md-gutter">
 
@@ -71,14 +69,23 @@
           </md-field>
         </div>
 
-        <div class="md-layout-item md-size-100">
-          <md-field :class="getValidationClass('actors')">
-            <label for="actors">{{ $ml.get('movie').actors }}</label>
-            <md-input name="actors" id="actors" v-model="movie.actors"/>
-            <span class="md-error" v-if="!$v.movie.actors.maxLength">
-              {{ $ml.get('movie').actors_too_long }}
-            </span>
-          </md-field>
+        <div class="md-layout-item md-size-100 md-layout md-gutter md-alignment-bottom-center">
+
+          <div class="md-layout-item md-size-10 add-actor-button">
+            <md-button class="md-icon-button" @click="addActor()">
+              <md-icon>add</md-icon>
+            </md-button>
+          </div>
+
+          <div class="md-layout-item md-size-90">
+            <div v-for="(actor, key) in actorsList" :key="key" >
+              <md-field v-if="shouldDisplay(key)" md-clearable @md-clear="removeActor(key)">
+                <label :for="actorsList[key]">{{ $ml.get('movie').actors }}</label>
+                <md-input name="actors" v-model="actorsList[key]"/>
+              </md-field>
+            </div>
+          </div>
+
         </div>
 
         <div class="md-layout-item md-size-100">
@@ -165,6 +172,10 @@ export default {
       this.movie.categories = this.movieCategories
         .map(category => category.id)
         .filter(x => x !== null);
+      this.actorsList = this.movie.actors.split(',').filter(x => x !== '').map(x => x.trim());
+      if (this.actorsList.length === 0) {
+        this.actorsList.push('');
+      }
       Object.keys(mapping).forEach((key) => {
         if (this.movie[key]) {
           this.supports.push(mapping[key]);
@@ -190,6 +201,7 @@ export default {
       environment: process.env.NODE_ENV,
       supports: [],
       errored: false,
+      actorsList: [],
     };
   },
   computed: {
@@ -274,6 +286,7 @@ export default {
       const method = (this.method === 'create') ? 'post' : 'put';
       const urlId = (this.method === 'modify') ? `/${this.movie.id}` : '';
       delete this.movie.id;
+      this.movie.actors = this.actorsList.join(',');
       axios({
         method,
         url: `${this.apiBaseUrl}/movies${urlId}`,
@@ -293,6 +306,16 @@ export default {
         this.saveMovie();
       }
     },
+    addActor() {
+      this.actorsList.push('');
+    },
+    removeActor(id) {
+      this.actorsList[id] = '';
+    },
+    shouldDisplay(id) {
+      return this.actorsList[id] !== ''
+      || (id === this.actorsList.length - 1);
+    },
   },
 };
 </script>
@@ -301,5 +324,8 @@ export default {
 .movie-edit-form {
   width: 90%;
   margin: auto;
+}
+.add-actor-button {
+  padding-bottom: 20px;
 }
 </style>

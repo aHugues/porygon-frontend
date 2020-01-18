@@ -83,7 +83,7 @@ const invalidV = {
 
 const vueToken = 'thisIsAToken';
 
-const stubs = ['md-field', 'md-switch', 'md-snackbar',
+const stubs = ['md-field', 'md-switch', 'md-snackbar', 'md-icon',
   'md-input', 'md-button', 'md-select', 'md-option'];
 
 describe('MovieForm.vue', () => {
@@ -113,6 +113,7 @@ describe('MovieForm.vue', () => {
           year: 2019,
           location_id: 1,
           is_dvd: true,
+          actors: '',
         },
         movieCategories: [
           {
@@ -138,6 +139,42 @@ describe('MovieForm.vue', () => {
     expect(wrapper.vm.supports).not.toContain('bluray');
     expect(wrapper.vm.movie.categories).toEqual([1, 2]);
   });
+
+  it('correctly adds and removes actors', () => {
+    const wrapper = shallowMount(MovieForm, {
+      stubs,
+      propsData: {
+        method: 'modify',
+        currentMovie: {
+          title: 'test title',
+          year: 2019,
+          location_id: 1,
+          is_dvd: true,
+          actors: 'actor1,actor2',
+        },
+        movieCategories: [
+          {
+            id: 1,
+            label: 'toto',
+          },
+          {
+            id: 2,
+            label: 'tata',
+          },
+        ],
+      },
+      mocks: {
+        $ml,
+      },
+    });
+
+    expect(wrapper.vm.actorsList).toEqual(['actor1', 'actor2']);
+    wrapper.vm.addActor();
+    expect(wrapper.vm.actorsList).toEqual(['actor1', 'actor2', '']);
+    wrapper.vm.removeActor(1);
+    expect(wrapper.vm.actorsList).toEqual(['actor1', '', '']);
+  });
+
 
   it('generates the correct dev API urls', () => {
     const wrapper = shallowMount(MovieForm, {
@@ -179,6 +216,7 @@ describe('MovieForm.vue', () => {
           title: 'test title',
           year: 2019,
           location_id: 1,
+          actors: 'abert,toto',
         },
         movieCategories: [
           {
@@ -211,6 +249,7 @@ describe('MovieForm.vue', () => {
           title: 'test title',
           year: 2019,
           location_id: 1,
+          actors: 'roger,rabbit',
         },
         movieCategories: [
           {
@@ -252,6 +291,7 @@ describe('MovieForm.vue', () => {
           title: 'test title',
           year: 2019,
           location_id: 1,
+          actors: 'toto,tata',
         },
         movieCategories: [
           {
@@ -332,6 +372,7 @@ describe('MovieForm.vue', () => {
       propsData: {
         currentMovie: {
           id: 42,
+          actors: 'roger,rabbit',
         },
         movieCategories: [
           {
