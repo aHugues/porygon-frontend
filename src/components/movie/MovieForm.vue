@@ -1,5 +1,8 @@
 <template>
 <div class="movie-edit-form">
+
+  {{ movie }}
+
     <form novalidate @submit.prevent="validateMovie">
       <div class="md-layout md-gutter">
 
@@ -101,8 +104,8 @@
 
         <div class="md-layout-item md-size-100">
           <md-field>
-            <label for="category">{{ $ml.get('category').category }}</label>
-            <md-select v-model="movie.category_id" name="category" id="category">
+            <label for="categories">{{ $ml.get('category').categories }}</label>
+            <md-select v-model="movie.categories" name="categories" id="categories" multiple>
               <md-option v-for="(category, key) in categories" :key="key"
               :value="category.id">{{ category.label }}</md-option>
             </md-select>
@@ -158,6 +161,10 @@ export default {
         is_bluray: 'bluray',
         is_digital: 'digital',
       };
+      delete this.movie.category_id;
+      this.movie.categories = this.movieCategories
+        .map(category => category.id)
+        .filter(x => x !== null);
       Object.keys(mapping).forEach((key) => {
         if (this.movie[key]) {
           this.supports.push(mapping[key]);
@@ -228,6 +235,7 @@ export default {
     currentMovie: Object,
     locations: Array,
     categories: Array,
+    movieCategories: Array,
   },
   methods: {
     deleteMovie() {
@@ -265,6 +273,7 @@ export default {
     saveMovie() {
       const method = (this.method === 'create') ? 'post' : 'put';
       const urlId = (this.method === 'modify') ? `/${this.movie.id}` : '';
+      delete this.movie.id;
       axios({
         method,
         url: `${this.apiBaseUrl}/movies${urlId}`,

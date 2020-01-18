@@ -29,10 +29,11 @@
           <md-list-item @click="onSelect(key)" md-expand
           :md-expanded.sync="expanded[key - 1]">
             <movie
-            :movie="movie.Movie" :category="movie.Category" :location="movie.Location"
+            :movie="movie.Movie" :location="movie.Location"
+            :categories="movie.Categories.filter(category => category.id !== null)"
             ></movie>
             <div slot="md-expand">
-              <movie-form :currentMovie="movie.Movie"
+              <movie-form :currentMovie="movie.Movie" :movieCategories="movie.Categories"
               v-if="expanded[key - 1]"
               :categories="categories" :locations="locations"
               :method="'modify'"

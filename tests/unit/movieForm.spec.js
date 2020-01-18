@@ -114,6 +114,16 @@ describe('MovieForm.vue', () => {
           location_id: 1,
           is_dvd: true,
         },
+        movieCategories: [
+          {
+            id: 1,
+            label: 'toto',
+          },
+          {
+            id: 2,
+            label: 'tata',
+          },
+        ],
       },
       mocks: {
         $ml,
@@ -126,6 +136,7 @@ describe('MovieForm.vue', () => {
     expect(wrapper.vm.movie.location_id).toBe(1);
     expect(wrapper.vm.supports).toContain('dvd');
     expect(wrapper.vm.supports).not.toContain('bluray');
+    expect(wrapper.vm.movie.categories).toEqual([1, 2]);
   });
 
   it('generates the correct dev API urls', () => {
@@ -169,6 +180,16 @@ describe('MovieForm.vue', () => {
           year: 2019,
           location_id: 1,
         },
+        movieCategories: [
+          {
+            id: 1,
+            label: 'toto',
+          },
+          {
+            id: 2,
+            label: 'tata',
+          },
+        ],
       },
       mocks: {
         $ml,
@@ -191,6 +212,16 @@ describe('MovieForm.vue', () => {
           year: 2019,
           location_id: 1,
         },
+        movieCategories: [
+          {
+            id: 1,
+            label: 'toto',
+          },
+          {
+            id: 2,
+            label: 'tata',
+          },
+        ],
       },
       mocks: {
         $ml,
@@ -222,6 +253,16 @@ describe('MovieForm.vue', () => {
           year: 2019,
           location_id: 1,
         },
+        movieCategories: [
+          {
+            id: 1,
+            label: 'toto',
+          },
+          {
+            id: 2,
+            label: 'tata',
+          },
+        ],
         method: 'modify',
       },
       mocks: {
@@ -292,6 +333,16 @@ describe('MovieForm.vue', () => {
         currentMovie: {
           id: 42,
         },
+        movieCategories: [
+          {
+            id: 1,
+            label: 'toto',
+          },
+          {
+            id: 2,
+            label: 'tata',
+          },
+        ],
         method: 'modify',
       },
       mocks: {

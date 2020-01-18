@@ -2,11 +2,11 @@
   <div class="full-size">
     <div class="md-layout full-size">
       <div class="md-layout-item md-xlarge-size-20 md-large-size-30 md-medium-size-70">
-        <span v-if="category.label === null" class="md-caption">
+        <span v-if="categories.length === 0" class="md-caption">
           {{ $ml.get('category').undefined }}
         </span>
         <span v-else>
-          {{ category.label }}
+          {{ categories.map(category => category.label).join(', ') }}
         </span>
       </div>
       <div v-if="width < 1280" class="md-layout-item md-xlarge-size-20 md-medium-size-30">
@@ -33,7 +33,7 @@ export default {
   props: {
     serie: Object,
     location: Object,
-    category: Object,
+    categories: Array,
   },
   data() {
     return {

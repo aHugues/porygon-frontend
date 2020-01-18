@@ -75,8 +75,8 @@
 
         <div class="md-layout-item md-size-100">
           <md-field>
-            <label for="category">{{ $ml.get('category').category }}</label>
-            <md-select v-model="serie.category_id" name="category" id="category">
+            <label for="categories">{{ $ml.get('category').categories }}</label>
+            <md-select v-model="serie.categories" name="categories" id="categories" multiple>
               <md-option v-for="(category, key) in categories" :key="key"
               :value="category.id">{{ category.label }}</md-option>
             </md-select>
@@ -131,6 +131,10 @@ export default {
         is_bluray: 'bluray',
         is_digital: 'digital',
       };
+      delete this.serie.category_id;
+      this.serie.categories = this.serieCategories
+        .map(category => category.id)
+        .filter(x => x !== null);
       Object.keys(mapping).forEach((key) => {
         if (this.serie[key]) {
           this.supports.push(mapping[key]);
@@ -193,6 +197,7 @@ export default {
     currentSerie: Object,
     locations: Array,
     categories: Array,
+    serieCategories: Array,
   },
   methods: {
     deleteSerie() {
@@ -230,6 +235,7 @@ export default {
     saveSerie() {
       const method = (this.method === 'create') ? 'post' : 'put';
       const urlId = (this.method === 'modify') ? `/${this.serie.id}` : '';
+      delete this.serie.id;
       axios({
         method,
         url: `${this.apiBaseUrl}/series${urlId}`,

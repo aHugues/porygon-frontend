@@ -30,10 +30,11 @@
           <md-list-item @click="onSelect(key)" md-expand
           :md-expanded.sync="expanded[key - 1]">
             <serie
-            :serie="serie.Serie" :category="serie.Category" :location="serie.Location"
+            :serie="serie.Serie" :location="serie.Location"
+            :categories="serie.Categories.filter(category => category.id !== null)"
             ></serie>
             <div slot="md-expand">
-              <serie-form :currentSerie="serie.Serie"
+              <serie-form :currentSerie="serie.Serie" :serieCategories="serie.Categories"
               v-if="expanded[key - 1]"
               :categories="categories" :locations="locations"
               :method="'modify'"
