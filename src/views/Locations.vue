@@ -1,37 +1,40 @@
 <template>
   <div class="locations">
 
-    <div v-if="loading" class="loader">
+    <div v-if="state === State.LOADING" class="loader">
       <md-progress-spinner md-mode="indeterminate"></md-progress-spinner>
     </div>
 
     <empty-page
-      v-if="!loading && locations.length == 0 && !showDialog && !errored"
+      v-if="state === State.EMPTY"
       resource="location" :action="true"
       @resource-created="newLocation()">
     </empty-page>
 
-    <error-state v-if="errored" resource="location" @reload-page="reloadPage()"></error-state>
+    <error-state
+      v-if="state === State.ERRORED" resource="location"
+      @reload-page="reloadPage()">
+    </error-state>
 
-   <div class="edit-form-wrapper" v-if="showDialog && !errored">
+   <div class="edit-form-wrapper" v-if="state === State.EDIT">
       <div class="close-button-wrapper">
-        <md-button class="md-icon-button" @click="showDialog = false; currentId = -1">
+        <md-button class="md-icon-button" @click="closeEdit()">
           <md-icon>close</md-icon>
         </md-button>
       </div>
       <location-form
       :method="dialogMethod" :id="currentId" :currentLocation="currentLocation"
       :currentPhysical="currentPhysical"
-      @location-added-or-modified="fetchData(); showDialog = false;"
-      ></location-form>
-   </div>
+      @location-added-or-modified="fetchData()">
+      </location-form>
+    </div>
 
-  <div v-if="!loading && locations.length > 0 && showDialog" class="divider-wrapper">
+  <div v-if="state === State.EDIT && locations.length > 0" class="divider-wrapper">
     <md-divider></md-divider>
   </div>
 
 
-    <div class="md-layout" v-if="!loading && locations.length > 0 && !errored">
+    <div class="md-layout" v-if="state === State.OK || state === State.EDIT">
      <div
       v-for="(location, key) in locations" :key="key"
       @click="editLocation(location.id, location.location, Boolean(location.is_physical))"
@@ -46,7 +49,7 @@
      </div>
    </div>
 
-    <div class="add-button-wrapper" v-if="!loading && locations.length > 0 && !errored">
+    <div class="add-button-wrapper" v-if="state === State.OK">
      <md-button class="md-fab md-primary" @click="newLocation()">
        <md-icon>add</md-icon>
      </md-button>
@@ -68,6 +71,13 @@ import Location from '@/components/location/Location.vue';
 import LocationForm from '@/components/location/LocationForm.vue';
 import config from '../config';
 
+const State = {
+  LOADING: 'loading',
+  ERRORED: 'errored',
+  EMPTY: 'empty',
+  OK: 'ok',
+  EDIT: 'edit',
+};
 
 export default {
   mounted() {
@@ -78,15 +88,14 @@ export default {
     return {
       locations: [],
       environment: process.env.NODE_ENV,
-      showDialog: false,
       dialogMethod: 'create',
       currentId: -1,
       currentLocation: '',
       currentPhysical: true,
-      loading: true,
       errorDisplayed: false,
-      errored: false,
       resource: 'locations_list',
+      State,
+      state: State.LOADING,
     };
   },
   computed: {
@@ -107,37 +116,39 @@ export default {
           headers: this.buildHeaders(),
           withCredentials: true,
         })
-        .catch(() => {
-          this.errored = true;
-          this.errorDisplayed = true;
-          this.locations = [];
-          this.loading = false;
-        })
         .then((response) => {
           if (response) {
             this.locations = response.data;
-            this.loading = false;
+            this.state = this.locations.length === 0 ? State.EMPTY : State.OK;
           }
+        })
+        .catch(() => {
+          this.errorDisplayed = true;
+          this.locations = [];
+          this.state = this.State.ERRORED;
         });
     },
     newLocation() {
       this.dialogMethod = 'create';
-      this.showDialog = true;
+      this.state = State.EDIT;
     },
     reloadPage() {
       this.$router.go();
     },
+    closeEdit() {
+      this.state = this.locations.length === 0 ? State.EMPTY : State.OK;
+      this.currentId = -1;
+    },
     editLocation(id, location, physical) {
       // unselect if already selected
       if (id === this.currentId) {
-        this.showDialog = false;
-        this.currentId = -1;
+        this.closeEdit();
       } else {
         this.dialogMethod = 'modify';
         this.currentId = id;
         this.currentLocation = location;
         this.currentPhysical = physical;
-        this.showDialog = true;
+        this.state = State.EDIT;
       }
     },
   },

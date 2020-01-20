@@ -15,7 +15,7 @@ jest.mock('../../src/config', () => ({
   },
 }));
 jest.mock('axios', () => ({
-  get: jest.fn(() => Promise.resolve({ data: 3 })),
+  get: jest.fn(() => Promise.resolve({ data: [] })),
 }));
 
 const $ml = {
@@ -49,6 +49,7 @@ const stubs = [
   'md-icon',
   'md-progress-spinner',
   'md-snackbar',
+  'md-divider',
 ];
 
 const vueToken = 'thisIsAToken';
@@ -81,7 +82,7 @@ describe('CategoriesView', () => {
     process.env.NODE_ENV = 'test';
   });
 
-  it('correctly sets the data when creating a category', () => {
+  it('correctly sets the data when creating a category', async () => {
     const wrapper = shallowMount(Categories, {
       stubs,
       mocks: {
@@ -89,14 +90,16 @@ describe('CategoriesView', () => {
       },
     });
 
+    expect(wrapper.vm.state).toEqual('loading');
+    await wrapper.vm.$nextTick();
     expect(wrapper.vm.dialogMethod).toEqual('create');
-    expect(wrapper.vm.showDialog).toEqual(false);
+    expect(wrapper.vm.state).toEqual('empty');
     wrapper.vm.newCategory();
     expect(wrapper.vm.dialogMethod).toEqual('create');
-    expect(wrapper.vm.showDialog).toEqual(true);
+    expect(wrapper.vm.state).toEqual('edit');
   });
 
-  it('correctly sets the data when editing a category', () => {
+  it('correctly sets the data when editing a category', async () => {
     const wrapper = shallowMount(Categories, {
       stubs,
       mocks: {
@@ -104,17 +107,18 @@ describe('CategoriesView', () => {
       },
     });
 
+    await wrapper.vm.$nextTick();
     expect(wrapper.vm.dialogMethod).toEqual('create');
-    expect(wrapper.vm.showDialog).toEqual(false);
+    expect(wrapper.vm.state).toEqual('empty');
     wrapper.vm.editCategory(1, 'test category', 'test description');
     expect(wrapper.vm.dialogMethod).toEqual('modify');
-    expect(wrapper.vm.showDialog).toEqual(true);
+    expect(wrapper.vm.state).toEqual('edit');
     expect(wrapper.vm.currentId).toEqual(1);
     expect(wrapper.vm.currentLabel).toEqual('test category');
     expect(wrapper.vm.currentDescription).toEqual('test description');
   });
 
-  it('correctly closes the category when clicking a second time', () => {
+  it('correctly closes the category when clicking a second time', async () => {
     const wrapper = shallowMount(Categories, {
       stubs,
       mocks: {
@@ -122,18 +126,21 @@ describe('CategoriesView', () => {
       },
     });
 
+    await wrapper.vm.$nextTick();
+    wrapper.setData({
+      categories: [{ id: 1, label: 'test', description: 'test' }],
+    });
     expect(wrapper.vm.dialogMethod).toEqual('create');
-    expect(wrapper.vm.showDialog).toEqual(false);
 
     wrapper.vm.editCategory(1, 'test category', 'test description');
     expect(wrapper.vm.dialogMethod).toEqual('modify');
-    expect(wrapper.vm.showDialog).toEqual(true);
+    expect(wrapper.vm.state).toEqual('edit');
     expect(wrapper.vm.currentId).toEqual(1);
     expect(wrapper.vm.currentLabel).toEqual('test category');
     expect(wrapper.vm.currentDescription).toEqual('test description');
 
     wrapper.vm.editCategory(1, 'test category', 'test description');
     expect(wrapper.vm.currentId).toEqual(-1);
-    expect(wrapper.vm.showDialog).toEqual(false);
+    expect(wrapper.vm.state).toEqual('ok');
   });
 });

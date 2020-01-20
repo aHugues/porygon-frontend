@@ -1,29 +1,34 @@
 <template>
   <div id="movies-list" class="movies">
 
-    <div v-if="loading" class="loader">
+    <div v-if="state === State.LOADING" class="loader">
       <md-progress-spinner md-mode="indeterminate"></md-progress-spinner>
     </div>
 
-    <div v-if="!loading && showDialog && !errored" :method="'create'" class="add-form-wrapper">
+    <div v-if="state === State.EDIT" :method="'create'" class="add-form-wrapper">
       <div class="close-button-wrapper">
-        <md-button class="md-icon-button" @click="showDialog = false">
+        <md-button class="md-icon-button" @click="closeDialog()">
           <md-icon>close</md-icon>
         </md-button>
       </div>
-      <movie-form :method="'create'"  :movie="{}" :categories="categories" :locations="locations"
-          @movie-added-or-modified="refreshList(-1)"></movie-form>
+      <movie-form :method="'create'"  :movie="{}"
+        :categories="categories" :locations="locations"
+        @movie-added-or-modified="refreshList(-1)">
+      </movie-form>
     </div>
 
     <empty-page
-      v-if="!loading && movies.length == 0 && !showDialog && !errored"
+      v-if="state === State.EMPTY"
       resource="movie" :action="true"
       @resource-created="newMovie()">
     </empty-page>
 
-    <error-state v-if="errored" resource="movie" @reload-page="reloadPage()"></error-state>
+    <error-state
+      v-if="state === State.ERRORED" resource="movie"
+      @reload-page="reloadPage()">
+    </error-state>
 
-    <div v-if="!loading && movies.length > 0 && !errored">
+    <div v-if="state === State.OK">
       <md-list :md-expand-single="true">
         <div v-for="(movie, key) in movies" :key="key" :id="`movie-elt-${key}`">
           <md-list-item @click="onSelect(key)" md-expand
@@ -45,7 +50,7 @@
       </md-list>
     </div>
 
-    <div class="add-button-wrapper" v-if="!loading && movies.length > 0 && !errored">
+    <div class="add-button-wrapper" v-if="state === State.OK">
      <md-button class="md-fab md-primary" @click="newMovie()">
        <md-icon>add</md-icon>
      </md-button>
@@ -67,6 +72,14 @@ import Movie from '@/components/movie/Movie.vue';
 import MovieForm from '@/components/movie/MovieForm.vue';
 import config from '../config';
 
+const State = {
+  LOADING: 'loading',
+  ERRORED: 'errored',
+  EMPTY: 'empty',
+  OK: 'ok',
+  EDIT: 'edit',
+};
+
 export default {
   name: 'MoviesView',
   created() {
@@ -78,22 +91,21 @@ export default {
     return {
       movies: [],
       environment: process.env.NODE_ENV,
-      showDialog: false,
       expanded: [],
       categories: [],
       locations: [],
-      loading: true,
       selectedId: -1,
       errorDisplayed: false,
-      errored: false,
       resource: '',
       resourcesLoaded: 0,
+      State,
+      state: State.LOADING,
     };
   },
   watch: {
     resourcesLoaded(newValue) {
       if (newValue === 3) {
-        this.loading = false;
+        this.state = this.movies.length === 0 ? State.EMPTY : State.OK;
       }
     },
   },
@@ -121,18 +133,18 @@ export default {
           headers: this.buildHeaders(),
           withCredentials: true,
         })
-        .catch(() => {
-          this.resource = 'locations_list';
-          this.errored = true;
-          this.errorDisplayed = true;
-          this.locations = [];
-          this.resourcesLoaded += 1;
-        })
         .then((response) => {
           if (response) {
             this.locations = response.data;
             this.resourcesLoaded += 1;
           }
+        })
+        .catch(() => {
+          this.resource = 'locations_list';
+          this.errorDisplayed = true;
+          this.state = State.ERRORED;
+          this.locations = [];
+          this.resourcesLoaded += 1;
         });
     },
     fetchCategories() {
@@ -141,18 +153,18 @@ export default {
           headers: this.buildHeaders(),
           withCredentials: true,
         })
-        .catch(() => {
-          this.resource = 'categories_list';
-          this.errored = true;
-          this.errorDisplayed = true;
-          this.categories = [];
-          this.resourcesLoaded += 1;
-        })
         .then((response) => {
           if (response) {
             this.categories = response.data;
             this.resourcesLoaded += 1;
           }
+        })
+        .catch(() => {
+          this.resource = 'categories_list';
+          this.state = State.ERRORED;
+          this.errorDisplayed = true;
+          this.categories = [];
+          this.resourcesLoaded += 1;
         });
     },
     fetchMovies() {
@@ -161,13 +173,6 @@ export default {
           headers: this.buildHeaders(),
           withCredentials: true,
         })
-        .catch(() => {
-          this.resource = 'movies_list';
-          this.errored = true;
-          this.errorDisplayed = true;
-          this.movies = [];
-          this.resourcesLoaded += 1;
-        })
         .then((response) => {
           if (response) {
             this.expanded = Array(response.data.length);
@@ -175,6 +180,13 @@ export default {
             this.movies = response.data;
             this.resourcesLoaded += 1;
           }
+        })
+        .catch(() => {
+          this.resource = 'movies_list';
+          this.state = State.ERRORED;
+          this.errorDisplayed = true;
+          this.movies = [];
+          this.resourcesLoaded += 1;
         });
     },
     fetchData() {
@@ -182,11 +194,15 @@ export default {
       this.fetchCategories();
       this.fetchMovies();
     },
+    closeDialog() {
+      this.state = this.movies.length === 0 ? State.EMPTY : State.OK;
+    },
     refreshList(id) {
       if (id > 0) {
         this.expanded[id] = false;
       }
-      this.showDialog = false;
+      this.resourcesLoaded = 0;
+      this.state = State.LOADING;
       this.fetchData();
     },
     onSelect(id) {
@@ -199,7 +215,7 @@ export default {
       this.$router.go();
     },
     newMovie() {
-      this.showDialog = true;
+      this.state = State.EDIT;
     },
     scrollTo(id) {
       this.$nextTick(() => {

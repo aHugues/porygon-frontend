@@ -81,7 +81,7 @@ describe('SeriesView', () => {
     process.env.NODE_ENV = 'test';
   });
 
-  it('correctly sets the data when creating a serie', (done) => {
+  it('correctly sets the data when creating a serie', async () => {
     const wrapper = shallowMount(Series, {
       stubs,
       mocks: {
@@ -89,20 +89,18 @@ describe('SeriesView', () => {
       },
     });
 
-    wrapper.vm.$nextTick(() => {
-      wrapper.setData({
-        categories: [],
-        locations: [],
-      });
-
-      expect(wrapper.vm.showDialog).toEqual(false);
-      wrapper.vm.newSerie();
-      expect(wrapper.vm.showDialog).toEqual(true);
-      done();
+    await wrapper.vm.$nextTick();
+    wrapper.setData({
+      categories: [],
+      locations: [],
     });
+
+    expect(wrapper.vm.state).toEqual('empty');
+    wrapper.vm.newSerie();
+    expect(wrapper.vm.state).toEqual('edit');
   });
 
-  it('correctly refreshes the list after updating a serie', (done) => {
+  it('correctly refreshes the list after updating a serie', async () => {
     const wrapper = shallowMount(Series, {
       stubs,
       mocks: {
@@ -110,24 +108,22 @@ describe('SeriesView', () => {
       },
     });
 
-    wrapper.vm.$nextTick(() => {
-      wrapper.setData({
-        categories: [],
-        locations: [],
-        expanded: [false, true, false],
-        showDialog: true,
-      });
-
-      expect(wrapper.vm.expanded).toEqual([false, true, false]);
-      expect(wrapper.vm.showDialog).toEqual(true);
-      wrapper.vm.refreshList(1);
-      expect(wrapper.vm.expanded).toEqual([false, false, false]);
-      expect(wrapper.vm.showDialog).toEqual(false);
-      done();
+    await wrapper.vm.$nextTick();
+    wrapper.setData({
+      categories: [],
+      locations: [],
+      expanded: [false, true, false],
     });
+
+    expect(wrapper.vm.expanded).toEqual([false, true, false]);
+    expect(wrapper.vm.state).toEqual('empty');
+    wrapper.vm.refreshList(1);
+    expect(wrapper.vm.expanded).toEqual([false, false, false]);
+    await wrapper.vm.$nextTick();
+    expect(wrapper.vm.state).toEqual('empty');
   });
 
-  it('correctly refreshes the list after creating a serie', (done) => {
+  it('correctly refreshes the list after creating a serie', async () => {
     const wrapper = shallowMount(Series, {
       stubs,
       mocks: {
@@ -135,24 +131,23 @@ describe('SeriesView', () => {
       },
     });
 
-    wrapper.vm.$nextTick(() => {
-      wrapper.setData({
-        categories: [],
-        locations: [],
-        expanded: [false, false, false],
-        showDialog: true,
-      });
-
-      expect(wrapper.vm.expanded).toEqual([false, false, false]);
-      expect(wrapper.vm.showDialog).toEqual(true);
-      wrapper.vm.refreshList(-1);
-      expect(wrapper.vm.expanded).toEqual([false, false, false]);
-      expect(wrapper.vm.showDialog).toEqual(false);
-      done();
+    await wrapper.vm.$nextTick();
+    wrapper.setData({
+      categories: [],
+      locations: [],
+      expanded: [false, false, false],
+      state: wrapper.vm.State.EDIT,
     });
+
+    expect(wrapper.vm.expanded).toEqual([false, false, false]);
+    expect(wrapper.vm.state).toEqual('edit');
+    wrapper.vm.refreshList(-1);
+    expect(wrapper.vm.expanded).toEqual([false, false, false]);
+    await wrapper.vm.$nextTick();
+    expect(wrapper.vm.state).toEqual('empty');
   });
 
-  it('correctly scrolls on serie selection', (done) => {
+  it('correctly scrolls on serie selection', async () => {
     const mockScrollTo = jest.fn();
     const wrapper = shallowMount(Series, {
       stubs,
@@ -160,23 +155,21 @@ describe('SeriesView', () => {
         $ml,
       },
     });
-    wrapper.vm.$nextTick(() => {
-      wrapper.setData({
-        categories: [],
-        locations: [],
-        expanded: [false, false, false],
-        showDialog: true,
-      });
-
-      wrapper.setMethods({
-        scrollTo: mockScrollTo,
-      });
-
-      wrapper.vm.onSelect(3);
-      // expect(wrapper.vm.scrollTo.mock.calls.length).toBe(0);
-      // expect(wrapper.vm.scrollTo.mock.calls[0][0]).toBe(3);
-      expect(1).toBe(1);
-      done();
+    await wrapper.vm.$nextTick();
+    wrapper.setData({
+      categories: [],
+      locations: [],
+      expanded: [false, false, false],
+      state: wrapper.vm.State.OK,
     });
+
+    wrapper.setMethods({
+      scrollTo: mockScrollTo,
+    });
+
+    wrapper.vm.onSelect(3);
+    await wrapper.vm.$nextTick();
+    expect(wrapper.vm.scrollTo.mock.calls.length).toBe(1);
+    expect(wrapper.vm.scrollTo.mock.calls[0][0]).toBe(3);
   });
 });

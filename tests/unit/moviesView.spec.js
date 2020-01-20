@@ -81,7 +81,7 @@ describe('MoviesView', () => {
     process.env.NODE_ENV = 'test';
   });
 
-  it('correctly sets the data when creating a movie', (done) => {
+  it('correctly sets the data when creating a movie', async () => {
     const wrapper = shallowMount(Movies, {
       stubs,
       mocks: {
@@ -89,20 +89,17 @@ describe('MoviesView', () => {
       },
     });
 
-    wrapper.vm.$nextTick(() => {
-      wrapper.setData({
-        categories: [],
-        locations: [],
-      });
-
-      expect(wrapper.vm.showDialog).toEqual(false);
-      wrapper.vm.newMovie();
-      expect(wrapper.vm.showDialog).toEqual(true);
-      done();
+    await wrapper.vm.$nextTick();
+    wrapper.setData({
+      categories: [],
+      locations: [],
     });
+    expect(wrapper.vm.state).toEqual('empty');
+    wrapper.vm.newMovie();
+    expect(wrapper.vm.state).toEqual('edit');
   });
 
-  it('correctly refreshes the list after updating a movie', (done) => {
+  it('correctly refreshes the list after updating a movie', async () => {
     const wrapper = shallowMount(Movies, {
       stubs,
       mocks: {
@@ -110,24 +107,22 @@ describe('MoviesView', () => {
       },
     });
 
-    wrapper.vm.$nextTick(() => {
-      wrapper.setData({
-        categories: [],
-        locations: [],
-        expanded: [false, true, false],
-        showDialog: true,
-      });
-
-      expect(wrapper.vm.expanded).toEqual([false, true, false]);
-      expect(wrapper.vm.showDialog).toEqual(true);
-      wrapper.vm.refreshList(1);
-      expect(wrapper.vm.expanded).toEqual([false, false, false]);
-      expect(wrapper.vm.showDialog).toEqual(false);
-      done();
+    await wrapper.vm.$nextTick();
+    wrapper.setData({
+      categories: [],
+      locations: [],
+      expanded: [false, true, false],
     });
+
+    expect(wrapper.vm.expanded).toEqual([false, true, false]);
+    expect(wrapper.vm.state).toEqual('empty');
+    wrapper.vm.refreshList(1);
+    expect(wrapper.vm.expanded).toEqual([false, false, false]);
+    await wrapper.vm.$nextTick();
+    expect(wrapper.vm.state).toEqual('empty');
   });
 
-  it('correctly refreshes the list after creating a movie', (done) => {
+  it('correctly refreshes the list after creating a movie', async () => {
     const wrapper = shallowMount(Movies, {
       stubs,
       mocks: {
@@ -135,24 +130,23 @@ describe('MoviesView', () => {
       },
     });
 
-    wrapper.vm.$nextTick(() => {
-      wrapper.setData({
-        categories: [],
-        locations: [],
-        expanded: [false, false, false],
-        showDialog: true,
-      });
-
-      expect(wrapper.vm.expanded).toEqual([false, false, false]);
-      expect(wrapper.vm.showDialog).toEqual(true);
-      wrapper.vm.refreshList(-1);
-      expect(wrapper.vm.expanded).toEqual([false, false, false]);
-      expect(wrapper.vm.showDialog).toEqual(false);
-      done();
+    await wrapper.vm.$nextTick();
+    wrapper.setData({
+      categories: [],
+      locations: [],
+      expanded: [false, false, false],
+      state: wrapper.vm.State.EDIT,
     });
+
+    expect(wrapper.vm.expanded).toEqual([false, false, false]);
+    expect(wrapper.vm.state).toEqual('edit');
+    wrapper.vm.refreshList(-1);
+    expect(wrapper.vm.expanded).toEqual([false, false, false]);
+    await wrapper.vm.$nextTick();
+    expect(wrapper.vm.state).toEqual('empty');
   });
 
-  it('correctly scrolls on movie selection', (done) => {
+  it('correctly scrolls on movie selection', async () => {
     const mockScrollTo = jest.fn();
     const wrapper = shallowMount(Movies, {
       stubs,
@@ -160,24 +154,21 @@ describe('MoviesView', () => {
         $ml,
       },
     });
-    wrapper.vm.$nextTick(() => {
-      wrapper.setData({
-        categories: [],
-        locations: [],
-        expanded: [false, false, false],
-        showDialog: true,
-      });
-
-      wrapper.setMethods({
-        scrollTo: mockScrollTo,
-      });
-
-      wrapper.vm.onSelect(3);
-      wrapper.vm.$nextTick(() => {
-        expect(wrapper.vm.scrollTo.mock.calls.length).toBe(1);
-        expect(wrapper.vm.scrollTo.mock.calls[0][0]).toBe(3);
-        done();
-      });
+    await wrapper.vm.$nextTick();
+    wrapper.setData({
+      categories: [],
+      locations: [],
+      expanded: [false, false, false],
+      state: wrapper.vm.State.OK,
     });
+
+    wrapper.setMethods({
+      scrollTo: mockScrollTo,
+    });
+
+    wrapper.vm.onSelect(3);
+    await wrapper.vm.$nextTick();
+    expect(wrapper.vm.scrollTo.mock.calls.length).toBe(1);
+    expect(wrapper.vm.scrollTo.mock.calls[0][0]).toBe(3);
   });
 });
