@@ -12,7 +12,7 @@ jest.mock('../../src/config', () => ({
   },
 }));
 jest.mock('axios', () => ({
-  get: jest.fn(() => Promise.resolve({ data: 3 })),
+  get: jest.fn(() => Promise.resolve({ data: [] })),
 }));
 
 const $ml = {
@@ -178,36 +178,6 @@ describe('MoviesView', () => {
         expect(wrapper.vm.scrollTo.mock.calls[0][0]).toBe(3);
         done();
       });
-    });
-  });
-
-  // TODO refactor this test so that it better captures the application workflow
-  it('correctly use the scroll API', (done) => {
-    const querySelector = () => 'coucou';
-    const wrapper = shallowMount(Movies, {
-      stubs,
-      mocks: {
-        $ml,
-        '$el.querySelector': querySelector,
-      },
-    });
-    wrapper.vm.$nextTick(() => {
-      wrapper.setData({
-        categories: [],
-        locations: [],
-        movies: [
-          { id: 1 },
-          { id: 2 },
-          { id: 3 },
-          { id: 4 },
-        ],
-        expanded: [false, false, false, false],
-        showDialog: true,
-      });
-
-      wrapper.vm.scrollTo(3);
-      expect(1).toBe(1);
-      done();
     });
   });
 });

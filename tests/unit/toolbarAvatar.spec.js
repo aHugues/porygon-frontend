@@ -37,9 +37,11 @@ const $ml = {
   change: () => {},
 };
 
+
 describe('ToolbarAvatar.vue', () => {
   it('selects the correct theme when light', () => {
     setGlobals();
+    const material = { theming: () => null };
     Object.keys(localStorageLight).forEach((key) => {
       global.window.localStorage.setItem(key, localStorageLight[key]);
     });
@@ -47,6 +49,7 @@ describe('ToolbarAvatar.vue', () => {
       stubs: ['md-button', 'md-icon', 'md-switch', 'md-menu-item', 'md-menu-content', 'md-avatar', 'md-menu', 'md-list', 'md-list-item', 'md-divider'],
       mocks: {
         $ml,
+        $material: material,
       },
     });
     expect(wrapper.vm.darkTheme).toEqual(false);

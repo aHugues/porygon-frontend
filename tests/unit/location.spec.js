@@ -10,6 +10,8 @@ const localStorageDark = {
   'vue-user-theme': 'porygon-dark',
 };
 
+const stubs = ['md-card-header', 'md-card-content', 'md-card', 'md-icon'];
+
 const $ml = {
   get: () => ({
     location: {
@@ -41,7 +43,7 @@ describe('Location.vue', () => {
       mocks: {
         $ml,
       },
-      stubs: ['md-card-header', 'md-card-content', 'md-card'],
+      stubs,
     });
     expect(wrapper.contains('md-card-stub')).toBe(true);
     const card = wrapper.find('md-card-stub');
@@ -60,7 +62,7 @@ describe('Location.vue', () => {
       mocks: {
         $ml,
       },
-      stubs: ['md-card-header', 'md-card-content', 'md-card'],
+      stubs,
     });
     expect(wrapper.contains('md-card-stub')).toBe(true);
     const card = wrapper.find('md-card-stub');
@@ -79,7 +81,7 @@ describe('Location.vue', () => {
       mocks: {
         $ml,
       },
-      stubs: ['md-card-header', 'md-card-content', 'md-card'],
+      stubs,
     });
     expect(wrapper.contains('md-card-stub')).toBe(true);
     const card = wrapper.find('md-card-stub');
@@ -101,7 +103,7 @@ describe('Location.vue', () => {
       mocks: {
         $ml,
       },
-      stubs: ['md-card-header', 'md-card-content', 'md-card'],
+      stubs,
     });
     const title = wrapper.find('.md-title');
     const content = wrapper.find('md-card-content-stub');
@@ -123,7 +125,7 @@ describe('Location.vue', () => {
       mocks: {
         $ml,
       },
-      stubs: ['md-card-header', 'md-card-content', 'md-card'],
+      stubs,
     });
     const title = wrapper.find('.md-title');
     const content = wrapper.find('md-card-content-stub');
