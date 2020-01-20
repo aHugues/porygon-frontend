@@ -15,7 +15,7 @@ jest.mock('../../src/config', () => ({
   },
 }));
 jest.mock('axios', () => ({
-  get: jest.fn(() => Promise.resolve({ data: 3 })),
+  get: jest.fn(() => Promise.resolve({ data: [] })),
 }));
 
 const $ml = {
@@ -48,6 +48,7 @@ const stubs = [
   'md-progress-spinner',
   'md-icon',
   'md-snackbar',
+  'md-divider',
 ];
 
 const vueToken = 'thisIsAToken';
@@ -80,7 +81,7 @@ describe('LocationsView', () => {
     process.env.NODE_ENV = 'test';
   });
 
-  it('correctly sets the data when creating a category', () => {
+  it('correctly sets the data when creating a location', async () => {
     const wrapper = shallowMount(Locations, {
       stubs,
       mocks: {
@@ -88,14 +89,16 @@ describe('LocationsView', () => {
       },
     });
 
+    expect(wrapper.vm.state).toEqual('loading');
+    await wrapper.vm.$nextTick();
     expect(wrapper.vm.dialogMethod).toEqual('create');
-    expect(wrapper.vm.showDialog).toEqual(false);
+    expect(wrapper.vm.state).toEqual('empty');
     wrapper.vm.newLocation();
     expect(wrapper.vm.dialogMethod).toEqual('create');
-    expect(wrapper.vm.showDialog).toEqual(true);
+    expect(wrapper.vm.state).toEqual('edit');
   });
 
-  it('correctly sets the data when editing a category', () => {
+  it('correctly sets the data when editing a location', async () => {
     const wrapper = shallowMount(Locations, {
       stubs,
       mocks: {
@@ -103,17 +106,18 @@ describe('LocationsView', () => {
       },
     });
 
+    await wrapper.vm.$nextTick();
     expect(wrapper.vm.dialogMethod).toEqual('create');
-    expect(wrapper.vm.showDialog).toEqual(false);
+    expect(wrapper.vm.state).toEqual('empty');
     wrapper.vm.editLocation(1, 'test location', true);
     expect(wrapper.vm.dialogMethod).toEqual('modify');
-    expect(wrapper.vm.showDialog).toEqual(true);
+    expect(wrapper.vm.state).toEqual('edit');
     expect(wrapper.vm.currentId).toEqual(1);
     expect(wrapper.vm.currentLocation).toEqual('test location');
     expect(wrapper.vm.currentPhysical).toEqual(true);
   });
 
-  it('correctly closes the category when clicking a second time', () => {
+  it('correctly closes the location when clicking a second time', async () => {
     const wrapper = shallowMount(Locations, {
       stubs,
       mocks: {
@@ -121,18 +125,21 @@ describe('LocationsView', () => {
       },
     });
 
+    await wrapper.vm.$nextTick();
+    wrapper.setData({
+      locations: [{ id: 1, location: 'test', physical: true }],
+    });
     expect(wrapper.vm.dialogMethod).toEqual('create');
-    expect(wrapper.vm.showDialog).toEqual(false);
 
     wrapper.vm.editLocation(1, 'test location', true);
     expect(wrapper.vm.dialogMethod).toEqual('modify');
-    expect(wrapper.vm.showDialog).toEqual(true);
+    expect(wrapper.vm.state).toEqual('edit');
     expect(wrapper.vm.currentId).toEqual(1);
     expect(wrapper.vm.currentLocation).toEqual('test location');
     expect(wrapper.vm.currentPhysical).toEqual(true);
 
     wrapper.vm.editLocation(1, 'test location', true);
     expect(wrapper.vm.currentId).toEqual(-1);
-    expect(wrapper.vm.showDialog).toEqual(false);
+    expect(wrapper.vm.state).toEqual('ok');
   });
 });

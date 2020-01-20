@@ -1,36 +1,39 @@
 <template>
   <div class="categories">
 
-    <div v-if="loading" class="loader">
+    <div v-if="state === State.LOADING" class="loader">
       <md-progress-spinner md-mode="indeterminate"></md-progress-spinner>
     </div>
 
     <empty-page
-      v-if="!loading && categories.length == 0 && !showDialog && !errored"
+      v-if="state === State.EMPTY"
       resource="category" :action="true"
       @resource-created="newCategory()">
     </empty-page>
 
-<error-state v-if="errored" resource="category" @reload-page="reloadPage()"></error-state>
+    <error-state
+      v-if="state === State.ERRORED" resource="category"
+      @reload-page="reloadPage()">
+    </error-state>
 
-   <div class="edit-form-wrapper" v-if="!loading && showDialog && !errored">
+    <div class="edit-form-wrapper" v-if="state === State.EDIT">
       <div class="close-button-wrapper">
-        <md-button class="md-icon-button" @click="showDialog = false; currentId = -1">
+        <md-button class="md-icon-button" @click="closeEdit()">
           <md-icon>close</md-icon>
         </md-button>
       </div>
       <category-form
       :method="dialogMethod" :id="currentId" :currentLabel="currentLabel"
       :currentDescription="currentDescription"
-      @category-added-or-modified="fetchData(); showDialog = false;"
-      ></category-form>
-   </div>
+      @category-added-or-modified="fetchData()">
+      </category-form>
+    </div>
 
-  <div v-if="!loading && categories.length > 0 && showDialog && !errored" class="divider-wrapper">
+  <div v-if="State === State.EDIT && categories.length > 0" class="divider-wrapper">
     <md-divider></md-divider>
   </div>
 
-   <div class="md-layout" v-if="!loading && categories.length > 0 && !errored">
+   <div class="md-layout" v-if="state === State.OK || state === State.EDIT">
      <div
       v-for="(category, key) in categories" :key="key"
       @click="editCategory(category.id, category.label, category.description)"
@@ -44,7 +47,7 @@
      </div>
    </div>
 
-   <div class="add-button-wrapper" v-if="!loading && categories.length > 0 && !errored">
+   <div class="add-button-wrapper" v-if="state === State.OK">
      <md-button class="md-fab md-primary" @click="newCategory()">
        <md-icon>add</md-icon>
      </md-button>
@@ -66,6 +69,14 @@ import Category from '@/components/category/Category.vue';
 import CategoryForm from '@/components/category/CategoryForm.vue';
 import config from '../config';
 
+const State = {
+  LOADING: 'loading',
+  ERRORED: 'errored',
+  EMPTY: 'empty',
+  OK: 'ok',
+  EDIT: 'edit',
+};
+
 export default {
   mounted() {
     this.fetchData();
@@ -75,15 +86,14 @@ export default {
     return {
       categories: [],
       environment: process.env.NODE_ENV,
-      showDialog: false,
       dialogMethod: 'create',
       currentId: -1,
       currentLabel: '',
       currentDescription: '',
-      loading: true,
       errorDisplayed: false,
-      errored: false,
       resource: 'categories_list',
+      State,
+      state: State.LOADING,
     };
   },
   computed: {
@@ -104,36 +114,38 @@ export default {
           headers: this.buildHeaders(),
           withCredentials: true,
         })
-        .catch(() => {
-          this.errored = true;
-          this.errorDisplayed = true;
-          this.categories = [];
-          this.loading = false;
-        })
         .then((response) => {
           if (response) {
             this.categories = response.data;
-            this.loading = false;
+            this.state = this.categories.length === 0 ? State.EMPTY : State.OK;
           }
+        })
+        .catch(() => {
+          this.errorDisplayed = true;
+          this.categories = [];
+          this.state = State.ERRORED;
         });
     },
     newCategory() {
       this.dialogMethod = 'create';
-      this.showDialog = true;
+      this.state = State.EDIT;
     },
     reloadPage() {
       this.$router.go();
     },
+    closeEdit() {
+      this.state = this.categories.length === 0 ? State.EMPTY : State.OK;
+      this.currentId = -1;
+    },
     editCategory(id, label, description) {
       if (id === this.currentId) {
-        this.showDialog = false;
-        this.currentId = -1;
+        this.closeEdit();
       } else {
         this.dialogMethod = 'modify';
         this.currentId = id;
         this.currentLabel = label;
         this.currentDescription = description;
-        this.showDialog = true;
+        this.state = State.EDIT;
       }
     },
   },
