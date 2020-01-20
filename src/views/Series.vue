@@ -190,7 +190,6 @@ export default {
       this.fetchData();
     },
     onSelect(id) {
-      console.log(`Selected serie ${id}`);
       this.selectedId = id;
       this.$nextTick(() => {
         this.scrollTo(id);
