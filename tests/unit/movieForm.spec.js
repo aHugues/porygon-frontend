@@ -90,6 +90,8 @@ describe('MovieForm.vue', () => {
       stubs,
       propsData: {
         method: 'create',
+        categories: [],
+        locations: [],
       },
       mocks: {
         $ml,
@@ -106,6 +108,8 @@ describe('MovieForm.vue', () => {
       stubs,
       propsData: {
         method: 'modify',
+        categories: [],
+        locations: [],
         currentMovie: {
           title: 'test title',
           year: 2019,
@@ -143,6 +147,8 @@ describe('MovieForm.vue', () => {
       stubs,
       propsData: {
         method: 'modify',
+        categories: [],
+        locations: [],
         currentMovie: {
           title: 'test title',
           year: 2019,
@@ -177,6 +183,8 @@ describe('MovieForm.vue', () => {
     const wrapper = shallowMount(MovieForm, {
       stubs,
       propsData: {
+        categories: [],
+        locations: [],
         method: 'create',
       },
       mocks: {
@@ -194,6 +202,8 @@ describe('MovieForm.vue', () => {
       stubs,
       propsData: {
         method: 'modify',
+        categories: [],
+        locations: [],
         currentMovie: {
           title: 'test title',
           year: 2019,
@@ -226,6 +236,8 @@ describe('MovieForm.vue', () => {
       stubs,
       propsData: {
         method: 'modify',
+        categories: [],
+        locations: [],
         currentMovie: {
           id: 42,
           title: 'test title',
@@ -268,6 +280,8 @@ describe('MovieForm.vue', () => {
     const wrapper = shallowMount(MovieForm, {
       stubs,
       propsData: {
+        categories: [],
+        locations: [],
         currentMovie: {
           id: 42,
           title: 'test title',
@@ -307,6 +321,8 @@ describe('MovieForm.vue', () => {
     const wrapper = shallowMount(MovieForm, {
       stubs,
       propsData: {
+        categories: [],
+        locations: [],
         method: 'create',
       },
       mocks: {
@@ -330,6 +346,8 @@ describe('MovieForm.vue', () => {
     const wrapper = shallowMount(MovieForm, {
       stubs,
       propsData: {
+        categories: [],
+        locations: [],
         currentMovie: {
           id: 42,
           actors: 'roger,rabbit',

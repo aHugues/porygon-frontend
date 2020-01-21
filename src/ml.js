@@ -118,6 +118,8 @@ export default new MLCreate({
         reload_button: 'Reload page',
         errored_description: 'An error has occured during loading. Please reload this page.',
         auth: 'An error has occured during authentication. Please reload this page.',
+        empty_category: 'No category are present in the database. you should create at least one before continuing.',
+        empty_location: 'No location are present in the database. you should create at least one before continuing.',
         resources: {
           movies_list: 'Error loading movies list from the server',
           series_list: 'Error loading series list from the server',
@@ -243,6 +245,8 @@ export default new MLCreate({
         reload_button: 'Recharger la page',
         errored_description: "Une erreur s'est produite durant le chargement. Veuillez recharger la page.",
         auth: "Une erreur s'est produite lors de l'authentification, veuillez recharger la page.",
+        empty_category: "Aucune catégorie n'est présente dans la base de données. Veuillez en créer au moins une avant de continuer",
+        empty_location: "Aucun emplacement n'est présent dans la base de données. Veuillez en créer au moins un avant de continuer",
         resources: {
           movies_list: 'Erreur lors du téléchargement de la liste des films depuis le serveur',
           series_list: 'Erreur lors du téléchargement de la liste des séries depuis le serveur',
