@@ -1,5 +1,9 @@
 <template>
 <div class="serie-edit-form">
+
+    <resource-warning resource="location" v-if="locations.length === 0"></resource-warning>
+    <resource-warning resource="category" v-if="categories.length === 0"></resource-warning>
+
     <form novalidate @submit.prevent="validateSerie">
       <div class="md-layout md-gutter">
 
@@ -118,6 +122,7 @@ import {
   required, maxLength, integer, between,
 } from 'vuelidate/lib/validators';
 import axios from 'axios';
+import ResourceWarning from '../misc/ResourceWarning.vue';
 import requests from '../../utils/requests';
 
 export default {
@@ -182,6 +187,9 @@ export default {
         maxLength: maxLength(255),
       },
     },
+  },
+  components: {
+    ResourceWarning,
   },
   props: {
     method: {

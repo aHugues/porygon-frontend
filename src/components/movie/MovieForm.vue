@@ -1,6 +1,11 @@
 <template>
 <div class="movie-edit-form">
 
+    <div class="md-layout md-gutter">
+      <resource-warning resource="location" v-if="locations.length === 0"></resource-warning>
+      <resource-warning resource="category" v-if="categories.length === 0"></resource-warning>
+    </div>
+
     <form novalidate @submit.prevent="validateMovie">
       <div class="md-layout md-gutter">
 
@@ -155,6 +160,7 @@ import {
   required, maxLength, between, integer,
 } from 'vuelidate/lib/validators';
 import axios from 'axios';
+import ResourceWarning from '../misc/ResourceWarning.vue';
 import requests from '../../utils/requests';
 
 export default {
@@ -202,6 +208,9 @@ export default {
       errored: false,
       actorsList: [],
     };
+  },
+  components: {
+    ResourceWarning,
   },
   validations: {
     movie: {

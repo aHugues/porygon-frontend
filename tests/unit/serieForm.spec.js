@@ -80,6 +80,8 @@ describe('SerieForm.vue', () => {
       stubs,
       propsData: {
         method: 'create',
+        categories: [],
+        locations: [],
       },
       mocks: {
         $ml,
@@ -96,6 +98,8 @@ describe('SerieForm.vue', () => {
       stubs,
       propsData: {
         method: 'modify',
+        categories: [],
+        locations: [],
         currentSerie: {
           title: 'test title',
           season: 1,
@@ -136,6 +140,8 @@ describe('SerieForm.vue', () => {
       stubs,
       propsData: {
         method: 'create',
+        categories: [],
+        locations: [],
       },
       mocks: {
         $ml,
@@ -152,6 +158,8 @@ describe('SerieForm.vue', () => {
       stubs,
       propsData: {
         method: 'modify',
+        categories: [],
+        locations: [],
         currentSerie: {
           title: 'test title',
           season: 1,
@@ -186,6 +194,8 @@ describe('SerieForm.vue', () => {
       stubs,
       propsData: {
         method: 'modify',
+        categories: [],
+        locations: [],
         currentSerie: {
           id: 42,
           title: 'test title',
@@ -231,6 +241,8 @@ describe('SerieForm.vue', () => {
     const wrapper = shallowMount(SerieForm, {
       stubs,
       propsData: {
+        categories: [],
+        locations: [],
         currentSerie: {
           id: 42,
           title: 'test title',
@@ -272,6 +284,8 @@ describe('SerieForm.vue', () => {
     const wrapper = shallowMount(SerieForm, {
       stubs,
       propsData: {
+        categories: [],
+        locations: [],
         method: 'create',
       },
       mocks: {
@@ -295,6 +309,8 @@ describe('SerieForm.vue', () => {
     const wrapper = shallowMount(SerieForm, {
       stubs,
       propsData: {
+        categories: [],
+        locations: [],
         currentSerie: {
           id: 42,
         },
