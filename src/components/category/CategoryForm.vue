@@ -53,7 +53,7 @@
 import { validationMixin } from 'vuelidate';
 import { required, maxLength } from 'vuelidate/lib/validators';
 import axios from 'axios';
-import config from '../../config';
+import requests from '../../utils/requests';
 
 export default {
   name: 'CategoryForm',
@@ -77,12 +77,7 @@ export default {
       label: '',
       description: '',
       errored: false,
-      environment: process.env.NODE_ENV,
     };
-  },
-  computed: {
-    apiBaseUrl() { return config[this.environment].porygonApiBaseUrl; },
-    authenticationRequired() { return config[this.environment].porygonApiAuthentication; },
   },
   validations: {
     label: {
@@ -103,24 +98,18 @@ export default {
   },
   methods: {
     deleteCategory() {
+      const options = requests.buildOptions();
       axios({
         method: 'delete',
-        url: `${this.apiBaseUrl}/categories/${this.id}`,
-        headers: this.buildHeaders(),
-        withCredentials: true,
+        url: requests.buildUrl(`categories/${this.id}`),
+        headers: options.headers,
+        withCredentials: options.withCredentials,
       })
         .then(() => this.$emit('category-added-or-modified'))
         .catch((error) => {
           this.errored = true;
           console.error(error);
         });
-    },
-    buildHeaders() {
-      const headers = { 'Content-Type': 'application/json' };
-      if (this.authenticationRequired) {
-        headers.Authorization = `Bearer ${localStorage.getItem('vue-token')}`;
-      }
-      return headers;
     },
     getValidationClass(fieldName) {
       const field = this.$v[fieldName];
@@ -137,11 +126,12 @@ export default {
     saveCategory() {
       const method = (this.method === 'create') ? 'post' : 'put';
       const urlId = (this.method === 'modify') ? `/${this.id}` : '';
+      const options = requests.buildOptions();
       axios({
         method,
-        url: `${this.apiBaseUrl}/categories${urlId}`,
-        withCredentials: true,
-        headers: this.buildHeaders(),
+        url: requests.buildUrl(`categories${urlId}`),
+        withCredentials: options.withCredentials,
+        headers: options.headers,
         data: {
           label: this.label,
           description: this.description,

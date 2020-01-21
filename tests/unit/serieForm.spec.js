@@ -1,7 +1,6 @@
 import { shallowMount } from '@vue/test-utils';
 import axios from 'axios';
 import SerieForm from '@/components/serie/SerieForm.vue';
-import setGlobals from '../utils/localStorage';
 
 jest.mock('../../src/config', () => ({
   test: {
@@ -71,7 +70,6 @@ const invalidV = {
   },
 };
 
-const vueToken = 'thisIsAToken';
 
 const stubs = ['md-field', 'md-switch', 'md-input', 'md-snackbar',
   'md-button', 'md-select', 'md-option'];
@@ -131,21 +129,6 @@ describe('SerieForm.vue', () => {
     expect(wrapper.vm.supports).toContain('dvd');
     expect(wrapper.vm.supports).not.toContain('bluray');
     expect(wrapper.vm.serie.categories).toEqual([1, 2]);
-  });
-
-  it('generates the correct dev API urls', () => {
-    const wrapper = shallowMount(SerieForm, {
-      stubs,
-      propsData: {
-        method: 'create',
-      },
-      mocks: {
-        $ml,
-      },
-    });
-    // wrapper.vm.saveLocation();
-    expect(wrapper.vm.apiBaseUrl).toBe('http://example.com:4000');
-    expect(wrapper.vm.authenticationRequired).toBe(false);
   });
 
   it('emits the correct event when serie is saved', () => {
@@ -284,29 +267,6 @@ describe('SerieForm.vue', () => {
       expect(axiosArgs.data).not.toBeDefined();
     });
   });
-
-  it('correctly set the authorization header', () => {
-    setGlobals();
-    global.window.localStorage.setItem('vue-token', vueToken);
-    process.env.NODE_ENV = 'testAuthentication';
-    const wrapper = shallowMount(SerieForm, {
-      stubs,
-      propsData: {
-        method: 'create',
-      },
-      mocks: {
-        'this.authenticationRequired': true,
-        $ml,
-      },
-    });
-    const headers = wrapper.vm.buildHeaders();
-    expect(wrapper.vm.authenticationRequired).toBe(true);
-    expect(headers.Authorization).toBe('Bearer thisIsAToken');
-    expect(headers['Content-Type']).toBe('application/json');
-
-    process.env.NODE_ENV = 'test';
-  });
-
 
   it('correctly saves after validating', () => {
     const wrapper = shallowMount(SerieForm, {

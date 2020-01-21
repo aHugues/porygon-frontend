@@ -2,7 +2,6 @@
 import { shallowMount } from '@vue/test-utils';
 import axios from 'axios';
 import LocationForm from '@/components/location/LocationForm.vue';
-import setGlobals from '../utils/localStorage';
 
 // const mockAxios = require('../utils/axios.mock');
 // import setGlobals from '../utils/localStorage';
@@ -52,7 +51,6 @@ const invalidV = {
   location: {},
 };
 
-const vueToken = 'thisIsAToken';
 
 const stubs = ['md-card', 'md-card-header', 'md-card-content', 'md-snackbar',
   'md-card-actions', 'md-field', 'md-switch', 'md-input', 'md-button'];
@@ -92,21 +90,6 @@ describe('LocationForm.vue', () => {
     expect(wrapper.vm.$props.method).toBe('modify');
     expect(wrapper.vm.location).toBe('test');
     expect(wrapper.vm.physical).toBe(true);
-  });
-
-  it('generates the correct dev API urls', () => {
-    const wrapper = shallowMount(LocationForm, {
-      stubs,
-      propsData: {
-        method: 'create',
-      },
-      mocks: {
-        $ml,
-      },
-    });
-    // wrapper.vm.saveLocation();
-    expect(wrapper.vm.apiBaseUrl).toBe('http://example.com:4000');
-    expect(wrapper.vm.authenticationRequired).toBe(false);
   });
 
   it('emits the correct event when location is saved', () => {
@@ -184,28 +167,6 @@ describe('LocationForm.vue', () => {
       expect(axiosArgs.headers.Authorization).not.toBeDefined();
       expect(axiosArgs.data).not.toBeDefined();
     });
-  });
-
-  it('correctly set the authorization header', () => {
-    setGlobals();
-    global.window.localStorage.setItem('vue-token', vueToken);
-    process.env.NODE_ENV = 'testAuthentication';
-    const wrapper = shallowMount(LocationForm, {
-      stubs,
-      propsData: {
-        method: 'modify',
-      },
-      mocks: {
-        'this.authenticationRequired': true,
-        $ml,
-      },
-    });
-    const headers = wrapper.vm.buildHeaders();
-    expect(wrapper.vm.authenticationRequired).toBe(true);
-    expect(headers.Authorization).toBe('Bearer thisIsAToken');
-    expect(headers['Content-Type']).toBe('application/json');
-
-    process.env.NODE_ENV = 'test';
   });
 
   it('Correctly watches currentLocation updates', () => {

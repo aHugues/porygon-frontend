@@ -52,7 +52,7 @@
 import { validationMixin } from 'vuelidate';
 import { required, maxLength } from 'vuelidate/lib/validators';
 import axios from 'axios';
-import config from '../../config';
+import requests from '../../utils/requests';
 
 export default {
   name: 'LocationForm',
@@ -79,10 +79,6 @@ export default {
       errored: false,
     };
   },
-  computed: {
-    apiBaseUrl() { return config[this.environment].porygonApiBaseUrl; },
-    authenticationRequired() { return config[this.environment].porygonApiAuthentication; },
-  },
   validations: {
     location: {
       required,
@@ -104,24 +100,18 @@ export default {
   },
   methods: {
     deleteLocation() {
+      const options = requests.buildOptions();
       axios({
         method: 'delete',
-        url: `${this.apiBaseUrl}/locations/${this.id}`,
-        withCredentials: true,
-        headers: this.buildHeaders(),
+        url: requests.buildUrl(`locations/${this.id}`),
+        withCredentials: options.withCredentials,
+        headers: options.headers,
       })
         .then(() => this.$emit('location-added-or-modified'))
         .catch((error) => {
           this.errored = true;
           console.error(error);
         });
-    },
-    buildHeaders() {
-      const headers = { 'Content-Type': 'application/json' };
-      if (this.authenticationRequired) {
-        headers.Authorization = `Bearer ${localStorage.getItem('vue-token')}`;
-      }
-      return headers;
     },
     getValidationClass(fieldName) {
       const field = this.$v[fieldName];
@@ -138,11 +128,12 @@ export default {
     saveLocation() {
       const method = (this.method === 'create') ? 'post' : 'put';
       const urlId = (this.method === 'modify') ? `/${this.id}` : '';
+      const options = requests.buildOptions();
       axios({
         method,
-        url: `${this.apiBaseUrl}/locations${urlId}`,
-        headers: this.buildHeaders(),
-        withCredentials: true,
+        url: requests.buildUrl(`locations${urlId}`),
+        headers: options.headers,
+        withCredentials: options.withCredentials,
         data: {
           location: this.location,
           is_physical: this.physical,

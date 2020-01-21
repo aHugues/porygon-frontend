@@ -69,7 +69,7 @@ import EmptyPage from '@/components/misc/EmptyPage.vue';
 import ErrorState from '@/components/misc/ErrorState.vue';
 import Serie from '@/components/serie/Serie.vue';
 import SerieForm from '@/components/serie/SerieForm.vue';
-import config from '../config';
+import requests from '../utils/requests';
 
 const State = {
   LOADING: 'loading',
@@ -114,24 +114,10 @@ export default {
     SerieForm,
     ErrorState,
   },
-  computed: {
-    apiBaseUrl() { return config[this.environment].porygonApiBaseUrl; },
-    authenticationRequired() { return config[this.environment].porygonApiAuthentication; },
-  },
   methods: {
-    buildHeaders() {
-      const headers = { 'Content-Type': 'application/json' };
-      if (this.authenticationRequired) {
-        headers.Authorization = `Bearer ${localStorage.getItem('vue-token')}`;
-      }
-      return headers;
-    },
     fetchLocations() {
       axios
-        .get(`${this.apiBaseUrl}/locations`, {
-          headers: this.buildHeaders(),
-          withCredentials: true,
-        })
+        .get(requests.buildUrl('locations'), requests.buildOptions())
         .then((response) => {
           if (response) {
             this.locations = response.data;
@@ -148,10 +134,7 @@ export default {
     },
     fetchCategories() {
       axios
-        .get(`${this.apiBaseUrl}/categories`, {
-          headers: this.buildHeaders(),
-          withCredentials: true,
-        })
+        .get(requests.buildUrl('categories'), requests.buildOptions())
         .then((response) => {
           if (response) {
             this.categories = response.data;
@@ -168,10 +151,7 @@ export default {
     },
     fetchSeries() {
       axios
-        .get(`${this.apiBaseUrl}/series`, {
-          headers: this.buildHeaders(),
-          withCredentials: true,
-        })
+        .get(requests.buildUrl('series'), requests.buildOptions())
         .then((response) => {
           if (response) {
             this.expanded = Array(response.data.length);
