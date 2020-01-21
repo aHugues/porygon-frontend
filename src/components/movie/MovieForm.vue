@@ -155,7 +155,7 @@ import {
   required, maxLength, between, integer,
 } from 'vuelidate/lib/validators';
 import axios from 'axios';
-import config from '../../config';
+import requests from '../../utils/requests';
 
 export default {
   name: 'MovieForm',
@@ -198,15 +198,10 @@ export default {
   data() {
     return {
       movie: {},
-      environment: process.env.NODE_ENV,
       supports: [],
       errored: false,
       actorsList: [],
     };
-  },
-  computed: {
-    apiBaseUrl() { return config[this.environment].porygonApiBaseUrl; },
-    authenticationRequired() { return config[this.environment].porygonApiAuthentication; },
   },
   validations: {
     movie: {
@@ -251,24 +246,18 @@ export default {
   },
   methods: {
     deleteMovie() {
+      const options = requests.buildOptions();
       axios({
         method: 'delete',
-        url: `${this.apiBaseUrl}/movies/${this.movie.id}`,
-        headers: this.buildHeaders(),
-        withCredentials: true,
+        url: requests.buildUrl(`movies/${this.movie.id}`),
+        headers: options.headers,
+        withCredentials: options.withCredentials,
       })
         .then(() => this.$emit('movie-added-or-modified'))
         .catch((error) => {
           this.errored = true;
           console.error(error);
         });
-    },
-    buildHeaders() {
-      const headers = { 'Content-Type': 'application/json' };
-      if (this.authenticationRequired) {
-        headers.Authorization = `Bearer ${localStorage.getItem('vue-token')}`;
-      }
-      return headers;
     },
     getValidationClass(fieldName) {
       const field = this.$v.movie[fieldName];
@@ -285,13 +274,14 @@ export default {
     saveMovie() {
       const method = (this.method === 'create') ? 'post' : 'put';
       const urlId = (this.method === 'modify') ? `/${this.movie.id}` : '';
+      const options = requests.buildOptions();
       delete this.movie.id;
       this.movie.actors = this.actorsList.join(',');
       axios({
         method,
-        url: `${this.apiBaseUrl}/movies${urlId}`,
-        headers: this.buildHeaders(),
-        withCredentials: true,
+        url: requests.buildUrl(`movies${urlId}`),
+        headers: options.headers,
+        withCredentials: options.withCredentials,
         data: this.movie,
       })
         .then(() => this.$emit('movie-added-or-modified'))

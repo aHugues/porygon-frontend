@@ -118,7 +118,7 @@ import {
   required, maxLength, integer, between,
 } from 'vuelidate/lib/validators';
 import axios from 'axios';
-import config from '../../config';
+import requests from '../../utils/requests';
 
 export default {
   name: 'SerieForm',
@@ -157,14 +157,9 @@ export default {
   data() {
     return {
       serie: {},
-      environment: process.env.NODE_ENV,
       supports: [],
       errored: false,
     };
-  },
-  computed: {
-    apiBaseUrl() { return config[this.environment].porygonApiBaseUrl; },
-    authenticationRequired() { return config[this.environment].porygonApiAuthentication; },
   },
   validations: {
     serie: {
@@ -201,24 +196,18 @@ export default {
   },
   methods: {
     deleteSerie() {
+      const options = requests.buildOptions();
       axios({
         method: 'delete',
-        url: `${this.apiBaseUrl}/series/${this.serie.id}`,
-        headers: this.buildHeaders(),
-        withCredentials: true,
+        url: requests.buildUrl(`series/${this.serie.id}`),
+        headers: options.headers,
+        withCredentials: options.withCredentials,
       })
         .then(() => this.$emit('serie-added-or-modified'))
         .catch((error) => {
           this.errored = true;
           console.error(error);
         });
-    },
-    buildHeaders() {
-      const headers = { 'Content-Type': 'application/json' };
-      if (this.authenticationRequired) {
-        headers.Authorization = `Bearer ${localStorage.getItem('vue-token')}`;
-      }
-      return headers;
     },
     getValidationClass(fieldName) {
       const field = this.$v.serie[fieldName];
@@ -235,12 +224,13 @@ export default {
     saveSerie() {
       const method = (this.method === 'create') ? 'post' : 'put';
       const urlId = (this.method === 'modify') ? `/${this.serie.id}` : '';
+      const options = requests.buildOptions();
       delete this.serie.id;
       axios({
         method,
-        url: `${this.apiBaseUrl}/series${urlId}`,
-        headers: this.buildHeaders(),
-        withCredentials: true,
+        url: requests.buildUrl(`series${urlId}`),
+        headers: options.headers,
+        withCredentials: options.withCredentials,
         data: this.serie,
       })
         .then(() => this.$emit('serie-added-or-modified'))

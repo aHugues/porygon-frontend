@@ -69,7 +69,7 @@ import EmptyPage from '@/components/misc/EmptyPage.vue';
 import ErrorState from '@/components/misc/ErrorState.vue';
 import Location from '@/components/location/Location.vue';
 import LocationForm from '@/components/location/LocationForm.vue';
-import config from '../config';
+import requests from '../utils/requests';
 
 const State = {
   LOADING: 'loading',
@@ -87,7 +87,6 @@ export default {
   data() {
     return {
       locations: [],
-      environment: process.env.NODE_ENV,
       dialogMethod: 'create',
       currentId: -1,
       currentLocation: '',
@@ -98,24 +97,10 @@ export default {
       state: State.LOADING,
     };
   },
-  computed: {
-    apiBaseUrl() { return config[this.environment].porygonApiBaseUrl; },
-    authenticationRequired() { return config[this.environment].porygonApiAuthentication; },
-  },
   methods: {
-    buildHeaders() {
-      const headers = { 'Content-Type': 'application/json' };
-      if (this.authenticationRequired) {
-        headers.Authorization = `Bearer ${localStorage.getItem('vue-token')}`;
-      }
-      return headers;
-    },
     fetchData() {
       axios
-        .get(`${this.apiBaseUrl}/locations`, {
-          headers: this.buildHeaders(),
-          withCredentials: true,
-        })
+        .get(requests.buildUrl('locations'), requests.buildOptions())
         .then((response) => {
           if (response) {
             this.locations = response.data;

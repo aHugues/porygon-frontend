@@ -30,7 +30,6 @@ const $ml = {
 };
 
 const stubs = ['md-card', 'md-card-header', 'md-card-content'];
-const vueToken = 'thisIsAToken';
 
 
 describe('VersionCheckComponent', () => {
@@ -42,23 +41,6 @@ describe('VersionCheckComponent', () => {
       },
     });
     expect(wrapper.contains('.md-title')).toBe(true);
-  });
-
-  it('correctly set the authorization header', () => {
-    global.window.localStorage.setItem('vue-token', vueToken);
-    process.env.NODE_ENV = 'testAuthentication';
-    const wrapper = shallowMount(VersionCheck, {
-      stubs,
-      mocks: {
-        $ml,
-      },
-    });
-    const headers = wrapper.vm.buildHeaders();
-    expect(wrapper.vm.authenticationRequired).toBe(true);
-    expect(headers.Authorization).toBe('Bearer thisIsAToken');
-    expect(headers['Content-Type']).toBe('application/json');
-
-    process.env.NODE_ENV = 'test';
   });
 
   it('correctly inits the component', async () => {

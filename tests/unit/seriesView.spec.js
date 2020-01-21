@@ -51,8 +51,6 @@ const stubs = [
   'md-snackbar',
 ];
 
-const vueToken = 'thisIsAToken';
-
 describe('SeriesView', () => {
   it('Correctly loads', () => {
     const wrapper = shallowMount(Series, {
@@ -62,23 +60,6 @@ describe('SeriesView', () => {
       },
     });
     expect(wrapper.contains('.series')).toBe(true);
-  });
-
-  it('correctly set the authorization header', () => {
-    global.window.localStorage.setItem('vue-token', vueToken);
-    process.env.NODE_ENV = 'testAuthentication';
-    const wrapper = shallowMount(Series, {
-      stubs,
-      mocks: {
-        $ml,
-      },
-    });
-    const headers = wrapper.vm.buildHeaders();
-    expect(wrapper.vm.authenticationRequired).toBe(true);
-    expect(headers.Authorization).toBe('Bearer thisIsAToken');
-    expect(headers['Content-Type']).toBe('application/json');
-
-    process.env.NODE_ENV = 'test';
   });
 
   it('correctly sets the data when creating a serie', async () => {

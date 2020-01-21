@@ -25,6 +25,7 @@
 
 import axios from 'axios';
 import config from '../../config';
+import requests from '../../utils/requests';
 
 const State = {
   LOADING: 0,
@@ -45,7 +46,6 @@ export default {
   },
   data() {
     return {
-      environment: process.env.NODE_ENV,
       distantVersion: '',
       pageState: State.LOADING,
       state: State,
@@ -53,17 +53,8 @@ export default {
   },
   computed: {
     minRequiredApiVersion() { return config.all.porygonApiMinVersion; },
-    apiBaseUrl() { return config[this.environment].porygonApiBaseUrl; },
-    authenticationRequired() { return config[this.environment].porygonApiAuthentication; },
   },
   methods: {
-    buildHeaders() {
-      const headers = { 'Content-Type': 'application/json' };
-      if (this.authenticationRequired) {
-        headers.Authorization = `Bearer ${localStorage.getItem('vue-token')}`;
-      }
-      return headers;
-    },
     parseVersionNumber(version) {
       const parsedVersion = version.replace('v', '').split('.').map(x => Number(x));
       while (parsedVersion.length !== 3) {
@@ -85,10 +76,7 @@ export default {
     getApiVersion() {
       return new Promise((resolve, reject) => {
         axios
-          .get(this.apiBaseUrl, {
-            headers: this.buildHeaders(),
-            withCredentials: true,
-          })
+          .get(requests.buildUrl(), requests.buildOptions())
           .then((response) => {
             this.distantVersion = response.headers['porygon-api-version'];
             resolve();
