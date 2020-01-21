@@ -12,7 +12,7 @@ VueJS web interface to manage a movies and series collection, along with categor
 
 ### Prerequisites
 
-You need **Node.JS** (version 8 or later) to install the application, as well as the VueCLI package
+You need **Node.JS** (version 10 or later) to install the application, as well as the VueCLI package
 
 The Porygon API must also be installed and be accessible, further instructions are available [here](https://github.com/ahugues/porygon-backend)
 
