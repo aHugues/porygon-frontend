@@ -333,4 +333,8 @@ export default {
   padding-right: 10px;
   text-align: right;
 }
+
+.md-content-menu-container {
+  max-width: 500px !important;
+}
 </style>
