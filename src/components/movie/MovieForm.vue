@@ -93,7 +93,7 @@
 
         </div>
 
-        <div class="md-layout-item md-size-100">
+        <div class="md-layout-item md-size-50 md-small-size-100">
           <md-field>
             <label for="support">{{ $ml.get('movie').supports }}</label>
             <md-select v-model="supports" name="supports" id="supports" multiple>
@@ -104,7 +104,7 @@
           </md-field>
         </div>
 
-        <div class="md-layout-item md-size-100">
+        <div class="md-layout-item md-size-50 md-small-size-100">
           <md-field>
             <label for="location">{{ $ml.get('location').location }}</label>
             <md-select v-model="movie.location_id" name="location" id="location">
