@@ -27,7 +27,7 @@ after_success:
 deploy:
   - provider: script
     skip_cleanup: true
-    script: ansible-playbook deploy/playbook.yml --private-key=deploy/ssh_key --inventory deploy/inventory
+    script: ./deploy/deploy
     on:
       node_js: 12
       branch: master

@@ -1,0 +1,11 @@
+#!/bin/bash
+
+package_version=v$(npm version | grep "porygon-frontend" | awk -F ':' '{ print $2; }' | tr -d ",' ")
+
+if [ "$package_version" != "$TRAVIS_TAG" ]
+then
+    >&2 echo "ERROR: tag [$TRAVIS_TAG] and package version [$package_version] don't match, exiting..."
+    exit 1
+fi
+
+ansible-playbook deploy/playbook.yml --private-key=deploy/ssh_key --inventory deploy/inventory
