@@ -76,13 +76,13 @@
 
         <div class="md-layout-item md-size-100 md-layout md-gutter md-alignment-bottom-center">
 
-          <div class="md-layout-item md-size-10 add-actor-button">
-            <md-button class="md-icon-button" @click="addActor()">
+          <div class="md-layout-item md-size-5 md-medium-size-10 add-actor-button-wrapper">
+            <md-button class="md-icon-button add-actor-button" @click="addActor()">
               <md-icon>add</md-icon>
             </md-button>
           </div>
 
-          <div class="md-layout-item md-size-90">
+          <div class="md-layout-item md-size-95 md-medium-size-90">
             <div v-for="(actor, key) in actorsList" :key="key" >
               <md-field v-if="shouldDisplay(key)" md-clearable @md-clear="removeActor(key)">
                 <label :for="actorsList[key]">{{ $ml.get('movie').actors }}</label>
@@ -206,7 +206,7 @@ export default {
       movie: {},
       supports: [],
       errored: false,
-      actorsList: [],
+      actorsList: [''],
     };
   },
   components: {
@@ -325,6 +325,12 @@ export default {
   margin: auto;
 }
 .add-actor-button {
+  width: 100%;
+  margin: auto;
+}
+.add-actor-button-wrapper {
   padding-bottom: 20px;
+  padding-right: 10px;
+  text-align: right;
 }
 </style>
