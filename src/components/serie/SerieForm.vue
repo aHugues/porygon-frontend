@@ -20,27 +20,7 @@
           </md-field>
         </div>
 
-        <div class="md-layout-item md-size-50 md-small-size-100">
-          <md-field :class="getValidationClass('season')">
-            <label for="season">{{ $ml.get('serie').season }}</label>
-            <md-input name="season" id="season" v-model="serie.season"/>
-            <span class="md-error" v-if="!$v.serie.season.integer">
-              {{ $ml.get('serie').season_integer }}
-            </span>
-          </md-field>
-        </div>
-
-        <div class="md-layout-item md-size-50 md-small-size-100">
-          <md-field :class="getValidationClass('episodes')">
-            <label for="episodes">{{ $ml.get('serie').episodes }}</label>
-            <md-input name="episodes" id="episodes" v-model="serie.episodes"/>
-            <span class="md-error" v-if="!$v.serie.episodes.integer">
-              {{ $ml.get('serie').episodes_integer }}
-            </span>
-          </md-field>
-        </div>
-
-        <div class="md-layout-item md-size-100">
+        <div class="md-layout-item md-size-33 md-small-size-100">
           <md-field :class="getValidationClass('year')">
             <label for="year">{{ $ml.get('serie').year }}</label>
             <md-input name="year" id="year" v-model="serie.year"/>
@@ -56,7 +36,27 @@
           </md-field>
         </div>
 
-        <div class="md-layout-item md-size-100">
+        <div class="md-layout-item md-size-33 md-small-size-100">
+          <md-field :class="getValidationClass('season')">
+            <label for="season">{{ $ml.get('serie').season }}</label>
+            <md-input name="season" id="season" v-model="serie.season"/>
+            <span class="md-error" v-if="!$v.serie.season.integer">
+              {{ $ml.get('serie').season_integer }}
+            </span>
+          </md-field>
+        </div>
+
+        <div class="md-layout-item md-size-33 md-small-size-100">
+          <md-field :class="getValidationClass('episodes')">
+            <label for="episodes">{{ $ml.get('serie').episodes }}</label>
+            <md-input name="episodes" id="episodes" v-model="serie.episodes"/>
+            <span class="md-error" v-if="!$v.serie.episodes.integer">
+              {{ $ml.get('serie').episodes_integer }}
+            </span>
+          </md-field>
+        </div>
+
+        <div class="md-layout-item md-size-50 md-small-size-100">
           <md-field>
             <label for="support">{{ $ml.get('serie').supports }}</label>
             <md-select v-model="supports" name="supports" id="supports" multiple>
@@ -67,7 +67,7 @@
           </md-field>
         </div>
 
-        <div class="md-layout-item md-size-100">
+        <div class="md-layout-item md-size-50 md-small-size-100">
           <md-field>
             <label for="location">{{ $ml.get('location').location }}</label>
             <md-select v-model="serie.location_id" name="location" id="location">
