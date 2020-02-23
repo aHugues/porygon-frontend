@@ -28,26 +28,31 @@
       @reload-page="reloadPage()">
     </error-state>
 
-     <div v-if="state === State.OK">
-      <md-list :md-expand-single="true">
-        <div v-for="(serie, key) in series" :key="key" :id="`serie-elt-${key}`">
-          <md-list-item @click="onSelect(key)" md-expand
-          :md-expanded.sync="expanded[key - 1]">
-            <serie
-            :serie="serie.Serie" :location="serie.Location"
-            :categories="serie.Categories.filter(category => category.id !== null)"
-            ></serie>
-            <div slot="md-expand">
-              <serie-form :currentSerie="serie.Serie" :serieCategories="serie.Categories"
-              v-if="expanded[key - 1]"
-              :categories="categories" :locations="locations"
-              :method="'modify'"
-              @serie-added-or-modified="refreshList(key - 1)"></serie-form>
+     <div v-if="state === State.OK" class="md-layout md-gutter series-content">
+       <div class="md-layout-item md-size-80">
+          <md-list :md-expand-single="true">
+            <div v-for="(serie, key) in series" :key="key" :id="`serie-elt-${key}`">
+              <md-list-item @click="onSelect(key)" md-expand
+              :md-expanded.sync="expanded[key - 1]">
+                <serie
+                :serie="serie.Serie" :location="serie.Location"
+                :categories="serie.Categories.filter(category => category.id !== null)"
+                ></serie>
+                <div slot="md-expand">
+                  <serie-form :currentSerie="serie.Serie" :serieCategories="serie.Categories"
+                  v-if="expanded[key - 1]"
+                  :categories="categories" :locations="locations"
+                  :method="'modify'"
+                  @serie-added-or-modified="refreshList(key - 1)"></serie-form>
+                </div>
+              </md-list-item>
+              <md-divider></md-divider>
             </div>
-          </md-list-item>
-          <md-divider></md-divider>
-        </div>
-      </md-list>
+          </md-list>
+       </div>
+       <div class="md-layout-item md-size-20" :class="rightDrawerBorderClass">
+         <filter-bar></filter-bar>
+       </div>
     </div>
 
     <div class="add-button-wrapper" v-if="state === State.OK">
@@ -69,6 +74,7 @@ import EmptyPage from '@/components/misc/EmptyPage.vue';
 import ErrorState from '@/components/misc/ErrorState.vue';
 import Serie from '@/components/serie/Serie.vue';
 import SerieForm from '@/components/serie/SerieForm.vue';
+import FilterBar from '@/components/filterbar/FilterBar.vue';
 import requests from '../utils/requests';
 
 const State = {
@@ -113,6 +119,13 @@ export default {
     Serie,
     SerieForm,
     ErrorState,
+    FilterBar,
+  },
+  computed: {
+    rightDrawerBorderClass() {
+      const currentTheme = localStorage.getItem('vue-user-theme');
+      return (currentTheme === 'porygon-light') ? 'right-filter-drawer-light' : 'right-filter-drawer-dark';
+    },
   },
   methods: {
     fetchLocations() {
@@ -220,6 +233,19 @@ export default {
 
 .series {
   height: 100%;
+}
+
+.series-content {
+  height: 100%;
+  width: 100%;
+}
+
+.right-filter-drawer-dark {
+  border-left: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.right-filter-drawer-light {
+  border-left: 1px solid rgba(0, 0, 0, 0.12);
 }
 
 .add-button-wrapper {

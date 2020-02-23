@@ -28,26 +28,31 @@
       @reload-page="reloadPage()">
     </error-state>
 
-    <div v-if="state === State.OK">
-      <md-list :md-expand-single="true">
-        <div v-for="(movie, key) in movies" :key="key" :id="`movie-elt-${key}`">
-          <md-list-item @click="onSelect(key)" md-expand
-          :md-expanded.sync="expanded[key - 1]">
-            <movie
-            :movie="movie.Movie" :location="movie.Location"
-            :categories="movie.Categories.filter(category => category.id !== null)"
-            ></movie>
-            <div slot="md-expand">
-              <movie-form :currentMovie="movie.Movie" :movieCategories="movie.Categories"
-              v-if="expanded[key - 1]"
-              :categories="categories" :locations="locations"
-              :method="'modify'"
-              @movie-added-or-modified="refreshList(key - 1)"></movie-form>
-            </div>
-          </md-list-item>
-          <md-divider></md-divider>
-        </div>
-      </md-list>
+    <div v-if="state === State.OK" class="md-layout md-gutter movies-content">
+      <div class="md-layout-item md-size-80">
+        <md-list :md-expand-single="true">
+          <div v-for="(movie, key) in movies" :key="key" :id="`movie-elt-${key}`">
+            <md-list-item @click="onSelect(key)" md-expand
+            :md-expanded.sync="expanded[key - 1]">
+              <movie
+              :movie="movie.Movie" :location="movie.Location"
+              :categories="movie.Categories.filter(category => category.id !== null)"
+              ></movie>
+              <div slot="md-expand">
+                <movie-form :currentMovie="movie.Movie" :movieCategories="movie.Categories"
+                v-if="expanded[key - 1]"
+                :categories="categories" :locations="locations"
+                :method="'modify'"
+                @movie-added-or-modified="refreshList(key - 1)"></movie-form>
+              </div>
+            </md-list-item>
+            <md-divider></md-divider>
+          </div>
+        </md-list>
+      </div>
+      <div class="md-layout-item md-size-20" :class="rightDrawerBorderClass">
+        <filter-bar></filter-bar>
+      </div>
     </div>
 
     <div class="add-button-wrapper" v-if="state === State.OK">
@@ -68,6 +73,7 @@
 import axios from 'axios';
 import EmptyPage from '@/components/misc/EmptyPage.vue';
 import ErrorState from '@/components/misc/ErrorState.vue';
+import FilterBar from '@/components/filterbar/FilterBar.vue';
 import Movie from '@/components/movie/Movie.vue';
 import MovieForm from '@/components/movie/MovieForm.vue';
 import requests from '../utils/requests';
@@ -113,6 +119,13 @@ export default {
     MovieForm,
     EmptyPage,
     ErrorState,
+    FilterBar,
+  },
+  computed: {
+    rightDrawerBorderClass() {
+      const currentTheme = localStorage.getItem('vue-user-theme');
+      return (currentTheme === 'porygon-light') ? 'right-filter-drawer-light' : 'right-filter-drawer-dark';
+    },
   },
   methods: {
     fetchLocations() {
@@ -220,6 +233,19 @@ export default {
 
 .movies {
   height: 100%;
+}
+
+.movies-content {
+  height: 100%;
+  width: 100%;
+}
+
+.right-filter-drawer-dark {
+  border-left: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.right-filter-drawer-light {
+  border-left: 1px solid rgba(0, 0, 0, 0.12);
 }
 
 .add-button-wrapper {

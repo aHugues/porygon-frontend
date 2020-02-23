@@ -1,5 +1,6 @@
 import { shallowMount } from '@vue/test-utils';
 import Series from '@/views/Series.vue';
+import setGlobals from '../utils/localStorage';
 
 jest.mock('../../src/config', () => ({
   test: {
@@ -14,6 +15,14 @@ jest.mock('../../src/config', () => ({
 jest.mock('axios', () => ({
   get: jest.fn(() => Promise.resolve({ data: [] })),
 }));
+
+const localStorageLight = {
+  'vue-user-theme': 'porygon-light',
+};
+
+const localStorageDark = {
+  'vue-user-theme': 'porygon-dark',
+};
 
 const $ml = {
   get: () => ({
@@ -60,6 +69,34 @@ describe('SeriesView', () => {
       },
     });
     expect(wrapper.contains('.series')).toBe(true);
+  });
+
+  it('Gets the correct class for drawer on light theme', () => {
+    setGlobals();
+    Object.keys(localStorageLight).forEach((key) => {
+      global.window.localStorage.setItem(key, localStorageLight[key]);
+    });
+    const wrapper = shallowMount(Series, {
+      stubs,
+      mocks: {
+        $ml,
+      },
+    });
+    expect(wrapper.vm.rightDrawerBorderClass).toBe('right-filter-drawer-light');
+  });
+
+  it('Gets the correct class for drawer on dark theme', () => {
+    setGlobals();
+    Object.keys(localStorageDark).forEach((key) => {
+      global.window.localStorage.setItem(key, localStorageDark[key]);
+    });
+    const wrapper = shallowMount(Series, {
+      stubs,
+      mocks: {
+        $ml,
+      },
+    });
+    expect(wrapper.vm.rightDrawerBorderClass).toBe('right-filter-drawer-dark');
   });
 
   it('correctly sets the data when creating a serie', async () => {
