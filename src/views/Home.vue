@@ -1,19 +1,19 @@
 <template>
   <div class="home">
     <div class="check-card">
-      <version-check></version-check>
+      <api-check></api-check>
     </div>
   </div>
 </template>
 
 <script>
 
-import VersionCheck from '@/components/misc/VersionCheck.vue';
+import ApiCheck from '@/components/misc/ApiCheck.vue';
 
 export default {
   name: 'home',
   components: {
-    VersionCheck,
+    ApiCheck,
   },
 };
 </script>
