@@ -17,6 +17,12 @@
         <stat-card resourceName="categories" :resourceValue="categoryCount"></stat-card>
       </div>
     </div>
+    <div class="md-layout-item md-size-33">
+      <stats-location resource="movies"></stats-location>
+    </div>
+    <div class="md-layout-item md-size-33">
+      <stats-location resource="series"></stats-location>
+    </div>
   </div>
 </template>
 
@@ -26,6 +32,7 @@ import axios from 'axios';
 import requests from '../utils/requests';
 import ApiCheck from '@/components/misc/ApiCheck.vue';
 import StatCard from '@/components/misc/StatCard.vue';
+import StatsLocation from '@/components/misc/StatsLocation.vue';
 
 export default {
   name: 'home',
@@ -55,6 +62,7 @@ export default {
   components: {
     ApiCheck,
     StatCard,
+    StatsLocation,
   },
 };
 </script>
