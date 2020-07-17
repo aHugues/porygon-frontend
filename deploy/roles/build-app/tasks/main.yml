@@ -1,7 +1,0 @@
-- name: Run 'npm run build'
-  raw: npm run build --prod
-
-- name: Compress dist package
-  archive:
-    path: ../dist/*
-    dest: ../app.tgz

@@ -1,0 +1,30 @@
+#!/bin/bash
+package_version=v$(npm version | grep "porygon-frontend" | awk -F ':' '{ print $2; }' | tr -d ",' ")
+echo "Pushing docker images for version $package_version"
+
+$tags = git tag --sort=-creatordate
+$TAG = $tags[0]
+
+# # only tag latest and versionned image on tagged commit
+if [ -z "$TAG" ]
+then
+    echo "Not a tagged build, exiting..."
+    exit 0
+fi
+
+
+if [ "$package_version" != "$TAG" ]
+then
+    >&2 echo "ERROR: tag [$TAG] and package version [$package_version] don't match, exiting..."
+    exit 1
+fi
+
+# push image associated with current version
+echo "Pushing image for tag $TAG"
+docker tag ahugues/porygon-frontend ahugues/porygon-frontend:$TAG
+docker push ahugues/porygon-frontend:$TAG
+
+# push image associated with latest tag
+echo "Pushing latest image"
+docker tag ahugues/porygon-frontend ahugues/porygon-frontend:latest
+docker push ahugues/porygon-frontend:latest
