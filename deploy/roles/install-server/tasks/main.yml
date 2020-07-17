@@ -1,9 +1,0 @@
-- name: Extract compressed app to the server
-  unarchive:
-    src: ../app.tgz
-    dest: /var/www/sites/porygon2-frontend
-
-- name: Restart nginx
-  systemd:
-    name: nginx
-    state: restarted
