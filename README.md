@@ -153,6 +153,15 @@ server {
 
 This is just an example, and you should refer to the various documents available to ensure you have a corect configuration. 
 
+#### Docker
+
+A docker image is available with a preconfigured server. It can be ran using 
+```shell
+docker run -p 4000:80 --name porygon_frontend -v /var/log/porygon-frontend/:/var/log/nginx ahugues/porygon-frontend:latest
+```
+
+This will bind the logs directory to `/var/log/porygon-frontend` and listen on port `4000`. However this does not prevent from using the full nginx proxy as this version is not protected.
+
 ### Run the tests
 
 If you want to run the unit and e2e tests, use `npm`:
