@@ -151,11 +151,9 @@ describe('ToolbarAvatar.vue', () => {
       global.window.localStorage.setItem(key, localStorageLight[key]);
     });
     const material = { theming: () => null };
-    const keycloak = { logout: (url) => { expect(url).toBe('/'); } };
     const wrapper = shallowMount(ToolbarAvatar, {
       stubs: ['md-button', 'md-icon', 'md-switch', 'md-menu-item', 'md-menu-content', 'md-avatar', 'md-menu', 'md-list', 'md-list-item', 'md-divider'],
       mocks: {
-        $keycloak: keycloak,
         $ml,
         $material: material,
       },

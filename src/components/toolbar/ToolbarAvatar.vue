@@ -185,7 +185,7 @@ export default {
   }),
   methods: {
     logout() {
-      this.$keycloak.logout('/');
+      // this.$keycloak.logout('/');
     },
     updateLanguage(newLanguage) {
       localStorage.setItem('vue-user-language', newLanguage);

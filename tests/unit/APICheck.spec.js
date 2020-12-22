@@ -23,10 +23,6 @@ const dataValid = {
   database: {
     status: true,
   },
-  keycloak: {
-    used: true,
-    status: true,
-  },
 };
 
 const $ml = {
@@ -69,7 +65,6 @@ describe('VersionCheckComponent', () => {
     await wrapper.vm.$nextTick();
     expect(wrapper.vm.apiReachableStatus).toBe(wrapper.vm.status.VALID);
     expect(wrapper.vm.apiVersionStatus).toBe(wrapper.vm.status.VALID);
-    expect(wrapper.vm.authenticationStatus).toBe(wrapper.vm.status.VALID);
     expect(wrapper.vm.databaseStatus).toBe(wrapper.vm.status.VALID);
     expect(wrapper.vm.pageState).toBe(wrapper.vm.state.VALID);
     expect(wrapper.vm.getClass()).toBe('check-valid');
@@ -110,62 +105,6 @@ describe('VersionCheckComponent', () => {
     expect(wrapper.vm.pageState).toBe(wrapper.vm.state.ERROR);
     expect(wrapper.vm.getClass()).toBe('check-error');
     expect(wrapper.vm.getIconName()).toBe('remove_circle');
-  });
-
-  it('correctly inits the component on keycloak ok, but not required', async () => {
-    const mockData = JSON.parse(JSON.stringify(dataValid));
-    mockData.keycloak.status = true;
-    mockData.keycloak.used = false;
-    axios.get.mockImplementation(() => Promise.resolve({ data: mockData }));
-    const wrapper = shallowMount(ApiCheck, {
-      stubs,
-      mocks: {
-        $ml,
-      },
-    });
-    expect(wrapper.vm.pageState).toBe(wrapper.vm.state.LOADING);
-    await wrapper.vm.$nextTick();
-    await wrapper.vm.$nextTick();
-    expect(wrapper.vm.pageState).toBe(wrapper.vm.state.VALID);
-    expect(wrapper.vm.getClass()).toBe('check-valid');
-    expect(wrapper.vm.getIconName()).toBe('check_circle');
-  });
-
-  it('correctly inits the component on keycloak error', async () => {
-    const mockData = JSON.parse(JSON.stringify(dataValid));
-    mockData.keycloak.status = false;
-    axios.get.mockImplementation(() => Promise.resolve({ data: mockData }));
-    const wrapper = shallowMount(ApiCheck, {
-      stubs,
-      mocks: {
-        $ml,
-      },
-    });
-    expect(wrapper.vm.pageState).toBe(wrapper.vm.state.LOADING);
-    await wrapper.vm.$nextTick();
-    await wrapper.vm.$nextTick();
-    expect(wrapper.vm.pageState).toBe(wrapper.vm.state.ERROR);
-    expect(wrapper.vm.getClass()).toBe('check-error');
-    expect(wrapper.vm.getIconName()).toBe('remove_circle');
-  });
-
-  it('correctly inits the component on keycloak error, but not required', async () => {
-    const mockData = JSON.parse(JSON.stringify(dataValid));
-    mockData.keycloak.status = false;
-    mockData.keycloak.used = false;
-    axios.get.mockImplementation(() => Promise.resolve({ data: mockData }));
-    const wrapper = shallowMount(ApiCheck, {
-      stubs,
-      mocks: {
-        $ml,
-      },
-    });
-    expect(wrapper.vm.pageState).toBe(wrapper.vm.state.LOADING);
-    await wrapper.vm.$nextTick();
-    await wrapper.vm.$nextTick();
-    expect(wrapper.vm.pageState).toBe(wrapper.vm.state.VALID);
-    expect(wrapper.vm.getClass()).toBe('check-valid');
-    expect(wrapper.vm.getIconName()).toBe('check_circle');
   });
 
   it('correctly parses version numbers', () => {

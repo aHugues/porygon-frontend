@@ -57,30 +57,12 @@ The option `porygonApiMinVersion` allows to restrict the version of the Porygon 
 
 The options `porygonApiVaseUrl` and `porygonApiAuthentication` are both set for a production environment (using `npm run serve --production` or `npm run build --production`) or a dev environment (`npm run serve`.)
 - `porygonApiBaseUrl` should be the root path of your API (as defined during its configuration)
-- `porygonApiAuthentication` should be put to `true` if your API enforces authentication. Currently, only [keycloak](https://www.keycloak.org/) is supported
 
 Typically, your dev environment is set to `localhost` without authentication, while your production environment should have an actual host with authentication enabled.
 
 ### Authentication
 
-> Only consider this if you are using Keycloak as an authentication backend, and have set `porygonApiAuthentication` to `true`
-
-`Keycloak` is configured using a `keycloak.json` file put in the `src` directory `src/keycloak.json`
-
-It should have a structure similar to this:
-
-```json
-{
-  "realm": "your-realm",
-  "url": "https://keycloak.example.com/auth",
-  "public-client": true,
-  "confidential-port": 0,
-  "clientId": "porygon-public",
-  "onLoad": "login-required"
-}
-```
-
-To get the correct values, please refer to the [keycloak](https://www.keycloak.org/) documentation.
+TODO
 
 
 ## Running the project
@@ -136,7 +118,7 @@ server {
     # include security_headers
     # some headers can be reused, but Content-Security-Policy must be adapted to your server
     include /etc/nginx/snippets/security_headers.conf;
-    add_header Content-Security-Policy "default-src 'self'; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com https://fonts.googleapis.com; font-src https://maxcdn.bootstrapcdn.com https://fonts.gstatic.com; script-src 'self'; connect-src https://api.porygon.example.com https://keycloak.example.com; frame-src https://keycloak.example.com 'self'";
+    add_header Content-Security-Policy "default-src 'self'; style-src 'self' 'unsafe-inline' https://maxcdn.bootstrapcdn.com https://fonts.googleapis.com; font-src https://maxcdn.bootstrapcdn.com https://fonts.gstatic.com; script-src 'self'; connect-src https://api.porygon.example.com; 'self'";
 
     # add custom config
     location / {
