@@ -55,10 +55,6 @@ export default {
         this.pageState = (
           this.apiReachableStatus === Status.VALID && this.apiVersionStatus === Status.VALID
           && this.databaseStatus === Status.VALID
-          && (
-            this.authenticationStatus === Status.VALID
-            || this.authenticationStatus === Status.WARNING
-          )
         ) ? State.VALID : State.ERROR;
       })
       .catch(() => { this.pageState = State.ERROR; });
@@ -68,7 +64,6 @@ export default {
       pageState: State.LOADING,
       apiReachableStatus: Status.WAITING,
       apiVersionStatus: Status.WAITING,
-      authenticationStatus: Status.WAITING,
       databaseStatus: Status.WAITING,
       state: State,
       status: Status,
@@ -82,7 +77,6 @@ export default {
       const statusList = [
         ['API reachable', this.apiReachableStatus],
         ['API version valid', this.apiVersionStatus],
-        ['Authentication backend', this.authenticationStatus],
         ['Database status', this.databaseStatus],
       ];
       return statusList;
@@ -112,13 +106,6 @@ export default {
           .then((response) => {
             this.apiReachableStatus = Status.VALID;
             this.databaseStatus = response.data.database.status ? Status.VALID : Status.ERROR;
-            const authenticationEnabled = response.data.keycloak.used;
-            const authenticationReachable = response.data.keycloak.status;
-            if (authenticationEnabled) {
-              this.authenticationStatus = authenticationReachable ? Status.VALID : Status.ERROR;
-            } else {
-              this.authenticationStatus = authenticationReachable ? Status.VALID : Status.WARNING;
-            }
             const distantVersion = response.data.ApiVersion;
             const apiVersionValid = this.isVersionValid(
               this.minRequiredApiVersion, distantVersion,
@@ -128,7 +115,6 @@ export default {
           })
           .catch(() => {
             this.databaseStatus = Status.ERROR;
-            this.authenticationStatus = Status.ERROR;
             this.apiReachableStatus = Status.ERROR;
             this.apiVersionStatus = Status.ERROR;
             this.$emit('server-version-error');
