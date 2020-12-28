@@ -137,7 +137,10 @@
 </template>
 
 <script>
+import axios from 'axios';
 import flags from '../../flags';
+import requests from '../../utils/requests';
+import config from '../../config';
 
 export default {
   name: 'ToolbarAvatar',
@@ -173,6 +176,8 @@ export default {
     },
     userAccountUrl() { return localStorage.getItem('vue-user-url'); },
     porygonVersion() { return process.env.PACKAGE_VERSION || '0'; },
+    environment() { return process.env.NODE_ENV; },
+    authBaseUrl() { return config[this.environment].authBaseUrl; },
   },
   data: () => ({
     darkTheme: undefined,
@@ -185,7 +190,20 @@ export default {
   }),
   methods: {
     logout() {
-      // this.$keycloak.logout('/');
+      const options = requests.buildOptions();
+
+      axios({
+        method: 'get',
+        url: `${this.authBaseUrl}/logout`,
+        headers: options.headers,
+        withCredentials: options.withCredentials,
+      })
+        .then(() => {
+          this.$router.go('/');
+        })
+        .catch((error) => {
+          console.error(error);
+        });
     },
     updateLanguage(newLanguage) {
       localStorage.setItem('vue-user-language', newLanguage);
