@@ -30,6 +30,10 @@ const $ml = {
   change: jest.fn(),
 };
 
+const $route = {
+  name: 'home',
+};
+
 const $material = {
   theming: () => {},
 };
@@ -47,6 +51,7 @@ describe('App', () => {
       mocks: {
         $ml,
         $material,
+        $route,
       },
     });
     expect(wrapper.contains('#app')).toBe(true);
@@ -59,6 +64,7 @@ describe('App', () => {
       mocks: {
         $ml,
         $material,
+        $route,
       },
     });
     global.window.onresize();
@@ -75,6 +81,7 @@ describe('App', () => {
       mocks: {
         $ml,
         $material,
+        $route,
       },
     });
     expect($ml.change.mock.calls.length).toBe(1);

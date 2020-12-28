@@ -37,12 +37,12 @@ Vue.use(MdProgress);
 
 const env = process.env.NODE_ENV || 'development';
 
-if (appConfig[env].porygonApiAuthentication) {
+if (!appConfig[env].porygonApiAuthentication) {
   localStorage.setItem('vue-user-firstname', 'Test');
   localStorage.setItem('vue-user-lastname', 'User');
   localStorage.setItem('vue-user-url', 'https://google.com');
-  new Vue({
-    router,
-    render: h => h(App),
-  }).$mount('#app');
 }
+new Vue({
+  router,
+  render: h => h(App),
+}).$mount('#app');

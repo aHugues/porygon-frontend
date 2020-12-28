@@ -37,6 +37,29 @@ const $ml = {
   change: () => {},
 };
 
+const mockUser = {
+  login: 'username',
+  firstName: 'John',
+  lastName: 'Doe',
+  email: 'user@email.com',
+};
+
+jest.mock('../../src/config', () => ({
+  test: {
+    porygonApiBaseUrl: 'http://example.com:4000',
+    porygonApiAuthentication: false,
+  },
+  testAuthentication: {
+    porygonApiBaseUrl: 'http://example.com:4000',
+    porygonApiAuthentication: true,
+  },
+}));
+
+jest.mock('axios', () => ({
+  __esModule: true,
+  get: jest.fn(() => Promise.resolve({ data: mockUser })),
+  default: jest.fn(request => Promise.resolve({ request, data: mockUser })),
+}));
 
 describe('ToolbarAvatar.vue', () => {
   it('selects the correct theme when light', () => {

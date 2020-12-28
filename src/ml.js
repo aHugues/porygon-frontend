@@ -8,6 +8,13 @@ export default new MLCreate({
   save: process.env.NODE_ENV === 'production',
   languages: [
     new MLanguage('english').create({
+      auth: {
+        login: 'Login',
+        password: 'Password',
+        login_required: 'Login required',
+        password_required: 'Password required',
+        send_login: 'Login',
+      },
       navigation: {
         title: 'Navigation',
         home: 'Home',
@@ -118,6 +125,7 @@ export default new MLCreate({
         reload_button: 'Reload page',
         errored_description: 'An error has occured during loading. Please reload this page.',
         auth: 'An error has occured during authentication. Please reload this page.',
+        login_error: 'Invalid username or password',
         empty_category: 'No category are present in the database. you should create at least one before continuing.',
         empty_location: 'No location are present in the database. you should create at least one before continuing.',
         resources: {
@@ -135,6 +143,13 @@ export default new MLCreate({
       },
     }),
     new MLanguage('french').create({
+      auth: {
+        login: 'Utilisateur',
+        password: 'Mot de passe',
+        login_required: 'Utilisateur required',
+        password_required: 'Mot de passe requis',
+        send_login: 'Connexion',
+      },
       navigation: {
         title: 'Navigation',
         home: 'Accueil',
@@ -243,6 +258,7 @@ export default new MLCreate({
       },
       error: {
         reload_button: 'Recharger la page',
+        login_error: "Nom d'utilisateur ou mot de passe invalide",
         errored_description: "Une erreur s'est produite durant le chargement. Veuillez recharger la page.",
         auth: "Une erreur s'est produite lors de l'authentification, veuillez recharger la page.",
         empty_category: "Aucune catégorie n'est présente dans la base de données. Veuillez en créer au moins une avant de continuer",

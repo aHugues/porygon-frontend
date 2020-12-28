@@ -1,13 +1,15 @@
 export default {
   all: {
-    porygonApiMinVersion: '0.5.0',
+    porygonApiMinVersion: '0.6.0',
   },
   development: {
     porygonApiBaseUrl: 'http://localhost:4000/api/v1',
-    porygonApiAuthentication: false,
+    authBaseUrl: 'http://localhost:4000',
+    porygonApiAuthentication: true,
   },
   production: {
     porygonApiBaseUrl: 'https://api.porygon.aurelienhugues.com',
+    authBaseUrl: 'https://auth.porygon.aurelienhugues.com',
     porygonApiAuthentication: true,
   },
 };

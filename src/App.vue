@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <md-app md-waterfall md-mode="fixed">
+    <md-app md-waterfall md-mode="fixed" v-if="this.$route.name !== 'login'">
       <md-app-toolbar class="md-primary toolbar-wrapper">
         <md-button v-if="pageWidth<600"
         class="md-icon-button" @click="showNavigation = true">
@@ -51,6 +51,10 @@
 
     </md-app>
 
+    <div v-if="this.$route.name === 'login'">
+      <router-view/>
+    </div>
+
     <md-snackbar :md-active.sync="authError">
       <span>{{ $ml.get('error').auth }}</span>
     </md-snackbar>
@@ -76,7 +80,9 @@ export default {
     window.onresize = () => {
       this.pageWidth = window.innerWidth;
     };
-    this.checkLogin();
+    if (this.$route.name !== 'login') {
+      this.checkLogin();
+    }
   },
   created() {
     let currentTheme = localStorage.getItem('vue-user-theme');
@@ -92,7 +98,7 @@ export default {
   },
   name: 'app',
   computed: {
-    apiBaseUrl() { return config[this.environment].porygonApiBaseUrl; },
+    authBaseUrl() { return config[this.environment].authBaseUrl; },
     authenticationRequired() { return config[this.environment].porygonApiAuthentication; },
   },
   components: {
@@ -103,13 +109,13 @@ export default {
     buildHeaders() {
       const headers = { 'Content-Type': 'application/json' };
       if (this.authenticationRequired) {
-        headers.Authorization = `Bearer ${localStorage.getItem('vue-token')}`;
+        // headers.Authorization = `Bearer ${localStorage.getItem('vue-token')}`;
       }
       return headers;
     },
     checkLogin() {
       axios
-        .get(`${this.apiBaseUrl}/healthcheck`, {
+        .get(`${this.authBaseUrl}/login`, {
           headers: this.buildHeaders(),
           withCredentials: true,
         })
@@ -118,7 +124,7 @@ export default {
         })
         .catch((error) => {
           if (error.message.includes('401') || error.message.includes('403')) {
-            this.authError = true;
+            this.$router.push('login');
           }
         });
     },

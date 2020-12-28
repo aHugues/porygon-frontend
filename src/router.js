@@ -5,6 +5,7 @@ import Movies from './views/Movies.vue';
 import Series from './views/Series.vue';
 import Locations from './views/Locations.vue';
 import Categories from './views/Categories.vue';
+import Login from './views/Login.vue';
 
 Vue.use(Router);
 
@@ -16,6 +17,11 @@ export default new Router({
       path: '/',
       name: 'home',
       component: Home,
+    },
+    {
+      path: '/login',
+      name: 'login',
+      component: Login,
     },
     {
       path: '/movies',
