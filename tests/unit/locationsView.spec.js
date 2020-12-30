@@ -51,7 +51,6 @@ const stubs = [
   'md-divider',
 ];
 
-
 describe('LocationsView', () => {
   it('Correctly loads', () => {
     const wrapper = shallowMount(Locations, {
@@ -60,7 +59,7 @@ describe('LocationsView', () => {
         $ml,
       },
     });
-    expect(wrapper.contains('.locations')).toBe(true);
+    expect(wrapper.find('.locations')).toBeDefined();
   });
 
   it('correctly sets the data when creating a location', async () => {

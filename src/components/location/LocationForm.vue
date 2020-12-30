@@ -9,7 +9,6 @@
 
     <md-card-content>
 
-
       <md-field :class="getValidationClass('location')">
         <label for="location">{{ $ml.get('location').location }}</label>
         <md-input name="location" id="location" v-model="location"/>
@@ -92,7 +91,7 @@ export default {
     method: {
       type: String,
       required: true,
-      validator: value => ['create', 'modify'].indexOf(value) !== -1,
+      validator: (value) => ['create', 'modify'].indexOf(value) !== -1,
     },
     id: Number,
     currentLocation: String,

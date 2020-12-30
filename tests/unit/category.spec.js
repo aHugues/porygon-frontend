@@ -22,7 +22,7 @@ describe('Category.vue', () => {
       },
       stubs: ['md-card-header', 'md-card-content', 'md-card'],
     });
-    expect(wrapper.contains('md-card-stub')).toBe(true);
+    expect(wrapper.find('md-card-stub')).toBeDefined();
     const card = wrapper.find('md-card-stub');
     expect(card.classes()).toContain('selected-light');
   });
@@ -38,7 +38,6 @@ describe('Category.vue', () => {
       },
       stubs: ['md-card-header', 'md-card-content', 'md-card'],
     });
-    expect(wrapper.contains('md-card-stub')).toBe(true);
     const card = wrapper.find('md-card-stub');
     expect(card.classes()).toContain('selected-dark');
   });
@@ -54,7 +53,6 @@ describe('Category.vue', () => {
       },
       stubs: ['md-card-header', 'md-card-content', 'md-card'],
     });
-    expect(wrapper.contains('md-card-stub')).toBe(true);
     const card = wrapper.find('md-card-stub');
     expect(card.classes()).not.toContain('selected-dark');
     expect(card.classes()).not.toContain('selected-light');

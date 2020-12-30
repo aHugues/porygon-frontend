@@ -19,7 +19,7 @@ export default {
     resource: {
       type: String,
       required: true,
-      validator: value => ['category', 'location'].indexOf(value) !== -1,
+      validator: (value) => ['category', 'location'].indexOf(value) !== -1,
     },
   },
   computed: {

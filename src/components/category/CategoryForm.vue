@@ -9,7 +9,6 @@
 
     <md-card-content>
 
-
       <md-field :class="getValidationClass('label')">
         <label for="label">{{ $ml.get('category').label }}</label>
         <md-input name="label" id="label" v-model="label"/>
@@ -90,7 +89,7 @@ export default {
     method: {
       type: String,
       required: true,
-      validator: value => ['create', 'modify'].indexOf(value) !== -1,
+      validator: (value) => ['create', 'modify'].indexOf(value) !== -1,
     },
     id: Number,
     currentLabel: String,

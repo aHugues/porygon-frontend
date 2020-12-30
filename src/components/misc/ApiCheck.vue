@@ -82,7 +82,7 @@ export default {
       return statusList;
     },
     parseVersionNumber(version) {
-      const parsedVersion = version.replace('v', '').split('.').map(x => Number(x));
+      const parsedVersion = version.replace('v', '').split('.').map((x) => Number(x));
       while (parsedVersion.length !== 3) {
         parsedVersion.push(0);
       }

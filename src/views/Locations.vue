@@ -33,7 +33,6 @@
     <md-divider></md-divider>
   </div>
 
-
     <div class="md-layout" v-if="state === State.OK || state === State.EDIT">
      <div
       v-for="(location, key) in locations" :key="key"

@@ -21,7 +21,6 @@ const $ml = {
 
 const stubs = ['md-card', 'md-card-actions', 'md-card-content', 'md-icon', 'md-button'];
 
-
 describe('ResourceWarning', () => {
   it('Correctly loads for categories', () => {
     const wrapper = shallowMount(ResourceWarning, {

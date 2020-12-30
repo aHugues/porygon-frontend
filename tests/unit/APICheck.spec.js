@@ -38,7 +38,6 @@ const $ml = {
 
 const stubs = ['md-card', 'md-card-header', 'md-card-content', 'md-icon', 'status-check'];
 
-
 describe('VersionCheckComponent', () => {
   it('Correctly loads', () => {
     const wrapper = shallowMount(ApiCheck, {
@@ -47,7 +46,7 @@ describe('VersionCheckComponent', () => {
         $ml,
       },
     });
-    expect(wrapper.contains('.md-title')).toBe(true);
+    expect(wrapper.find('.md-title')).toBeDefined();
     expect(wrapper.vm.getClass()).toBe('check-waiting');
     expect(wrapper.vm.getIconName()).toBe('pause_circle_filled');
   });

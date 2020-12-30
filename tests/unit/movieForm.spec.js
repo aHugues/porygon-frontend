@@ -15,7 +15,7 @@ jest.mock('../../src/config', () => ({
 jest.mock('axios', () => ({
   __esModule: true,
   get: jest.fn(() => Promise.resolve({ data: 'data' })),
-  default: jest.fn(request => Promise.resolve({ request, data: 'data' })),
+  default: jest.fn((request) => Promise.resolve({ request, data: 'data' })),
 }));
 
 const $ml = {
@@ -80,7 +80,6 @@ const invalidV = {
   },
 };
 
-
 const stubs = ['md-field', 'md-switch', 'md-snackbar', 'md-icon',
   'md-input', 'md-button', 'md-select', 'md-option'];
 
@@ -98,7 +97,7 @@ describe('MovieForm.vue', () => {
       },
     });
 
-    expect(wrapper.contains('.movie-edit-form')).toBe(true);
+    expect(wrapper.find('.movie-edit-form')).toBeDefined();
     expect(wrapper.vm.$options.props.method.required).toBeTruthy();
     expect(wrapper.vm.$props.method).toBe('create');
   });
@@ -179,7 +178,7 @@ describe('MovieForm.vue', () => {
     expect(wrapper.vm.actorsList).toEqual(['actor1', '', '']);
   });
 
-  it('emits the correct event when movie is saved', () => {
+  it('emits the correct event when movie is saved', async () => {
     const wrapper = shallowMount(MovieForm, {
       stubs,
       propsData: {
@@ -192,12 +191,11 @@ describe('MovieForm.vue', () => {
       },
     });
     wrapper.vm.saveMovie();
-    wrapper.vm.$nextTick(() => {
-      expect(wrapper.emitted('movie-added-or-modified')).toBeDefined();
-    });
+    await wrapper.vm.$nextTick();
+    expect(wrapper.emitted('movie-added-or-modified')).toBeDefined();
   });
 
-  it('emits the correct event when movie is deleted', () => {
+  it('emits the correct event when movie is deleted', async () => {
     const wrapper = shallowMount(MovieForm, {
       stubs,
       propsData: {
@@ -226,12 +224,11 @@ describe('MovieForm.vue', () => {
       },
     });
     wrapper.vm.deleteMovie();
-    wrapper.vm.$nextTick(() => {
-      expect(wrapper.emitted('movie-added-or-modified')).toBeDefined();
-    });
+    await wrapper.vm.$nextTick();
+    expect(wrapper.emitted('movie-added-or-modified')).toBeDefined();
   });
 
-  it('sends the correct arguments when modifying a movie', (done) => {
+  it('sends the correct arguments when modifying a movie', async () => {
     const wrapper = shallowMount(MovieForm, {
       stubs,
       propsData: {
@@ -261,22 +258,20 @@ describe('MovieForm.vue', () => {
       },
     });
     wrapper.vm.saveMovie();
-    wrapper.vm.$nextTick(() => {
-      const axiosArgs = axios.mock.calls[2][0];
-      expect(axios.mock.calls.length).toBe(3);
-      expect(axiosArgs.method).toBe('put');
-      expect(axiosArgs.url).toBe('http://example.com:4000/movies/42');
-      expect(axiosArgs.headers['Content-Type']).toBe('application/json');
-      expect(axiosArgs.headers.Authorization).not.toBeDefined();
-      expect(axiosArgs.data.remarks).not.toBeDefined();
-      expect(axiosArgs.data.title).toBe('test title');
-      expect(axiosArgs.data.year).toBe(2019);
-      expect(axiosArgs.data.location_id).toBe(1);
-      done();
-    });
+    await wrapper.vm.$nextTick();
+    const axiosArgs = axios.mock.calls[2][0];
+    expect(axios.mock.calls.length).toBe(3);
+    expect(axiosArgs.method).toBe('put');
+    expect(axiosArgs.url).toBe('http://example.com:4000/movies/42');
+    expect(axiosArgs.headers['Content-Type']).toBe('application/json');
+    expect(axiosArgs.headers.Authorization).not.toBeDefined();
+    expect(axiosArgs.data.remarks).not.toBeDefined();
+    expect(axiosArgs.data.title).toBe('test title');
+    expect(axiosArgs.data.year).toBe(2019);
+    expect(axiosArgs.data.location_id).toBe(1);
   });
 
-  it('sends the correct arguments when deleting a movie', () => {
+  it('sends the correct arguments when deleting a movie', async () => {
     const wrapper = shallowMount(MovieForm, {
       stubs,
       propsData: {
@@ -306,18 +301,17 @@ describe('MovieForm.vue', () => {
       },
     });
     wrapper.vm.deleteMovie();
-    wrapper.vm.$nextTick(() => {
-      const axiosArgs = axios.mock.calls[3][0];
-      expect(axios.mock.calls.length).toBe(4);
-      expect(axiosArgs.method).toBe('delete');
-      expect(axiosArgs.url).toBe('http://example.com:4000/movies/42');
-      expect(axiosArgs.headers['Content-Type']).toBe('application/json');
-      expect(axiosArgs.headers.Authorization).not.toBeDefined();
-      expect(axiosArgs.data).not.toBeDefined();
-    });
+    await wrapper.vm.$nextTick();
+    const axiosArgs = axios.mock.calls[3][0];
+    expect(axios.mock.calls.length).toBe(4);
+    expect(axiosArgs.method).toBe('delete');
+    expect(axiosArgs.url).toBe('http://example.com:4000/movies/42');
+    expect(axiosArgs.headers['Content-Type']).toBe('application/json');
+    expect(axiosArgs.headers.Authorization).not.toBeDefined();
+    expect(axiosArgs.data).not.toBeDefined();
   });
 
-  it('correctly saves after validating', () => {
+  it('correctly saves after validating', async () => {
     const wrapper = shallowMount(MovieForm, {
       stubs,
       propsData: {
@@ -331,18 +325,17 @@ describe('MovieForm.vue', () => {
       },
     });
     wrapper.vm.validateMovie();
-    wrapper.vm.$nextTick(() => {
-      expect(axios.mock.calls.length).toEqual(5);
-      const axiosArgs = axios.mock.calls[4][0];
-      expect(axiosArgs.method).toBe('post');
-      expect(axiosArgs.url).toBe('http://example.com:4000/movies');
-      expect(axiosArgs.headers['Content-Type']).toBe('application/json');
-      expect(axiosArgs.headers.Authorization).not.toBeDefined();
-      expect(axiosArgs.data.title).not.toBeDefined();
-    });
+    await wrapper.vm.$nextTick();
+    expect(axios.mock.calls.length).toEqual(5);
+    const axiosArgs = axios.mock.calls[4][0];
+    expect(axiosArgs.method).toBe('post');
+    expect(axiosArgs.url).toBe('http://example.com:4000/movies');
+    expect(axiosArgs.headers['Content-Type']).toBe('application/json');
+    expect(axiosArgs.headers.Authorization).not.toBeDefined();
+    expect(axiosArgs.data.title).not.toBeDefined();
   });
 
-  it('correctly detects invalid', () => {
+  it('correctly detects invalid', async () => {
     const wrapper = shallowMount(MovieForm, {
       stubs,
       propsData: {
@@ -370,8 +363,7 @@ describe('MovieForm.vue', () => {
       },
     });
     wrapper.vm.validateMovie();
-    wrapper.vm.$nextTick(() => {
-      expect(axios.mock.calls.length).toEqual(5);
-    });
+    await wrapper.vm.$nextTick();
+    expect(axios.mock.calls.length).toEqual(5);
   });
 });

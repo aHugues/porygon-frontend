@@ -58,7 +58,7 @@ jest.mock('../../src/config', () => ({
 jest.mock('axios', () => ({
   __esModule: true,
   get: jest.fn(() => Promise.resolve({ data: mockUser })),
-  default: jest.fn(request => Promise.resolve({ request, data: mockUser })),
+  default: jest.fn((request) => Promise.resolve({ request, data: mockUser })),
 }));
 
 describe('ToolbarAvatar.vue', () => {
@@ -144,7 +144,7 @@ describe('ToolbarAvatar.vue', () => {
     expect(wrapper.vm.userInitials).toEqual('-');
   });
 
-  it('correctly updates the theme when updated', () => {
+  it('correctly updates the theme when updated', async () => {
     setGlobals();
     Object.keys(localStorageLight).forEach((key) => {
       global.window.localStorage.setItem(key, localStorageLight[key]);
@@ -160,15 +160,21 @@ describe('ToolbarAvatar.vue', () => {
     expect(wrapper.vm.darkTheme).toEqual(false);
     wrapper.vm.darkTheme = true;
     wrapper.vm.$forceUpdate();
+    await wrapper.vm.$nextTick();
     expect(wrapper.vm.darkTheme).toEqual(true);
     expect(global.window.localStorage.getItem('vue-user-theme')).toEqual('porygon-dark');
     wrapper.vm.darkTheme = false;
     wrapper.vm.$forceUpdate();
+    await wrapper.vm.$nextTick();
     expect(wrapper.vm.darkTheme).toEqual(false);
     expect(global.window.localStorage.getItem('vue-user-theme')).toEqual('porygon-light');
   });
 
-  it('correctly calls the logout function', () => {
+  it('correctly calls the logout function', async () => {
+    const calledRoutes = [];
+    const $router = {
+      go: (route) => { calledRoutes.push(route); },
+    };
     setGlobals();
     Object.keys(localStorageLight).forEach((key) => {
       global.window.localStorage.setItem(key, localStorageLight[key]);
@@ -179,9 +185,12 @@ describe('ToolbarAvatar.vue', () => {
       mocks: {
         $ml,
         $material: material,
+        $router,
       },
     });
     wrapper.vm.logout();
+    await wrapper.vm.$nextTick();
+    expect(calledRoutes).toStrictEqual(['/']);
   });
 
   it('correctly updates the language', () => {
