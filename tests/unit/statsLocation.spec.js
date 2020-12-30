@@ -32,7 +32,6 @@ const data = [
 
 const stubs = ['md-card', 'md-card-header', 'md-card-content'];
 
-
 describe('StatsLocationComponent', () => {
   axios.get.mockImplementation(() => Promise.resolve({ data }));
 
@@ -43,9 +42,8 @@ describe('StatsLocationComponent', () => {
       },
       stubs,
     });
-    expect(wrapper.contains('.md-title')).toBe(true);
+    expect(wrapper.find('.md-title')).toBeDefined();
   });
-
 
   it('Correctly gets data for movies', async () => {
     const wrapper = shallowMount(StatsLocation, {

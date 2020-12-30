@@ -29,10 +29,10 @@
 <script>
 
 import axios from 'axios';
-import requests from '../utils/requests';
 import ApiCheck from '@/components/misc/ApiCheck.vue';
 import StatCard from '@/components/misc/StatCard.vue';
 import StatsLocation from '@/components/misc/StatsLocation.vue';
+import requests from '../utils/requests';
 
 export default {
   name: 'home',

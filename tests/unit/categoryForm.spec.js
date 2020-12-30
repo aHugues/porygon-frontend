@@ -19,7 +19,7 @@ jest.mock('../../src/config', () => ({
 jest.mock('axios', () => ({
   __esModule: true,
   get: jest.fn(() => Promise.resolve({ data: 'data' })),
-  default: jest.fn(request => Promise.resolve({ request, data: 'data' })),
+  default: jest.fn((request) => Promise.resolve({ request, data: 'data' })),
 }));
 
 const $ml = {
@@ -52,10 +52,8 @@ const invalidV = {
   label: {},
 };
 
-
 const stubs = ['md-card', 'md-card-header', 'md-card-content', 'md-snackbar',
   'md-card-actions', 'md-field', 'md-switch', 'md-input', 'md-button'];
-
 
 describe('CategoryForm.vue', () => {
   it('correctly loads', () => {
@@ -69,7 +67,7 @@ describe('CategoryForm.vue', () => {
       },
     });
 
-    expect(wrapper.contains('md-card-stub')).toBe(true);
+    expect(wrapper.find('md-card-stub')).toBeDefined();
     expect(wrapper.vm.$options.props.method.required).toBeTruthy();
     expect(wrapper.vm.$props.method).toBe('create');
   });
@@ -87,13 +85,13 @@ describe('CategoryForm.vue', () => {
       },
     });
 
-    expect(wrapper.contains('md-card-stub')).toBe(true);
+    expect(wrapper.find('md-card-stub')).toBeDefined();
     expect(wrapper.vm.$props.method).toBe('modify');
     expect(wrapper.vm.label).toBe('test category');
     expect(wrapper.vm.description).toBe('test description');
   });
 
-  it('emits the correct event when category is saved', () => {
+  it('emits the correct event when category is saved', async () => {
     const wrapper = shallowMount(CategoryForm, {
       stubs,
       propsData: {
@@ -104,12 +102,11 @@ describe('CategoryForm.vue', () => {
       },
     });
     wrapper.vm.saveCategory();
-    wrapper.vm.$nextTick(() => {
-      expect(wrapper.emitted('category-added-or-modified')).toBeDefined();
-    });
+    await wrapper.vm.$nextTick();
+    expect(wrapper.emitted('category-added-or-modified')).toBeDefined();
   });
 
-  it('emits the correct event when category is deleted', () => {
+  it('emits the correct event when category is deleted', async () => {
     const wrapper = shallowMount(CategoryForm, {
       stubs,
       propsData: {
@@ -120,12 +117,11 @@ describe('CategoryForm.vue', () => {
       },
     });
     wrapper.vm.deleteCategory();
-    wrapper.vm.$nextTick(() => {
-      expect(wrapper.emitted('category-added-or-modified')).toBeDefined();
-    });
+    await wrapper.vm.$nextTick();
+    expect(wrapper.emitted('category-added-or-modified')).toBeDefined();
   });
 
-  it('sends the correct arguments when modifying a location', () => {
+  it('sends the correct arguments when modifying a location', async () => {
     const wrapper = shallowMount(CategoryForm, {
       stubs,
       propsData: {
@@ -137,18 +133,17 @@ describe('CategoryForm.vue', () => {
       },
     });
     wrapper.vm.saveCategory();
-    wrapper.vm.$nextTick(() => {
-      const axiosArgs = axios.mock.calls[2][0];
-      expect(axiosArgs.method).toBe('put');
-      expect(axiosArgs.url).toBe('http://example.com:4000/categories/42');
-      expect(axiosArgs.headers['Content-Type']).toBe('application/json');
-      expect(axiosArgs.headers.Authorization).not.toBeDefined();
-      expect(axiosArgs.data.label).not.toBeDefined();
-      expect(axiosArgs.data.description).not.toBeDefined();
-    });
+    await wrapper.vm.$nextTick();
+    const axiosArgs = axios.mock.calls[2][0];
+    expect(axiosArgs.method).toBe('put');
+    expect(axiosArgs.url).toBe('http://example.com:4000/categories/42');
+    expect(axiosArgs.headers['Content-Type']).toBe('application/json');
+    expect(axiosArgs.headers.Authorization).not.toBeDefined();
+    expect(axiosArgs.data.label).not.toBeDefined();
+    expect(axiosArgs.data.description).not.toBeDefined();
   });
 
-  it('sends the correct arguments when deleting a category', () => {
+  it('sends the correct arguments when deleting a category', async () => {
     const wrapper = shallowMount(CategoryForm, {
       stubs,
       propsData: {
@@ -160,17 +155,16 @@ describe('CategoryForm.vue', () => {
       },
     });
     wrapper.vm.deleteCategory();
-    wrapper.vm.$nextTick(() => {
-      const axiosArgs = axios.mock.calls[3][0];
-      expect(axiosArgs.method).toBe('delete');
-      expect(axiosArgs.url).toBe('http://example.com:4000/categories/42');
-      expect(axiosArgs.headers['Content-Type']).toBe('application/json');
-      expect(axiosArgs.headers.Authorization).not.toBeDefined();
-      expect(axiosArgs.data).not.toBeDefined();
-    });
+    await wrapper.vm.$nextTick();
+    const axiosArgs = axios.mock.calls[3][0];
+    expect(axiosArgs.method).toBe('delete');
+    expect(axiosArgs.url).toBe('http://example.com:4000/categories/42');
+    expect(axiosArgs.headers['Content-Type']).toBe('application/json');
+    expect(axiosArgs.headers.Authorization).not.toBeDefined();
+    expect(axiosArgs.data).not.toBeDefined();
   });
 
-  it('Correctly watches currentLabel updates', () => {
+  it('Correctly watches currentLabel updates', async () => {
     const wrapper = shallowMount(CategoryForm, {
       stubs,
       propsData: {
@@ -185,10 +179,11 @@ describe('CategoryForm.vue', () => {
 
     expect(wrapper.vm.label).toEqual('test category');
     wrapper.setProps({ currentLabel: 'updated category' });
+    await wrapper.vm.$nextTick();
     expect(wrapper.vm.label).toEqual('updated category');
   });
 
-  it('Correctly watches currentDescription updates', () => {
+  it('Correctly watches currentDescription updates', async () => {
     const wrapper = shallowMount(CategoryForm, {
       stubs,
       propsData: {
@@ -203,10 +198,11 @@ describe('CategoryForm.vue', () => {
 
     expect(wrapper.vm.description).toEqual('test description');
     wrapper.setProps({ currentDescription: 'updated description' });
+    await wrapper.vm.$nextTick();
     expect(wrapper.vm.description).toEqual('updated description');
   });
 
-  it('correctly saves after validating', () => {
+  it('correctly saves after validating', async () => {
     const wrapper = shallowMount(CategoryForm, {
       stubs,
       propsData: {
@@ -218,19 +214,18 @@ describe('CategoryForm.vue', () => {
       },
     });
     wrapper.vm.validateCategory();
-    wrapper.vm.$nextTick(() => {
-      expect(axios.mock.calls.length).toEqual(5);
-      const axiosArgs = axios.mock.calls[4][0];
-      expect(axiosArgs.method).toBe('post');
-      expect(axiosArgs.url).toBe('http://example.com:4000/categories');
-      expect(axiosArgs.headers['Content-Type']).toBe('application/json');
-      expect(axiosArgs.headers.Authorization).not.toBeDefined();
-      expect(axiosArgs.data.label).toEqual('');
-      expect(axiosArgs.data.description).toEqual('');
-    });
+    await wrapper.vm.$nextTick();
+    expect(axios.mock.calls.length).toEqual(5);
+    const axiosArgs = axios.mock.calls[4][0];
+    expect(axiosArgs.method).toBe('post');
+    expect(axiosArgs.url).toBe('http://example.com:4000/categories');
+    expect(axiosArgs.headers['Content-Type']).toBe('application/json');
+    expect(axiosArgs.headers.Authorization).not.toBeDefined();
+    expect(axiosArgs.data.label).toEqual('');
+    expect(axiosArgs.data.description).toEqual('');
   });
 
-  it('correctly detects invalid', () => {
+  it('correctly detects invalid', async () => {
     const wrapper = shallowMount(CategoryForm, {
       stubs,
       propsData: {
@@ -243,8 +238,7 @@ describe('CategoryForm.vue', () => {
       },
     });
     wrapper.vm.validateCategory();
-    wrapper.vm.$nextTick(() => {
-      expect(axios.mock.calls.length).toEqual(5);
-    });
+    await wrapper.vm.$nextTick();
+    expect(axios.mock.calls.length).toEqual(5);
   });
 });

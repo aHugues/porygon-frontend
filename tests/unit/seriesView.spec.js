@@ -68,7 +68,7 @@ describe('SeriesView', () => {
         $ml,
       },
     });
-    expect(wrapper.contains('.series')).toBe(true);
+    expect(wrapper.find('.series')).toBeDefined();
   });
 
   it('Gets the correct class for drawer on light theme', () => {
@@ -138,6 +138,7 @@ describe('SeriesView', () => {
     wrapper.vm.refreshList(1);
     expect(wrapper.vm.expanded).toEqual([false, false, false]);
     await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
     expect(wrapper.vm.state).toEqual('empty');
   });
 
@@ -161,6 +162,7 @@ describe('SeriesView', () => {
     expect(wrapper.vm.state).toEqual('edit');
     wrapper.vm.refreshList(-1);
     expect(wrapper.vm.expanded).toEqual([false, false, false]);
+    await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();
     expect(wrapper.vm.state).toEqual('empty');
   });

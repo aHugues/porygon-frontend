@@ -52,7 +52,7 @@ export default {
   },
   computed: {
     packData() {
-      return d3.hierarchy(this.dataset).sum(d => d.count);
+      return d3.hierarchy(this.dataset).sum((d) => d.count);
     },
     textColor() {
       return '#212121';
@@ -69,8 +69,8 @@ export default {
       const output = packChart(this.packData).descendants();
       if (this.dataset.children.length === 0) return [];
       return output
-        .filter(d => !d.children)
-        .filter(d => d.r > 0)
+        .filter((d) => !d.children)
+        .filter((d) => d.r > 0)
         .map((d, i) => {
           const fill = color(i);
           return {
@@ -90,12 +90,12 @@ export default {
     getData() {
       axios.get(requests.buildUrl('locations/count'), requests.buildOptions())
         .then((response) => {
-          this.dataset.children = response.data.map(value => ({
+          this.dataset.children = response.data.map((value) => ({
             location: value.location,
             count: this.resource === 'movies' ? value.movie_count : value.serie_count,
           }));
         })
-        .catch(err => console.log(err));
+        .catch((err) => console.log(err));
     },
   },
 };

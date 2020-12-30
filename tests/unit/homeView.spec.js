@@ -24,7 +24,6 @@ jest.mock('axios', () => ({
   )),
 }));
 
-
 const stubs = ['api-check', 'stat-card'];
 
 describe('HomeView', () => {
@@ -32,7 +31,7 @@ describe('HomeView', () => {
     const wrapper = shallowMount(Home, {
       stubs,
     });
-    expect(wrapper.contains('.home')).toBe(true);
+    expect(wrapper.find('.home')).toBeDefined();
   });
 
   it('Correctly sets the data', async () => {

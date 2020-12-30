@@ -68,7 +68,7 @@ describe('MoviesView', () => {
         $ml,
       },
     });
-    expect(wrapper.contains('.movies')).toBe(true);
+    expect(wrapper.find('.movies')).toBeDefined();
   });
 
   it('Gets the correct class for drawer on light theme', () => {
@@ -131,11 +131,13 @@ describe('MoviesView', () => {
       locations: [],
       expanded: [false, true, false],
     });
+    await wrapper.vm.$nextTick();
 
     expect(wrapper.vm.expanded).toEqual([false, true, false]);
     expect(wrapper.vm.state).toEqual('empty');
     wrapper.vm.refreshList(1);
     expect(wrapper.vm.expanded).toEqual([false, false, false]);
+    await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();
     expect(wrapper.vm.state).toEqual('empty');
   });
@@ -160,6 +162,7 @@ describe('MoviesView', () => {
     expect(wrapper.vm.state).toEqual('edit');
     wrapper.vm.refreshList(-1);
     expect(wrapper.vm.expanded).toEqual([false, false, false]);
+    await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();
     expect(wrapper.vm.state).toEqual('empty');
   });

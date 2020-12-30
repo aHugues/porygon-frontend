@@ -15,7 +15,7 @@ jest.mock('../../src/config', () => ({
 jest.mock('axios', () => ({
   __esModule: true,
   get: jest.fn(() => Promise.resolve({ data: 'data' })),
-  default: jest.fn(request => Promise.resolve({ request, data: 'data' })),
+  default: jest.fn((request) => Promise.resolve({ request, data: 'data' })),
 }));
 
 const $ml = {
@@ -70,7 +70,6 @@ const invalidV = {
   },
 };
 
-
 const stubs = ['md-field', 'md-switch', 'md-input', 'md-snackbar',
   'md-button', 'md-select', 'md-option'];
 
@@ -88,7 +87,7 @@ describe('SerieForm.vue', () => {
       },
     });
 
-    expect(wrapper.contains('.serie-edit-form')).toBe(true);
+    expect(wrapper.find('.serie-edit-form')).toBeDefined();
     expect(wrapper.vm.$options.props.method.required).toBeTruthy();
     expect(wrapper.vm.$props.method).toBe('create');
   });
@@ -135,7 +134,7 @@ describe('SerieForm.vue', () => {
     expect(wrapper.vm.serie.categories).toEqual([1, 2]);
   });
 
-  it('emits the correct event when serie is saved', () => {
+  it('emits the correct event when serie is saved', async () => {
     const wrapper = shallowMount(SerieForm, {
       stubs,
       propsData: {
@@ -148,12 +147,11 @@ describe('SerieForm.vue', () => {
       },
     });
     wrapper.vm.saveSerie();
-    wrapper.vm.$nextTick(() => {
-      expect(wrapper.emitted('serie-added-or-modified')).toBeDefined();
-    });
+    await wrapper.vm.$nextTick();
+    expect(wrapper.emitted('serie-added-or-modified')).toBeDefined();
   });
 
-  it('emits the correct event when serie is deleted', () => {
+  it('emits the correct event when serie is deleted', async () => {
     const wrapper = shallowMount(SerieForm, {
       stubs,
       propsData: {
@@ -184,12 +182,11 @@ describe('SerieForm.vue', () => {
       },
     });
     wrapper.vm.deleteSerie();
-    wrapper.vm.$nextTick(() => {
-      expect(wrapper.emitted('serie-added-or-modified')).toBeDefined();
-    });
+    await wrapper.vm.$nextTick();
+    expect(wrapper.emitted('serie-added-or-modified')).toBeDefined();
   });
 
-  it('sends the correct arguments when modifying a serie', (done) => {
+  it('sends the correct arguments when modifying a serie', async () => {
     const wrapper = shallowMount(SerieForm, {
       stubs,
       propsData: {
@@ -221,23 +218,21 @@ describe('SerieForm.vue', () => {
       },
     });
     wrapper.vm.saveSerie();
-    wrapper.vm.$nextTick(() => {
-      const axiosArgs = axios.mock.calls[2][0];
-      expect(axios.mock.calls.length).toBe(3);
-      expect(axiosArgs.method).toBe('put');
-      expect(axiosArgs.url).toBe('http://example.com:4000/series/42');
-      expect(axiosArgs.headers['Content-Type']).toBe('application/json');
-      expect(axiosArgs.headers.Authorization).not.toBeDefined();
-      expect(axiosArgs.data.remarks).not.toBeDefined();
-      expect(axiosArgs.data.title).toBe('test title');
-      expect(axiosArgs.data.season).toBe(1);
-      expect(axiosArgs.data.location_id).toBe(1);
-      expect(axiosArgs.data.year).toBe(2019);
-      done();
-    });
+    await wrapper.vm.$nextTick();
+    const axiosArgs = axios.mock.calls[2][0];
+    expect(axios.mock.calls.length).toBe(3);
+    expect(axiosArgs.method).toBe('put');
+    expect(axiosArgs.url).toBe('http://example.com:4000/series/42');
+    expect(axiosArgs.headers['Content-Type']).toBe('application/json');
+    expect(axiosArgs.headers.Authorization).not.toBeDefined();
+    expect(axiosArgs.data.remarks).not.toBeDefined();
+    expect(axiosArgs.data.title).toBe('test title');
+    expect(axiosArgs.data.season).toBe(1);
+    expect(axiosArgs.data.location_id).toBe(1);
+    expect(axiosArgs.data.year).toBe(2019);
   });
 
-  it('sends the correct arguments when deleting a serie', () => {
+  it('sends the correct arguments when deleting a serie', async () => {
     const wrapper = shallowMount(SerieForm, {
       stubs,
       propsData: {
@@ -269,18 +264,17 @@ describe('SerieForm.vue', () => {
       },
     });
     wrapper.vm.deleteSerie();
-    wrapper.vm.$nextTick(() => {
-      const axiosArgs = axios.mock.calls[3][0];
-      expect(axios.mock.calls.length).toBe(4);
-      expect(axiosArgs.method).toBe('delete');
-      expect(axiosArgs.url).toBe('http://example.com:4000/series/42');
-      expect(axiosArgs.headers['Content-Type']).toBe('application/json');
-      expect(axiosArgs.headers.Authorization).not.toBeDefined();
-      expect(axiosArgs.data).not.toBeDefined();
-    });
+    await wrapper.vm.$nextTick();
+    const axiosArgs = axios.mock.calls[3][0];
+    expect(axios.mock.calls.length).toBe(4);
+    expect(axiosArgs.method).toBe('delete');
+    expect(axiosArgs.url).toBe('http://example.com:4000/series/42');
+    expect(axiosArgs.headers['Content-Type']).toBe('application/json');
+    expect(axiosArgs.headers.Authorization).not.toBeDefined();
+    expect(axiosArgs.data).not.toBeDefined();
   });
 
-  it('correctly saves after validating', () => {
+  it('correctly saves after validating', async () => {
     const wrapper = shallowMount(SerieForm, {
       stubs,
       propsData: {
@@ -294,18 +288,17 @@ describe('SerieForm.vue', () => {
       },
     });
     wrapper.vm.validateSerie();
-    wrapper.vm.$nextTick(() => {
-      expect(axios.mock.calls.length).toEqual(5);
-      const axiosArgs = axios.mock.calls[4][0];
-      expect(axiosArgs.method).toBe('post');
-      expect(axiosArgs.url).toBe('http://example.com:4000/series');
-      expect(axiosArgs.headers['Content-Type']).toBe('application/json');
-      expect(axiosArgs.headers.Authorization).not.toBeDefined();
-      expect(axiosArgs.data.title).not.toBeDefined();
-    });
+    await wrapper.vm.$nextTick();
+    expect(axios.mock.calls.length).toEqual(5);
+    const axiosArgs = axios.mock.calls[4][0];
+    expect(axiosArgs.method).toBe('post');
+    expect(axiosArgs.url).toBe('http://example.com:4000/series');
+    expect(axiosArgs.headers['Content-Type']).toBe('application/json');
+    expect(axiosArgs.headers.Authorization).not.toBeDefined();
+    expect(axiosArgs.data.title).not.toBeDefined();
   });
 
-  it('correctly detects invalid', () => {
+  it('correctly detects invalid', async () => {
     const wrapper = shallowMount(SerieForm, {
       stubs,
       propsData: {
@@ -332,8 +325,7 @@ describe('SerieForm.vue', () => {
       },
     });
     wrapper.vm.validateSerie();
-    wrapper.vm.$nextTick(() => {
-      expect(axios.mock.calls.length).toEqual(5);
-    });
+    await wrapper.vm.$nextTick();
+    expect(axios.mock.calls.length).toEqual(5);
   });
 });

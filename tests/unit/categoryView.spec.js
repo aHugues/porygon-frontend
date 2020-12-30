@@ -52,7 +52,6 @@ const stubs = [
   'md-divider',
 ];
 
-
 describe('CategoriesView', () => {
   it('Correctly loads', () => {
     const wrapper = shallowMount(Categories, {
@@ -61,7 +60,7 @@ describe('CategoriesView', () => {
         $ml,
       },
     });
-    expect(wrapper.contains('.categories')).toBe(true);
+    expect(wrapper.find('.categories')).toBeDefined();
   });
 
   it('correctly sets the data when creating a category', async () => {

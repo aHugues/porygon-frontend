@@ -10,7 +10,6 @@ jest.mock('../../src/config', () => ({
 
 const mockToken = 'sample token';
 
-
 describe('BuildHeaders', () => {
   beforeEach(() => jest.resetModules());
 
@@ -47,7 +46,6 @@ describe('BuildHeaders', () => {
   });
 });
 
-
 describe('BuildOptions', () => {
   beforeEach(() => jest.resetModules());
 
@@ -60,7 +58,6 @@ describe('BuildOptions', () => {
     });
   });
 });
-
 
 describe('BuildUrl', () => {
   it('Parses an empty resource', () => {

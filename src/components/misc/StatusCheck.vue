@@ -18,7 +18,6 @@ const Status = {
   WARNING: 3,
 };
 
-
 export default {
   name: 'StatusCheck',
   props: {

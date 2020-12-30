@@ -54,7 +54,7 @@ describe('App', () => {
         $route,
       },
     });
-    expect(wrapper.contains('#app')).toBe(true);
+    expect(wrapper.find('#app')).toBeDefined();
   });
 
   it('Correctly gets the page size', (done) => {

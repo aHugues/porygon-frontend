@@ -176,9 +176,9 @@ export default {
       };
       delete this.movie.category_id;
       this.movie.categories = this.movieCategories
-        .map(category => category.id)
-        .filter(x => x !== null);
-      this.actorsList = this.movie.actors.split(',').filter(x => x !== '').map(x => x.trim());
+        .map((category) => category.id)
+        .filter((x) => x !== null);
+      this.actorsList = this.movie.actors.split(',').filter((x) => x !== '').map((x) => x.trim());
       if (this.actorsList.length === 0) {
         this.actorsList.push('');
       }
@@ -246,7 +246,7 @@ export default {
     method: {
       type: String,
       required: true,
-      validator: value => ['create', 'modify'].indexOf(value) !== -1,
+      validator: (value) => ['create', 'modify'].indexOf(value) !== -1,
     },
     currentMovie: Object,
     locations: Array,

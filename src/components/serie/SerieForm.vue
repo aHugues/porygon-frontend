@@ -138,8 +138,8 @@ export default {
       };
       delete this.serie.category_id;
       this.serie.categories = this.serieCategories
-        .map(category => category.id)
-        .filter(x => x !== null);
+        .map((category) => category.id)
+        .filter((x) => x !== null);
       Object.keys(mapping).forEach((key) => {
         if (this.serie[key]) {
           this.supports.push(mapping[key]);
@@ -195,7 +195,7 @@ export default {
     method: {
       type: String,
       required: true,
-      validator: value => ['create', 'modify'].indexOf(value) !== -1,
+      validator: (value) => ['create', 'modify'].indexOf(value) !== -1,
     },
     currentSerie: Object,
     locations: Array,
