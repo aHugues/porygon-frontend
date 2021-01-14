@@ -10,7 +10,7 @@ export default {
   buildHeaders() {
     const headers = { 'Content-Type': 'application/json' };
     if (authenticationRequired) {
-      headers.Authorization = `Bearer ${localStorage.getItem('vue-token')}`;
+      headers.Authorization = `Bearer ${localStorage.getItem('vue-user-token')}`;
     }
     return headers;
   },

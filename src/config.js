@@ -1,6 +1,6 @@
 export default {
   all: {
-    porygonApiMinVersion: '0.6.0',
+    porygonApiMinVersion: '0.6.2',
   },
   development: {
     porygonApiBaseUrl: 'http://localhost:4000/api/v1',

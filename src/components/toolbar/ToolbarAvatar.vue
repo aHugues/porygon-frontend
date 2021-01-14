@@ -137,9 +137,7 @@
 </template>
 
 <script>
-import axios from 'axios';
 import flags from '../../flags';
-import requests from '../../utils/requests';
 import config from '../../config';
 
 export default {
@@ -190,20 +188,10 @@ export default {
   }),
   methods: {
     logout() {
-      const options = requests.buildOptions();
-
-      axios({
-        method: 'get',
-        url: `${this.authBaseUrl}/logout`,
-        headers: options.headers,
-        withCredentials: options.withCredentials,
-      })
-        .then(() => {
-          this.$router.go('/');
-        })
-        .catch((error) => {
-          console.error(error);
-        });
+      localStorage.setItem('vue-user-token', '');
+      localStorage.setItem('vue-user-firstname', '');
+      localStorage.setItem('vue-user-lastname', '');
+      this.$router.go('/');
     },
     updateLanguage(newLanguage) {
       localStorage.setItem('vue-user-language', newLanguage);
