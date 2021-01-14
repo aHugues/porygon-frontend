@@ -29,7 +29,7 @@ describe('BuildHeaders', () => {
 
   it('Works when authentication is required', () => {
     setGlobals();
-    global.window.localStorage.setItem('vue-token', mockToken);
+    global.window.localStorage.setItem('vue-user-token', mockToken);
     jest.mock('../../src/config', () => ({
       test: {
         porygonApiBaseUrl: 'http://example.com:4000',

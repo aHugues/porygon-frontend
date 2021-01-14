@@ -82,6 +82,7 @@ export default {
           this.errored = false;
           localStorage.setItem('vue-user-firstname', response.data.firstName);
           localStorage.setItem('vue-user-lastname', response.data.lastName);
+          localStorage.setItem('vue-user-token', response.data.token);
           // localStorage.setItem('vue-user-url', 'https://google.com');
           this.$router.back();
         })
